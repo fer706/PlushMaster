@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>PlushMaster</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
@@ -74,6 +74,10 @@
       cursor: pointer;
       box-shadow: 0 0 15px #00f0ff;
       transition: 0.3s;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     button:hover {
       background: #0ff;
@@ -150,20 +154,22 @@
       justify-content: center;
       gap: 15px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     #camera-selection button {
       flex: 1;
       max-width: 120px;
       font-size: 1.1rem;
       border-radius: 20px;
+      min-width: 90px;
     }
-    #camera-video {
+    #camera-iframe {
       width: 100%;
-      height: auto;
-      background: #000;
+      height: 480px;
       border: 1px solid #0ff;
       border-radius: 6px;
       box-shadow: 0 0 10px #0ff;
+      background: #000;
       margin-bottom: 10px;
     }
 
@@ -206,16 +212,81 @@
       user-select: none;
       pointer-events: none;
     }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      .controls {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(5, 60px);
+        gap: 10px;
+        max-width: 320px;
+        margin: 10px auto 0;
+      }
+      #btn-up { grid-column: 2 / 3; grid-row: 1 / 2; }
+      #btn-left { grid-column: 1 / 2; grid-row: 2 / 3; }
+      #btn-down { grid-column: 2 / 3; grid-row: 3 / 4; }
+      #btn-right { grid-column: 3 / 4; grid-row: 2 / 3; }
+      #btn-grab { grid-column: 1 / 4; grid-row: 4 / 5; font-size: 1.1rem; padding: 12px; }
+
+      button {
+        font-size: 1rem;
+        padding: 12px 20px;
+      }
+      input[type="text"], input[type="password"], select, input[type="number"] {
+        font-size: 1rem;
+        padding: 8px 10px;
+      }
+
+      #camera-iframe {
+        height: 270px;
+      }
+      .status-bar {
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 6px;
+      }
+      #bag-section {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .controls {
+        max-width: 260px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: repeat(6, 55px);
+        gap: 8px;
+      }
+      #btn-grab {
+        font-size: 1rem;
+        padding: 10px;
+      }
+      button {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+      }
+      #camera-selection button {
+        max-width: 100px;
+        font-size: 1rem;
+      }
+      header h1 {
+        font-size: 1.6rem;
+      }
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <header><h1>PLUSHMASTER</h1></header>
 
-  <!-- AVISO DESCONEXÃO DA MÁQUINA FIXO -->
   <div id="ws-status">A máquina selecionada está desconectada!</div>
 
-  <!-- NOTIFICAÇÃO FLOUTANTE TOPO CENTRAL -->
   <div id="top-notification"></div>
 
   <!-- Login -->
@@ -242,7 +313,7 @@
     <p>Já tem conta? <a href="#" id="show-login">Faça login</a></p>
   </section>
 
-  <!-- Escolher o que fazer -->
+  <!-- Seleção de Ação -->
   <section class="select-machine" id="select-machine-section" style="display:none;">
     <h2>O que deseja fazer?</h2>
     <div class="status-bar">
@@ -280,10 +351,10 @@
   <section class="machine-section" id="machine-area" style="display:none;">
     <h2>Máquina em Ação</h2>
 
-    <video id="machine-video" width="100%" height="auto" autoplay muted playsinline controls style="margin-bottom: 10px; background:#000;">
-      <source src="video-maquina.mp4" type="video/mp4" />
-      Seu navegador não suporta vídeo.
-    </video>
+    <iframe id="machine-video-iframe" src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02" 
+      frameborder="0" allowfullscreen 
+      style="width:100%; height:480px; border:1px solid #0ff; border-radius:6px; box-shadow: 0 0 10px #0ff; margin-bottom:10px;">
+    </iframe>
 
     <div class="controls">
       <button id="btn-up">▲</button>
@@ -312,10 +383,9 @@
       <button id="exit-camera-btn">Sair</button>
     </div>
 
-    <video id="camera-video" width="100%" height="auto" autoplay muted controls style="background:#000; display:none;">
-      <source src="" type="video/mp4" />
-      Seu navegador não suporta vídeo.
-    </video>
+    <iframe id="camera-iframe" src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02"
+      frameborder="0" allowfullscreen>
+    </iframe>
   </section>
 
   <!-- Sacola de Pelúcias -->
@@ -358,67 +428,47 @@
   const camera1Btn = document.getElementById("camera1-btn");
   const camera2Btn = document.getElementById("camera2-btn");
   const exitCameraBtn = document.getElementById("exit-camera-btn");
-  const cameraVideo = document.getElementById("camera-video");
+  const cameraIframe = document.getElementById("camera-iframe");
 
-  // ------------------ Estado ------------------
+  const machineVideoIframe = document.getElementById("machine-video-iframe");
+
+  // Estado global
   let currentUser = null;
   let currentMachine = null;
   let gameTimerInterval = null;
-  let ws = null;
-  let machineConnectionStatus = {
-    onlinemachine02: 'connected',
-    onlinemachine03: 'connected'
+
+  // Status das máquinas (simulação)
+  const machineConnectionStatus = {
+    "onlinemachine02": "connected",
+    "onlinemachine03": "connected"
   };
 
-  // ------------------ Utilidades LocalStorage ------------------
-  const saveUsers = users => localStorage.setItem("users", JSON.stringify(users));
-  const getUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
+  // ------------------ Funções de armazenamento ------------------
 
-  function updateCreditsDisplay() {
-    const users = getUsers();
-    const user = users.find(u => u.username === currentUser);
-    if (user) {
-      currentCredits.innerText = user.credits.toFixed(2);
-      currentCreditsMachine.innerText = user.credits.toFixed(2);
-    }
+  function getUsers() {
+    return JSON.parse(localStorage.getItem("users") || "[]");
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem("users", JSON.stringify(users));
   }
 
   function getUserBag() {
-    const bags = JSON.parse(localStorage.getItem("userBags") || "{}");
-    return bags[currentUser] || [];
+    const allBags = JSON.parse(localStorage.getItem("userBags") || "{}");
+    return allBags[currentUser] || [];
   }
 
   function saveUserBag(bag) {
-    const bags = JSON.parse(localStorage.getItem("userBags") || "{}");
-    bags[currentUser] = bag;
-    localStorage.setItem("userBags", JSON.stringify(bags));
+    const allBags = JSON.parse(localStorage.getItem("userBags") || "{}");
+    allBags[currentUser] = bag;
+    localStorage.setItem("userBags", JSON.stringify(allBags));
   }
 
-  function updatePeluciasCount() {
-    const bag = getUserBag();
-    peluciasCount.innerText = bag.length;
-  }
-
-  function updateBagList() {
-    const bag = getUserBag();
-    bagList.innerHTML = "";
-    if (bag.length === 0) {
-      bagList.innerHTML = "<li>Sacola vazia.</li>";
-    } else {
-      bag.forEach((pelucia, index) => {
-        const li = document.createElement("li");
-        li.textContent = `Pelúcia ${index + 1}: ${pelucia}`;
-        bagList.appendChild(li);
-      });
-    }
-  }
-
-  // ------------------ Função para notificação flutuante ------------------
-  function showTopNotification(message, duration = 4000) {
-    topNotification.textContent = message;
+  // ------------------ Notificações ------------------
+  function showTopNotification(message, duration = 3000) {
+    topNotification.innerText = message;
     topNotification.style.display = "block";
-    clearTimeout(topNotification._timeoutId);
-    topNotification._timeoutId = setTimeout(() => {
+    setTimeout(() => {
       topNotification.style.display = "none";
     }, duration);
   }
@@ -434,12 +484,10 @@
       loginSection.style.display = "none";
       selectSection.style.display = "block";
       currentUserSpan.innerText = currentUser;
-      currentUserMachineSpan.innerText = currentUser;
-      updateCreditsDisplay();
+      currentCredits.innerText = user.credits.toFixed(2);
       updatePeluciasCount();
       bagSection.style.display = "block";
       updateBagList();
-      // Conectaria WS aqui se tivesse
     } else {
       showTopNotification("Usuário ou senha inválidos.", 5000);
     }
@@ -499,10 +547,6 @@
 
   // ------------------ Jogar na máquina ------------------
   document.getElementById("play-machine-btn").onclick = () => {
-    if (!currentUser) {
-      showTopNotification("Faça login para jogar.", 5000);
-      return;
-    }
     selectSection.style.display = "none";
     playSection.style.display = "block";
   };
@@ -583,9 +627,13 @@
     playQueue = new Array(qty).fill(currentUser);
     currentPlayIndex = 0;
 
+    // Atualiza iframe para máquina selecionada
+    machineVideoIframe.src = `https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=${currentMachine}`;
+
     playSection.style.display = "none";
     machineArea.style.display = "block";
     currentUserMachineSpan.innerText = currentUser;
+    currentCreditsMachine.innerText = user.credits.toFixed(2);
     updateControlButtonsStatus();
     checkMachineConnection();
     startGameTimer(30);
@@ -616,7 +664,7 @@
       // Fim da fila
       exitMachine();
     } else {
-      // Próxima jogada (mesmo usuário repetido, poderia ser multiusuário no futuro)
+      // Próxima jogada
       startGameTimer(30);
       showTopNotification(`Sua próxima jogada vai começar!`, 3000);
     }
@@ -655,7 +703,7 @@
     checkMachineConnection();
   }
 
-  // Controle dos botões da máquina (apenas simulação local, sem WebSocket)
+  // Controle dos botões da máquina (simulação local, sem WebSocket)
   document.getElementById("btn-up").onclick = () => showTopNotification("Movimento para cima enviado", 1500);
   document.getElementById("btn-down").onclick = () => showTopNotification("Movimento para baixo enviado", 1500);
   document.getElementById("btn-left").onclick = () => showTopNotification("Movimento para esquerda enviado", 1500);
@@ -666,24 +714,45 @@
   document.getElementById("watch-cameras-btn").onclick = () => {
     selectSection.style.display = "none";
     cameraArea.style.display = "block";
+    // Abre a câmera 1 automaticamente
+    cameraIframe.src = "https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02";
   };
 
   camera1Btn.onclick = () => {
-    cameraVideo.src = "camera1.mp4";
-    cameraVideo.style.display = "block";
-    cameraVideo.play();
+    cameraIframe.src = "https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02";
   };
   camera2Btn.onclick = () => {
-    cameraVideo.src = "camera2.mp4";
-    cameraVideo.style.display = "block";
-    cameraVideo.play();
+    cameraIframe.src = "https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine03";
   };
   exitCameraBtn.onclick = () => {
-    cameraVideo.pause();
-    cameraVideo.style.display = "none";
+    cameraIframe.src = "";
     cameraArea.style.display = "none";
     selectSection.style.display = "block";
   };
+
+  // Atualizar pelúcias no topo
+  function updatePeluciasCount() {
+    const bag = getUserBag();
+    peluciasCount.innerText = bag.length;
+  }
+  function updateBagList() {
+    const bag = getUserBag();
+    bagList.innerHTML = "";
+    bag.forEach(pelucia => {
+      const li = document.createElement("li");
+      li.innerText = pelucia;
+      bagList.appendChild(li);
+    });
+  }
+
+  // Atualizar créditos no topo
+  function updateCreditsDisplay() {
+    const users = getUsers();
+    const user = users.find(u => u.username === currentUser);
+    if (!user) return;
+    currentCredits.innerText = user.credits.toFixed(2);
+    currentCreditsMachine.innerText = user.credits.toFixed(2);
+  }
 
   // Solicitar entrega das pelúcias (simulação)
   document.getElementById("request-delivery-btn").onclick = () => {
@@ -699,24 +768,22 @@
     updateBagList();
   };
 
-// Atualizar pelúcias imediatamente quando outra aba alterar a sacola do usuário
-window.addEventListener("storage", (e) => {
-  if (!currentUser) return;
+  // Atualizar pelúcias e créditos ao mudar localStorage em outras abas
+  window.addEventListener("storage", (e) => {
+    if (!currentUser) return;
 
-  if (e.key === "userBags") {
-    updatePeluciasCount();
-    updateBagList();
-  }
+    if (e.key === "userBags") {
+      updatePeluciasCount();
+      updateBagList();
+    }
 
-  if (e.key === "users") {
-    updateCreditsDisplay();
-  }
-});
-
+    if (e.key === "users") {
+      updateCreditsDisplay();
+    }
+  });
 </script>
 </body>
 </html>
-
 
 
 
