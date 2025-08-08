@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlushMaster</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: #111;
+      border: 1px solid #0ff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #0ff;
+      padding: 20px;
+      position: relative;
+    }
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      text-align: center;
+      color: #00f0ff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+    section.auth-box, section.select-machine, section.machine-section {
+      margin-bottom: 20px;
+    }
+    section.auth-box h2, section.select-machine h2 {
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      color: #0ff;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #0ff;
+    }
+    input[type="text"], input[type="password"], select, input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #0ff;
+      background: #000;
+      color: #0ff;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    input:focus, select:focus {
+      border-color: #00f0ff;
+      outline: none;
+    }
+    button {
+      background: #00f0ff;
+      color: #000;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px 30px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00f0ff;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0ff;
+      box-shadow: 0 0 25px #0ff;
+    }
+    button:active {
+      background: #00ddee;
+      transform: translateY(2px);
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 70px 70px 70px;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 12px;
+    }
+    #btn-up { grid-column: 2; grid-row: 1; }
+    #btn-left { grid-column: 1; grid-row: 2; }
+    #btn-down { grid-column: 2; grid-row: 2; }
+    #btn-right { grid-column: 3; grid-row: 2; }
+    #btn-grab { grid-column: 2; grid-row: 3; }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background: #000;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0ff;
+      border: 1px solid #0ff;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .status-bar span { margin-right: 20px; }
+
+    #support-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #bag-section {
+      margin-top: 20px;
+      background: #111;
+      border: 1px solid #0ff;
+      border-radius: 6px;
+      padding: 15px;
+      color: #0ff;
+    }
+    #bag-list {
+      list-style: none;
+      max-height: 150px;
+      overflow-y: auto;
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+
+    #camera-selection {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    #camera-selection button {
+      flex: 1;
+      max-width: 120px;
+      font-size: 1.1rem;
+      border-radius: 20px;
+    }
+    #camera-video {
+      width: 100%;
+      height: auto;
+      background: #000;
+      border: 1px solid #0ff;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #0ff;
+      margin-bottom: 10px;
+    }
+
+    /* Barra de status WS (só aparece se a MÁQUINA escolhida estiver offline) */
+    #ws-status {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: none;
+      background: #d00;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      padding: 8px 0;
+      text-align: center;
+      z-index: 2000;
+      box-shadow: 0 0 15px #d00;
+    }
+
+    /* Notificação flutuante no topo central */
+    #top-notification {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      border: 3px solid #d00;
+      border-radius: 12px;
+      padding: 14px 28px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      z-index: 3000;
+      display: none;
+      box-shadow: 0 0 15px #d00;
+      max-width: 90%;
+      text-align: center;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header><h1>PLUSHMASTER</h1></header>
+
+  <!-- AVISO DESCONEXÃO DA MÁQUINA FIXO -->
+  <div id="ws-status">A máquina selecionada está desconectada!</div>
+
+  <!-- NOTIFICAÇÃO FLOUTANTE TOPO CENTRAL -->
+  <div id="top-notification"></div>
+
+  <!-- Login -->
+  <section class="auth-box" id="login-section">
+    <h2>Login</h2>
+    <label for="login-username">Usuário</label>
+    <input type="text" id="login-username" autocomplete="off" />
+    <label for="login-password">Senha</label>
+    <input type="password" id="login-password" autocomplete="off" />
+    <button id="login-btn">Entrar</button>
+    <p>Não tem conta? <a href="#" id="show-register">Cadastre-se</a></p>
+  </section>
+
+  <!-- Cadastro -->
+  <section class="auth-box" id="register-section" style="display:none;">
+    <h2>Cadastro</h2>
+    <label for="register-name">Nome</label>
+    <input type="text" id="register-name" autocomplete="off" />
+    <label for="register-username">Usuário</label>
+    <input type="text" id="register-username" autocomplete="off" />
+    <label for="register-password">Senha</label>
+    <input type="password" id="register-password" autocomplete="off" />
+    <button id="register-btn">Cadastrar</button>
+    <p>Já tem conta? <a href="#" id="show-login">Faça login</a></p>
+  </section>
+
+  <!-- Escolher o que fazer -->
+  <section class="select-machine" id="select-machine-section" style="display:none;">
+    <h2>O que deseja fazer?</h2>
+    <div class="status-bar">
+      <span><strong>Usuário:</strong> <span id="current-user"></span></span>
+      <span><strong>Créditos:</strong> R$ <span id="current-credits">0.00</span></span>
+      <span><strong>Pelúcias na Sacola:</strong> <span id="pelucias-count">0</span></span>
+    </div>
+    <button id="play-machine-btn" style="margin-bottom: 15px; width:100%;">Jogar na Máquina</button>
+    <button id="watch-cameras-btn" style="width:100%;">Assistir Câmeras</button>
+  </section>
+
+  <!-- Seleção da Máquina para jogar -->
+  <section class="select-machine" id="machine-play-section" style="display:none;">
+    <h2>Selecione a Máquina</h2>
+
+    <label for="machine-select">Máquina</label>
+    <select id="machine-select">
+      <option value="" disabled selected>Escolha uma máquina</option>
+      <option value="onlinemachine02" data-price="2">Máquina 1 (R$2 por jogada)</option>
+      <option value="onlinemachine03" data-price="5">Máquina 2 (R$5 por jogada)</option>
+    </select>
+
+    <label for="play-quantity">Quantidade de jogadas</label>
+    <input type="number" id="play-quantity" min="1" max="10" value="1" />
+
+    <div style="margin-bottom: 15px; font-weight: 700; color: #0ff;">
+      Valor total: R$ <span id="total-price">0.00</span>
+    </div>
+
+    <button id="start-queue-btn">Entrar na fila</button>
+    <button id="back-to-select-btn" style="margin-top:10px; background:#888;">Voltar</button>
+  </section>
+
+  <!-- Área da Máquina -->
+  <section class="machine-section" id="machine-area" style="display:none;">
+    <h2>Máquina em Ação</h2>
+
+    <video id="machine-video" width="100%" height="auto" autoplay muted playsinline controls style="margin-bottom: 10px; background:#000;">
+      <source src="video-maquina.mp4" type="video/mp4" />
+      Seu navegador não suporta vídeo.
+    </video>
+
+    <div class="controls">
+      <button id="btn-up">▲</button>
+      <button id="btn-left">◀</button>
+      <button id="btn-down">▼</button>
+      <button id="btn-right">▶</button>
+      <button id="btn-grab">🎯 AGARRAR</button>
+    </div>
+
+    <div class="status-bar">
+      <span><strong>Usuário:</strong> <span id="current-user-machine"></span></span>
+      <span><strong>Créditos:</strong> R$ <span id="current-credits-machine">0.00</span></span>
+      <span><strong>Tempo:</strong> <span id="game-timer">--</span>s</span>
+    </div>
+
+    <button id="exit-machine-btn" style="margin-top:20px; width:100%; background:#d00;">Sair da Máquina</button>
+  </section>
+
+  <!-- Área para Assistir a Câmera -->
+  <section class="machine-section" id="camera-watch-section" style="display:none;">
+    <h2>Assistir Câmeras</h2>
+
+    <div id="camera-selection">
+      <button id="camera1-btn">Câmera 1</button>
+      <button id="camera2-btn">Câmera 2</button>
+      <button id="exit-camera-btn">Sair</button>
+    </div>
+
+    <video id="camera-video" width="100%" height="auto" autoplay muted controls style="background:#000; display:none;">
+      <source src="" type="video/mp4" />
+      Seu navegador não suporta vídeo.
+    </video>
+  </section>
+
+  <!-- Sacola de Pelúcias -->
+  <section id="bag-section" style="display:none;">
+    <h2>Sacola de Pelúcias</h2>
+    <ul id="bag-list"></ul>
+    <button id="request-delivery-btn">Solicitar Entrega</button>
+  </section>
+
+  <!-- Botão de Suporte Flutuante -->
+  <button id="support-btn" onclick="window.open('https://wa.me/5518996925754','_blank')">
+    Suporte
+  </button>
+</div>
+
+<script>
+  // ------------------ Referências ------------------
+  const loginSection = document.getElementById("login-section");
+  const registerSection = document.getElementById("register-section");
+  const selectSection = document.getElementById("select-machine-section");
+  const playSection = document.getElementById("machine-play-section");
+  const machineArea = document.getElementById("machine-area");
+  const cameraArea = document.getElementById("camera-watch-section");
+  const bagSection = document.getElementById("bag-section");
+  const wsStatusBar = document.getElementById("ws-status");
+  const topNotification = document.getElementById("top-notification");
+
+  const currentUserSpan = document.getElementById("current-user");
+  const currentCredits = document.getElementById("current-credits");
+  const peluciasCount = document.getElementById("pelucias-count");
+  const currentUserMachineSpan = document.getElementById("current-user-machine");
+  const currentCreditsMachine = document.getElementById("current-credits-machine");
+
+  const bagList = document.getElementById("bag-list");
+
+  const machineSelect = document.getElementById("machine-select");
+  const playQuantity = document.getElementById("play-quantity");
+  const totalPriceSpan = document.getElementById("total-price");
+
+  const camera1Btn = document.getElementById("camera1-btn");
+  const camera2Btn = document.getElementById("camera2-btn");
+  const exitCameraBtn = document.getElementById("exit-camera-btn");
+  const cameraVideo = document.getElementById("camera-video");
+
+  // ------------------ Estado ------------------
+  let currentUser = null;
+  let currentMachine = null;
+  let gameTimerInterval = null;
+  let ws = null;
+  let machineConnectionStatus = {
+    onlinemachine02: 'connected',
+    onlinemachine03: 'connected'
+  };
+
+  // ------------------ Utilidades LocalStorage ------------------
+  const saveUsers = users => localStorage.setItem("users", JSON.stringify(users));
+  const getUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
+
+  function updateCreditsDisplay() {
+    const users = getUsers();
+    const user = users.find(u => u.username === currentUser);
+    if (user) {
+      currentCredits.innerText = user.credits.toFixed(2);
+      currentCreditsMachine.innerText = user.credits.toFixed(2);
+    }
+  }
+
+  function getUserBag() {
+    const bags = JSON.parse(localStorage.getItem("userBags") || "{}");
+    return bags[currentUser] || [];
+  }
+
+  function saveUserBag(bag) {
+    const bags = JSON.parse(localStorage.getItem("userBags") || "{}");
+    bags[currentUser] = bag;
+    localStorage.setItem("userBags", JSON.stringify(bags));
+  }
+
+  function updatePeluciasCount() {
+    const bag = getUserBag();
+    peluciasCount.innerText = bag.length;
+  }
+
+  function updateBagList() {
+    const bag = getUserBag();
+    bagList.innerHTML = "";
+    if (bag.length === 0) {
+      bagList.innerHTML = "<li>Sacola vazia.</li>";
+    } else {
+      bag.forEach((pelucia, index) => {
+        const li = document.createElement("li");
+        li.textContent = `Pelúcia ${index + 1}: ${pelucia}`;
+        bagList.appendChild(li);
+      });
+    }
+  }
+
+  // ------------------ Função para notificação flutuante ------------------
+  function showTopNotification(message, duration = 4000) {
+    topNotification.textContent = message;
+    topNotification.style.display = "block";
+    clearTimeout(topNotification._timeoutId);
+    topNotification._timeoutId = setTimeout(() => {
+      topNotification.style.display = "none";
+    }, duration);
+  }
+
+  // ------------------ Login ------------------
+  document.getElementById("login-btn").onclick = () => {
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+    const users = getUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+      currentUser = user.username;
+      loginSection.style.display = "none";
+      selectSection.style.display = "block";
+      currentUserSpan.innerText = currentUser;
+      currentUserMachineSpan.innerText = currentUser;
+      updateCreditsDisplay();
+      updatePeluciasCount();
+      bagSection.style.display = "block";
+      updateBagList();
+      // Conectaria WS aqui se tivesse
+    } else {
+      showTopNotification("Usuário ou senha inválidos.", 5000);
+    }
+  };
+
+  // ------------------ Cadastro ------------------
+  document.getElementById("register-btn").onclick = () => {
+    const name = document.getElementById("register-name").value.trim();
+    const username = document.getElementById("register-username").value.trim();
+    const password = document.getElementById("register-password").value.trim();
+    if (!name || !username || !password) {
+      showTopNotification("Preencha todos os campos para se registrar.", 5000);
+      return;
+    }
+    const users = getUsers();
+    if (users.find(u => u.username === username)) {
+      showTopNotification("Usuário já existe.", 5000);
+      return;
+    }
+    users.push({ name, username, password, credits: 10.00 });
+    saveUsers(users);
+    showTopNotification("Registro feito com sucesso! Faça login.", 5000);
+    registerSection.style.display = "none";
+    loginSection.style.display = "block";
+  };
+
+  // ------------------ Navegação entre telas ------------------
+  document.getElementById("show-register").onclick = (e) => {
+    e.preventDefault();
+    loginSection.style.display = "none";
+    registerSection.style.display = "block";
+  };
+
+  document.getElementById("show-login").onclick = (e) => {
+    e.preventDefault();
+    registerSection.style.display = "none";
+    loginSection.style.display = "block";
+  };
+
+  // ------------------ Seleção de máquinas e cálculo preço ------------------
+  function updateTotalPrice() {
+    const option = machineSelect.selectedOptions[0];
+    if (!option) {
+      totalPriceSpan.textContent = "0.00";
+      return;
+    }
+    const price = parseFloat(option.dataset.price);
+    let qty = parseInt(playQuantity.value);
+    if (isNaN(qty) || qty < 1) qty = 1;
+    if (qty > 10) qty = 10;
+    playQuantity.value = qty;
+    totalPriceSpan.textContent = (price * qty).toFixed(2);
+  }
+  machineSelect.onchange = updateTotalPrice;
+  playQuantity.oninput = updateTotalPrice;
+  updateTotalPrice();
+
+  // ------------------ Jogar na máquina ------------------
+  document.getElementById("play-machine-btn").onclick = () => {
+    if (!currentUser) {
+      showTopNotification("Faça login para jogar.", 5000);
+      return;
+    }
+    selectSection.style.display = "none";
+    playSection.style.display = "block";
+  };
+
+  document.getElementById("back-to-select-btn").onclick = () => {
+    playSection.style.display = "none";
+    selectSection.style.display = "block";
+  };
+
+  // Função para atualizar os botões de controle (habilitar/desabilitar)
+  function updateControlButtonsStatus() {
+    const buttons = ["btn-up", "btn-left", "btn-down", "btn-right", "btn-grab"];
+    if (!currentMachine) {
+      buttons.forEach(id => document.getElementById(id).disabled = true);
+      return;
+    }
+    const status = machineConnectionStatus[currentMachine];
+    const disabled = status === "disconnected";
+    buttons.forEach(id => document.getElementById(id).disabled = disabled);
+  }
+
+  // Função para atualizar status da conexão da máquina
+  function checkMachineConnection() {
+    if (!currentMachine) {
+      wsStatusBar.style.display = "none";
+      updateControlButtonsStatus();
+      return;
+    }
+    const status = machineConnectionStatus[currentMachine];
+    if (status === "disconnected") {
+      wsStatusBar.style.display = "block";
+      showTopNotification("Conexão com a máquina caiu! Você será descontado e removido da fila.", 6000);
+      exitMachine();
+    } else {
+      wsStatusBar.style.display = "none";
+    }
+    updateControlButtonsStatus();
+  }
+
+  // Fila e controle de jogo
+  let playQueue = [];
+  let currentPlayIndex = -1;
+
+  document.getElementById("start-queue-btn").onclick = () => {
+    if (!machineSelect.value) {
+      showTopNotification("Selecione uma máquina para jogar.", 5000);
+      return;
+    }
+    if (!currentUser) {
+      showTopNotification("Faça login para jogar.", 5000);
+      return;
+    }
+    const users = getUsers();
+    const user = users.find(u => u.username === currentUser);
+    if (!user) {
+      showTopNotification("Usuário não encontrado.", 5000);
+      return;
+    }
+    const qty = parseInt(playQuantity.value);
+    if (isNaN(qty) || qty < 1) {
+      showTopNotification("Quantidade inválida.", 5000);
+      return;
+    }
+    const pricePerPlay = parseFloat(machineSelect.selectedOptions[0].dataset.price);
+    const totalPrice = pricePerPlay * qty;
+    if (user.credits < totalPrice) {
+      showTopNotification("Você não tem créditos suficientes.", 5000);
+      return;
+    }
+
+    // Deduz créditos e salva
+    user.credits -= totalPrice;
+    saveUsers(users);
+    updateCreditsDisplay();
+
+    // Configura fila e começa jogo
+    currentMachine = machineSelect.value;
+    playQueue = new Array(qty).fill(currentUser);
+    currentPlayIndex = 0;
+
+    playSection.style.display = "none";
+    machineArea.style.display = "block";
+    currentUserMachineSpan.innerText = currentUser;
+    updateControlButtonsStatus();
+    checkMachineConnection();
+    startGameTimer(30);
+  };
+
+  // Timer de jogo
+  let gameTime = 30;
+  function startGameTimer(seconds) {
+    gameTime = seconds;
+    document.getElementById("game-timer").innerText = gameTime;
+    if (gameTimerInterval) clearInterval(gameTimerInterval);
+    gameTimerInterval = setInterval(() => {
+      gameTime--;
+      document.getElementById("game-timer").innerText = gameTime;
+      if (gameTime <= 0) {
+        clearInterval(gameTimerInterval);
+        finishPlay();
+      }
+    }, 1000);
+  }
+
+  function finishPlay() {
+    // Adiciona pelúcia ao usuário ao final da jogada
+    addPeluciaToBag();
+
+    currentPlayIndex++;
+    if (currentPlayIndex >= playQueue.length) {
+      // Fim da fila
+      exitMachine();
+    } else {
+      // Próxima jogada (mesmo usuário repetido, poderia ser multiusuário no futuro)
+      startGameTimer(30);
+      showTopNotification(`Sua próxima jogada vai começar!`, 3000);
+    }
+  }
+
+  // Adicionar pelúcia à sacola do usuário
+  function addPeluciaToBag() {
+    const peluciasDisponiveis = [
+      "Urso de pelúcia",
+      "Coelho fofinho",
+      "Gato sorridente",
+      "Cachorro dorminhoco",
+      "Panda fofo"
+    ];
+
+    const bag = getUserBag();
+
+    const novaPelucia = peluciasDisponiveis[Math.floor(Math.random() * peluciasDisponiveis.length)];
+
+    bag.push(novaPelucia);
+    saveUserBag(bag);
+
+    showTopNotification(`Parabéns! Você ganhou uma pelúcia: ${novaPelucia}`, 6000);
+
+    updatePeluciasCount();
+    updateBagList();
+  }
+
+  // Sair da máquina
+  document.getElementById("exit-machine-btn").onclick = exitMachine;
+  function exitMachine() {
+    machineArea.style.display = "none";
+    selectSection.style.display = "block";
+    if (gameTimerInterval) clearInterval(gameTimerInterval);
+    currentMachine = null;
+    checkMachineConnection();
+  }
+
+  // Controle dos botões da máquina (apenas simulação local, sem WebSocket)
+  document.getElementById("btn-up").onclick = () => showTopNotification("Movimento para cima enviado", 1500);
+  document.getElementById("btn-down").onclick = () => showTopNotification("Movimento para baixo enviado", 1500);
+  document.getElementById("btn-left").onclick = () => showTopNotification("Movimento para esquerda enviado", 1500);
+  document.getElementById("btn-right").onclick = () => showTopNotification("Movimento para direita enviado", 1500);
+  document.getElementById("btn-grab").onclick = () => showTopNotification("Comando agarrar enviado", 1500);
+
+  // Assistir câmeras
+  document.getElementById("watch-cameras-btn").onclick = () => {
+    selectSection.style.display = "none";
+    cameraArea.style.display = "block";
+  };
+
+  camera1Btn.onclick = () => {
+    cameraVideo.src = "camera1.mp4";
+    cameraVideo.style.display = "block";
+    cameraVideo.play();
+  };
+  camera2Btn.onclick = () => {
+    cameraVideo.src = "camera2.mp4";
+    cameraVideo.style.display = "block";
+    cameraVideo.play();
+  };
+  exitCameraBtn.onclick = () => {
+    cameraVideo.pause();
+    cameraVideo.style.display = "none";
+    cameraArea.style.display = "none";
+    selectSection.style.display = "block";
+  };
+
+  // Solicitar entrega das pelúcias (simulação)
+  document.getElementById("request-delivery-btn").onclick = () => {
+    const bag = getUserBag();
+    if (bag.length === 0) {
+      showTopNotification("Sua sacola está vazia.", 4000);
+      return;
+    }
+    showTopNotification("Solicitação de entrega enviada! Obrigado por jogar.", 5000);
+    // Limpa sacola simulando entrega
+    saveUserBag([]);
+    updatePeluciasCount();
+    updateBagList();
+  };
+
+// Atualizar pelúcias imediatamente quando outra aba alterar a sacola do usuário
+window.addEventListener("storage", (e) => {
+  if (!currentUser) return;
+
+  if (e.key === "userBags") {
+    updatePeluciasCount();
+    updateBagList();
+  }
+
+  if (e.key === "users") {
+    updateCreditsDisplay();
+  }
+});
+
+</script>
+</body>
+</html>
+
+
+
+
