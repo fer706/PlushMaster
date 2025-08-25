@@ -40,11 +40,9 @@
     #intro { position: fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:5000; }
     #intro h1 { font-size:4rem; color:#00f7ff; text-shadow:0 0 20px #00f7ff, 0 0 40px #00f7ff; opacity:0; animation: glowText 2s ease forwards; }
     #intro p { margin-top:15px; font-size:1.5rem; color:#00f7ff; opacity:0; animation: fadeIn 2s ease forwards; animation-delay:1.5s; }
+    #start-btn { display:none; background:#0ff; color:#000; padding:12px 30px; font-size:1.5rem; font-weight:700; border:none; border-radius:30px; cursor:pointer; margin-top:30px; box-shadow: 0 0 15px #0ff; }
     @keyframes glowText { 0% {opacity:0; transform:scale(0.8);} 100% {opacity:1; transform:scale(1);} }
     @keyframes fadeIn { 0% {opacity:0;} 100% {opacity:1;} }
-
-    @media (max-width: 768px) { .container { padding: 15px; } header h1 { font-size: 2rem; } .controls { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(5, 60px); gap: 10px; max-width: 320px; margin: 10px auto 0; } #btn-up { grid-column: 2 / 3; grid-row: 1 / 2; } #btn-left { grid-column: 1 / 2; grid-row: 2 / 3; } #btn-down { grid-column: 2 / 3; grid-row: 3 / 4; } #btn-right { grid-column: 3 / 4; grid-row: 2 / 3; } #btn-grab { grid-column: 1 / 4; grid-row: 4 / 5; font-size: 1.1rem; padding: 12px; } button { font-size: 1rem; padding: 12px 20px; } input[type="text"], input[type="password"], select, input[type="number"] { font-size: 1rem; padding: 8px 10px; } #camera-iframe { height: 270px; } .status-bar { font-size: 1rem; flex-direction: column; gap: 6px; } #bag-section { font-size: 0.95rem; } }
-    @media (max-width: 400px) { .controls { max-width: 260px; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(6, 55px); gap: 8px; } #btn-grab { font-size: 1rem; padding: 10px; } button { font-size: 0.9rem; padding: 10px 16px; } #camera-selection button { max-width: 100px; font-size: 1rem; } header h1 { font-size: 1.6rem; } }
   </style>
 </head>
 <body>
@@ -53,6 +51,7 @@
 <div id="intro">
   <h1>PlushMaster</h1>
   <p>Sua máquina de pelúcia online</p>
+  <button id="start-btn">Vamos lá</button>
 </div>
 
 <!-- Conteúdo do site -->
@@ -96,7 +95,7 @@
     <label for="machine-select">Escolha a máquina:</label>
     <select id="machine-select">
       <option value="" disabled selected>Selecione</option>
-      <option value="onlinemachine02" data-price="2.00">Máquina 1 R$2,00 por jagada</option>
+      <option value="onlinemachine02" data-price="2.00">Máquina 1 R$2,00 por jogada</option>
       <option value="onlinemachine03" data-price="5.00">Máquina 2 R$5,00 por jogada</option>
     </select>
     <label for="play-quantity">Quantidade de jogadas:</label>
@@ -141,6 +140,7 @@
 <button id="support-btn">Suporte</button>
 
 <script>
+  // Botão Suporte
   document.getElementById("support-btn").onclick = () => {
     window.open("https://wa.me/5518996925754", "_blank");
   };
@@ -279,18 +279,25 @@
   });
 
   // ------------------ Intro ------------------
-  window.addEventListener("load", ()=>{
-    setTimeout(()=>{
-      const intro=document.getElementById("intro");
-      const site=document.getElementById("site");
-      site.style.display="block";
-      setTimeout(()=>intro.style.display="none",1000);
-    },3000);
+  window.addEventListener("load", () => {
+    const intro = document.getElementById("intro");
+    const site = document.getElementById("site");
+    const startBtn = document.getElementById("start-btn");
+
+    // Tempo da animação da intro: h1 (2s) + p (1.5s delay + 2s) = 3.5s
+    const introDuration = 3500;
+
+    setTimeout(() => {
+      startBtn.style.display = "block";
+      startBtn.onclick = () => {
+        site.style.display = "block";
+        intro.style.transition = "opacity 1s";
+        intro.style.opacity = "0";
+        setTimeout(() => intro.style.display = "none", 1000);
+      };
+    }, introDuration + 1000);
   });
 </script>
 
 </body>
 </html>
-
-
-
