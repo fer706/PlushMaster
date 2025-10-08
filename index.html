@@ -11,60 +11,72 @@
 </head>
 
 <style>
-  /* --- Geral --- */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; color: #0ff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; }
-  .container { max-width: 900px; width: 100%; background: #111; border: 1px solid #0ff; border-radius: 8px; box-shadow: 0 0 10px #0ff; padding: 20px; position: relative; display: none; }
-  header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; text-align: center; color: #00f0ff; margin-bottom: 20px; text-shadow: 0 0 8px #00f0ff; }
-  section.auth-box, section.select-machine, section.machine-section { margin-bottom: 20px; }
-  section.auth-box h2, section.select-machine h2 { font-size: 1.6rem; margin-bottom: 15px; color: #0ff; }
-  label { display: block; font-weight: 600; margin-bottom: 6px; color: #0ff; }
-  input[type="text"], input[type="password"], select, input[type="number"] { width: 100%; padding: 10px 12px; margin-bottom: 15px; border: 1px solid #0ff; background: #000; color: #0ff; border-radius: 4px; font-size: 1rem; }
-  input:focus, select:focus { border-color: #00f0ff; outline: none; }
-  button { background: #00f0ff; color: #000; font-weight: 700; font-size: 1.2rem; padding: 14px 30px; border-radius: 30px; border: none; cursor: pointer; box-shadow: 0 0 15px #00f0ff; transition: 0.3s; user-select: none; }
-  button:hover { background: #0ff; box-shadow: 0 0 25px #0ff; }
-  button:active { background: #00ddee; transform: translateY(2px); }
-  .controls { display: grid; grid-template-columns: 100px 100px 100px; grid-template-rows: 70px 70px 70px; gap: 15px; justify-content: center; align-items: center; margin-top: 12px; }
-  #btn-up { grid-column: 2; grid-row: 1; }
-  #btn-left { grid-column: 1; grid-row: 2; }
-  #btn-down { grid-column: 2; grid-row: 2; }
-  #btn-right { grid-column: 3; grid-row: 2; }
-  #btn-grab { grid-column: 2; grid-row: 3; }
-  .status-bar { display: flex; justify-content: space-between; padding: 10px 15px; background: #000; border-radius: 6px; font-weight: 700; font-size: 1.1rem; color: #0ff; border: 1px solid #0ff; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
-  .status-bar span { margin-right: 20px; }
-  #support-btn { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; }
-  #bag-section { margin-top: 20px; background: #111; border: 1px solid #0ff; border-radius: 6px; padding: 15px; color: #0ff; }
-  #bag-list { list-style: none; max-height: 150px; overflow-y: auto; padding-left: 10px; margin-bottom: 10px; }
-  #camera-selection { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
-  #camera-selection img { cursor: pointer; width: 64px; height: 64px; }
-  #camera-video { width: 100%; height: auto; background: #000; margin-bottom: 10px; }
-  #camera-iframe { width: 100%; height: 480px; background: #000; border: 1px solid #0ff; border-radius: 6px; box-shadow: 0 0 10px #0ff; margin-bottom: 10px; display: none; }
-  #ws-status { position: fixed; top: 0; left: 0; right: 0; display: none; background: #d00; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; padding: 8px 0; text-align: center; z-index: 2000; box-shadow: 0 0 15px #d00; }
-  #top-notification { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; border: 3px solid #d00; border-radius: 12px; padding: 14px 28px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.25rem; z-index: 3000; display: none; box-shadow: 0 0 15px #d00; max-width: 90%; text-align: center; user-select: none; pointer-events: none; }
+   * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; color: #0ff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; }
+    .container { max-width: 900px; width: 100%; background: #111; border: 1px solid #0ff; border-radius: 8px; box-shadow: 0 0 10px #0ff; padding: 20px; position: relative; display: none; }
+    header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; text-align: center; color: #00f0ff; margin-bottom: 20px; text-shadow: 0 0 8px #00f0ff; }
+    section.auth-box, section.select-machine, section.machine-section { margin-bottom: 20px; }
+    section.auth-box h2, section.select-machine h2 { font-size: 1.6rem; margin-bottom: 15px; color: #0ff; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: #0ff; }
+    input[type="text"], input[type="password"], select, input[type="number"] { width: 100%; padding: 10px 12px; margin-bottom: 15px; border: 1px solid #0ff; background: #000; color: #0ff; border-radius: 4px; font-size: 1rem; }
+    input:focus, select:focus { border-color: #00f0ff; outline: none; }
+    button { background: #00f0ff; color: #000; font-weight: 700; font-size: 1.2rem; padding: 14px 30px; border-radius: 30px; border: none; cursor: pointer; box-shadow: 0 0 15px #00f0ff; transition: 0.3s; user-select: none; }
+    button:hover { background: #0ff; box-shadow: 0 0 25px #0ff; }
+    button:active { background: #00ddee; transform: translateY(2px); }
+    .controls { display: grid; grid-template-columns: 100px 100px 100px; grid-template-rows: 70px 70px 70px; gap: 15px; justify-content: center; align-items: center; margin-top: 12px; }
+    #btn-up { grid-column: 2; grid-row: 1; }
+    #btn-left { grid-column: 1; grid-row: 2; }
+    #btn-down { grid-column: 2; grid-row: 2; }
+    #btn-right { grid-column: 3; grid-row: 2; }
+    #btn-grab { grid-column: 2; grid-row: 3; }
+    .status-bar { display: flex; justify-content: space-between; padding: 10px 15px; background: #000; border-radius: 6px; font-weight: 700; font-size: 1.1rem; color: #0ff; border: 1px solid #0ff; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
+    .status-bar span { margin-right: 20px; }
+    #support-btn { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; }
+    #bag-section { margin-top: 20px; background: #111; border: 1px solid #0ff; border-radius: 6px; padding: 15px; color: #0ff; }
+    #bag-list { list-style: none; max-height: 150px; overflow-y: auto; padding-left: 10px; margin-bottom: 10px; }
+    #camera-selection { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+    #camera-selection img { cursor: pointer; width: 64px; height: 64px; }
+    #camera-video { width: 100%; height: auto; background: #000; margin-bottom: 10px; }
+    #camera-iframe { width: 100%; height: 480px; background: #000; border: 1px solid #0ff; border-radius: 6px; box-shadow: 0 0 10px #0ff; margin-bottom: 10px; display: none; }
+    #ws-status { position: fixed; top: 0; left: 0; right: 0; display: none; background: #d00; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; padding: 8px 0; text-align: center; z-index: 2000; box-shadow: 0 0 15px #d00; }
+    #top-notification { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; border: 3px solid #d00; border-radius: 12px; padding: 14px 28px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.25rem; z-index: 3000; display: none; box-shadow: 0 0 15px #d00; max-width: 90%; text-align: center; user-select: none; pointer-events: none; }
 
-  /* Intro */
-  #intro { position: fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:5000; }
-  #intro h1 { font-size:4rem; color:#00f7ff; text-shadow:0 0 20px #00f7ff, 0 0 40px #00f7ff; opacity:0; animation: glowText 2s ease forwards; }
-  #intro p { margin-top:15px; font-size:1.5rem; color:#00f7ff; opacity:0; animation: fadeIn 2s ease forwards; animation-delay:1.5s; }
-  #start-btn { display:none; background:#0ff; color:#000; padding:12px 30px; font-size:1.5rem; font-weight:700; border:none; border-radius:30px; cursor:pointer; margin-top:30px; box-shadow: 0 0 15px #0ff; }
-  @keyframes glowText { 0% {opacity:0; transform:scale(0.8);} 100% {opacity:1; transform:scale(1);} }
-  @keyframes fadeIn { 0% {opacity:0;} 100% {opacity:1;} }
+    /* Intro */
+    #intro { position: fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:5000; }
+    #intro h1 { font-size:4rem; color:#00f7ff; text-shadow:0 0 20px #00f7ff, 0 0 40px #00f7ff; opacity:0; animation: glowText 2s ease forwards; }
+    #intro p { margin-top:15px; font-size:1.5rem; color:#00f7ff; opacity:0; animation: fadeIn 2s ease forwards; animation-delay:1.5s; }
+    #start-btn { display:none; background:#0ff; color:#000; padding:12px 30px; font-size:1.5rem; font-weight:700; border:none; border-radius:30px; cursor:pointer; margin-top:30px; box-shadow: 0 0 15px #0ff; }
+    @keyframes glowText { 0% {opacity:0; transform:scale(0.8);} 100% {opacity:1; transform:scale(1);} }
+    @keyframes fadeIn { 0% {opacity:0;} 100% {opacity:1;} }
 
-  /* Neon flash effect for button feedback */
-  .btn-flash { box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff; transform: translateY(-2px) scale(1.02); transition: all 0.18s ease; }
+    /* Neon flash effect for button feedback */
+    .btn-flash {
+      box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff;
+      transform: translateY(-2px) scale(1.02);
+      transition: all 0.18s ease;
+    }
 
-  /* Responsividade */
-  @media (max-width: 768px) {
-    body { padding: 10px; }
-    header h1 { font-size: 2rem; }
-    .container { padding: 15px; }
-    .controls { grid-template-columns: 80px 80px 80px; grid-template-rows: 60px 60px 60px; gap: 10px; }
-    button { font-size: 1rem; padding: 12px 20px; }
-    input[type="text"], input[type="password"], select, input[type="number"] { font-size: 0.95rem; padding: 8px 10px; }
-    #machine-video-iframe, #camera-iframe { height: 300px; }
-  }
-</style>
-
+    /* Responsividade para celular */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      header h1 { font-size: 2rem; }
+      .container { padding: 15px; }
+      .controls {
+        grid-template-columns: 80px 80px 80px;
+        grid-template-rows: 60px 60px 60px;
+        gap: 10px;
+      }
+      button { font-size: 1rem; padding: 12px 20px; }
+      input[type="text"], input[type="password"], select, input[type="number"] {
+        font-size: 0.95rem;
+        padding: 8px 10px;
+      }
+      #machine-video-iframe, #camera-iframe {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
 <body>
 
 <!-- Intro -->
@@ -79,7 +91,7 @@
   <header><h1>PLUSHMASTER</h1></header>
   <div id="ws-status">A máquina selecionada está desconectada!</div>
   <div id="top-notification"></div>
-  
+
   <!-- Login -->
   <section class="auth-box" id="login-section">
     <h2>Login</h2>
@@ -104,41 +116,273 @@
     <p>Já tem conta? <a href="#" id="show-login">Faça login</a></p>
   </section>
 
-  <!-- Conteúdo extra omitido para manter foco na intro e notificação -->
+  <!-- Seleção de ação -->
+  <section class="select-machine" id="select-machine-section" style="display:none;">
+    <h2>O que deseja fazer?</h2>
+    <div class="status-bar">
+      <span><strong>Usuário:</strong> <span id="current-user"></span></span>
+      <span><strong>Créditos:</strong> R$ <span id="current-credits">0.00</span></span>
+      <span><strong>Pelúcias:</strong> <span id="pelucias-count">0</span></span>
+    </div>
+    <label for="machine-select">Escolha a máquina:</label>
+    <select id="machine-select">
+      <option value="" disabled selected>Selecione</option>
+      <option value="onlinemachine02" data-price="2.00">Máquina 1 R$2,00 por jogada</option>
+      <option value="onlinemachine03" data-price="5.00">Máquina 2 R$5,00 por jogada</option>
+    </select>
+    <label for="play-quantity">Quantidade de jogadas:</label>
+    <input type="number" id="play-quantity" min="1" max="10" value="1" />
+    <p>Total: R$ <span id="total-price">0.00</span></p>
+    <button id="play-machine-btn">Jogar</button>
+    <button id="watch-cameras-btn">Assistir câmeras</button>
+
+    <section id="bag-section">
+      <h3>Sacola de Pelúcias</h3>
+      <ul id="bag-list"></ul>
+      <button id="request-delivery-btn">Solicitar Entrega</button>
+    </section>
+  </section>
+
+  <!-- Área da máquina -->
+  <section class="machine-section" id="machine-area" style="display:none;">
+    <iframe id="machine-video-iframe" width="100%" height="480" frameborder="0"></iframe>
+    <div class="controls">
+      <button id="btn-up">↑</button>
+      <button id="btn-left">←</button>
+      <button id="btn-down">↓</button>
+      <button id="btn-right">→</button>
+      <button id="btn-grab">AGARRAR</button>
+    </div>
+    <p>Tempo restante: <span id="game-timer">0</span>s</p>
+    <button id="exit-machine-btn">Sair da Máquina</button>
+  </section>
+
+  <!-- Área das câmeras -->
+  <section id="camera-area" style="display:none;">
+    <video id="camera-video" autoplay muted></video>
+    <iframe id="camera-iframe"></iframe>
+    <div id="camera-selection">
+      <img id="camera-switch" src="https://www.onlinemachine.com.br/_next/static/media/camera_1.361d4152.png" alt="Câmera">
+      <button id="exit-camera-btn">Sair</button>
+    </div>
+  </section>
 </div>
 
 <button id="support-btn">Suporte</button>
 
 <script>
-  // Funções de notificação e som
+  // Suporte
+  document.getElementById("support-btn").onclick = () => window.open("https://wa.me/5518996925754", "_blank");
+
+  // Variáveis
+  let currentUser = null;
+  let currentMachine = null;
+  let gameTimerInterval = null;
+
+  const currentUserSpan = document.getElementById("current-user");
+  const currentCredits = document.getElementById("current-credits");
+  const peluciasCount = document.getElementById("pelucias-count");
+  const bagList = document.getElementById("bag-list");
   const topNotification = document.getElementById("top-notification");
-  const beep = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
-  const success = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-video-game-mystery-alert-234.wav");
-  function safePlay(audio){ try{ audio.currentTime=0; audio.play().catch(()=>{}); }catch(e){} }
-  function playSuccess(){ safePlay(success); }
+  const wsStatusBar = document.getElementById("ws-status");
+  const machineVideoIframe = document.getElementById("machine-video-iframe");
+  const machineSelect = document.getElementById("machine-select");
+  const playQuantity = document.getElementById("play-quantity");
+  const totalPriceSpan = document.getElementById("total-price");
+
+  const loginSection = document.getElementById("login-section");
+  const registerSection = document.getElementById("register-section");
+  const selectSection = document.getElementById("select-machine-section");
+  const playSection = document.getElementById("machine-area");
+  const cameraArea = document.getElementById("camera-area");
+
+  const cameraSwitch = document.getElementById("camera-switch");
+  const exitCameraBtn = document.getElementById("exit-camera-btn");
+  const cameraVideo = document.getElementById("camera-video");
+  const cameraIframe = document.getElementById("camera-iframe");
+
+  const machineConnectionStatus = { "onlinemachine02": "connected", "onlinemachine03": "connected" };
+
+  // Funções auxiliares
+  const saveUsers = users => localStorage.setItem("users", JSON.stringify(users));
+  const getUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
+  function getUserBag(){ const bags = JSON.parse(localStorage.getItem("userBags")||"{}"); return bags[currentUser] || []; }
+  function saveUserBag(bag){ const bags = JSON.parse(localStorage.getItem("userBags")||"{}"); bags[currentUser]=bag; localStorage.setItem("userBags", JSON.stringify(bags)); }
+
+  function updateCreditsDisplay(){ const users=getUsers(); const user=users.find(u=>u.username===currentUser); if(user) currentCredits.innerText = user.credits.toFixed(2); }
+  function updatePeluciasCount(){ peluciasCount.innerText=getUserBag().length; }
+  function updateBagList(){ const bag=getUserBag(); bagList.innerHTML=""; if(bag.length===0) bagList.innerHTML="<li>Sacola vazia.</li>"; else bag.forEach((p,i)=>{ const li=document.createElement("li"); li.textContent=`Pelúcia ${i+1}: ${p}`; bagList.appendChild(li); }); }
   function showTopNotification(msg,d=3000){ topNotification.innerText=msg; topNotification.style.display="block"; clearTimeout(topNotification._timeoutId); topNotification._timeoutId=setTimeout(()=>topNotification.style.display="none",d); }
 
-  // Feedback botão
-  function buttonFeedback(btn, {vibrate=false}={}){
-    safePlay(beep);
-    if(vibrate && navigator.vibrate) navigator.vibrate(80);
+  // ------------------ Sons e feedback ------------------
+  const beep = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
+  const success = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-video-game-mystery-alert-234.wav");
+  const errorSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-error-voice-2866.mp3");
+
+  function safePlay(audio){
+    try { audio.currentTime = 0; audio.play().catch(()=>{}); } catch(e) {}
+  }
+  function playBeep(){ safePlay(beep); }
+  function playSuccess(){ safePlay(success); }
+  function playError(){ safePlay(errorSound); }
+
+  /* feedback visual + opcional vibração
+     vibrate = false por padrão (assim login/cadastro NÃO vibram).
+     Apenas os botões de comando da máquina chamarão com vibrate=true.
+  */
+  function buttonFeedback(btn, { vibrate = false } = {}){
+    try { playBeep(); } catch(e){}
+    if (vibrate && navigator.vibrate) navigator.vibrate(80);
     btn.classList.add("btn-flash");
-    setTimeout(()=>btn.classList.remove("btn-flash"),220);
+    setTimeout(()=> btn.classList.remove("btn-flash"), 220);
   }
 
-  // Intro com notificação de manutenção
-  const intro = document.getElementById("intro");
-  const startBtn = document.getElementById("start-btn");
+  // ------------------ Login ------------------
+  document.getElementById("login-btn").onclick = ()=>{
+    const btn = document.getElementById("login-btn");
+    buttonFeedback(btn, { vibrate: false }); // som + flash (sem vibração)
+
+    const username=document.getElementById("login-username").value.trim();
+    const password=document.getElementById("login-password").value.trim();
+    if(!username||!password){ showTopNotification("Preencha todos os campos para entrar.",5000); playError(); return; }
+    const users=getUsers();
+    const user=users.find(u=>u.username===username&&u.password===password);
+    if(!user){ showTopNotification("Usuário ou senha inválidos.",5000); playError(); return; }
+    currentUser=username; currentUserSpan.innerText=currentUser;
+    loginSection.style.display="none"; selectSection.style.display="block";
+    updateCreditsDisplay(); updatePeluciasCount(); updateBagList();
+    showTopNotification("Login realizado com sucesso!",3000);
+    playSuccess();
+  };
+
+  // ------------------ Cadastro ------------------
+  document.getElementById("register-btn").onclick = ()=>{
+    const btn = document.getElementById("register-btn");
+    buttonFeedback(btn, { vibrate: false }); // som + flash (sem vibração)
+
+    const name=document.getElementById("register-name").value.trim();
+    const username=document.getElementById("register-username").value.trim();
+    const password=document.getElementById("register-password").value.trim();
+    if(!name||!username||!password){ showTopNotification("Preencha todos os campos para se registrar.",5000); playError(); return; }
+    const users=getUsers();
+    if(users.find(u=>u.username===username)){ showTopNotification("Usuário já existe.",5000); playError(); return; }
+    users.push({name,username,password,credits:10.00});
+    saveUsers(users);
+    showTopNotification("Registro feito com sucesso! Faça login.",5000);
+    registerSection.style.display="none"; loginSection.style.display="block";
+    playSuccess();
+  };
+
+  document.getElementById("show-register").onclick=(e)=>{ e.preventDefault(); loginSection.style.display="none"; registerSection.style.display="block"; }
+  document.getElementById("show-login").onclick=(e)=>{ e.preventDefault(); registerSection.style.display="none"; loginSection.style.display="block"; }
+
+  // ------------------ Máquina ------------------
+  let playQueue=[]; let currentPlayIndex=-1;
+  function updateTotalPrice(){ const option=machineSelect.selectedOptions[0]; if(!option){ totalPriceSpan.textContent="0.00"; return; } const price=parseFloat(option.dataset.price); let qty=parseInt(playQuantity.value); if(isNaN(qty)||qty<1) qty=1; if(qty>10) qty=10; playQuantity.value=qty; totalPriceSpan.textContent=(price*qty).toFixed(2); }
+  machineSelect.onchange=updateTotalPrice; playQuantity.oninput=updateTotalPrice; updateTotalPrice();
+
+  document.getElementById("play-machine-btn").onclick=()=>{
+    const btn = document.getElementById("play-machine-btn");
+    buttonFeedback(btn, { vibrate: false }); // som + flash
+
+    if(!currentUser){ showTopNotification("Faça login para jogar.",5000); playError(); return; }
+    const users=getUsers(); const user=users.find(u=>u.username===currentUser);
+    const qty=parseInt(playQuantity.value); const pricePerPlay=parseFloat(machineSelect.selectedOptions[0].dataset.price); const totalPrice=pricePerPlay*qty;
+    if(user.credits<totalPrice){ showTopNotification("Você não tem créditos suficientes.",5000); playError(); return; }
+    user.credits-=totalPrice; saveUsers(users); updateCreditsDisplay();
+    currentMachine=machineSelect.value; playQueue=new Array(qty).fill(currentUser); currentPlayIndex=0;
+    machineVideoIframe.src=`https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=${currentMachine}`;
+    selectSection.style.display="none"; playSection.style.display="block"; updateControlButtonsStatus(); checkMachineConnection(); startGameTimer(30);
+  };
+
+  let gameTime=30;
+  function startGameTimer(seconds){ gameTime=seconds; document.getElementById("game-timer").innerText=gameTime; if(gameTimerInterval) clearInterval(gameTimerInterval); gameTimerInterval=setInterval(()=>{ gameTime--; document.getElementById("game-timer").innerText=gameTime; if(gameTime<=0){ clearInterval(gameTimerInterval); finishPlay(); } },1000); }
+  function finishPlay(){ addPeluciaToBag(); currentPlayIndex++; if(currentPlayIndex>=playQueue.length){ exitMachine(); } else { startGameTimer(30); showTopNotification(`Sua próxima jogada vai começar!`,3000); } }
+  function addPeluciaToBag(){ const pelucias=["Urso de pelúcia","Coelho fofinho","Gato sorridente","Cachorro dorminhoco","Panda fofo"]; const bag=getUserBag(); const nova=pelucias[Math.floor(Math.random()*pelucias.length)]; bag.push(nova); saveUserBag(bag); showTopNotification(`Parabéns! Você ganhou uma pelúcia: ${nova}`,6000); updatePeluciasCount(); updateBagList(); playSuccess(); }
+  document.getElementById("exit-machine-btn").onclick=()=>{
+    const btn = document.getElementById("exit-machine-btn");
+    buttonFeedback(btn, { vibrate: false });
+    exitMachine();
+  };
+  function exitMachine(){ playSection.style.display="none"; selectSection.style.display="block"; if(gameTimerInterval) clearInterval(gameTimerInterval); currentMachine=null; checkMachineConnection(); }
+
+  function updateControlButtonsStatus(){ const buttons=["btn-up","btn-left","btn-down","btn-right","btn-grab"]; if(!currentMachine){ buttons.forEach(id=>document.getElementById(id).disabled=true); return; } const status=machineConnectionStatus[currentMachine]; const disabled=status==="disconnected"; buttons.forEach(id=>document.getElementById(id).disabled=disabled); }
+  function checkMachineConnection(){ if(!currentMachine){ wsStatusBar.style.display="none"; updateControlButtonsStatus(); return; } const status=machineConnectionStatus[currentMachine]; if(status==="disconnected"){ wsStatusBar.style.display="block"; showTopNotification("Conexão com a máquina caiu! Você será descontado e removido da fila.",6000); exitMachine(); } else { wsStatusBar.style.display="none"; } updateControlButtonsStatus(); }
+
+  // Controles da máquina: SOM + VIBRAÇÃO apenas aqui
+  document.getElementById("btn-up").onclick=()=>{
+    const btn = document.getElementById("btn-up");
+    buttonFeedback(btn, { vibrate: true });
+    showTopNotification("Movimento para cima enviado",1500);
+  };
+  document.getElementById("btn-down").onclick=()=>{
+    const btn = document.getElementById("btn-down");
+    buttonFeedback(btn, { vibrate: true });
+    showTopNotification("Movimento para baixo enviado",1500);
+  };
+  document.getElementById("btn-left").onclick=()=>{
+    const btn = document.getElementById("btn-left");
+    buttonFeedback(btn, { vibrate: true });
+    showTopNotification("Movimento para esquerda enviado",1500);
+  };
+  document.getElementById("btn-right").onclick=()=>{
+    const btn = document.getElementById("btn-right");
+    buttonFeedback(btn, { vibrate: true });
+    showTopNotification("Movimento para direita enviado",1500);
+  };
+  document.getElementById("btn-grab").onclick=()=>{
+    const btn = document.getElementById("btn-grab");
+    // vibração mais marcante
+    buttonFeedback(btn, { vibrate: true });
+    if (navigator.vibrate) navigator.vibrate([180, 80, 180]);
+    showTopNotification("Comando agarrar enviado",1500);
+  };
+
+  // ------------------ Câmeras ------------------
+  document.getElementById("watch-cameras-btn").onclick=()=>{
+    const btn = document.getElementById("watch-cameras-btn");
+    buttonFeedback(btn, { vibrate: false });
+    selectSection.style.display="none"; cameraArea.style.display="block"; cameraVideo.style.display="block"; cameraIframe.style.display="none"; cameraSwitch.src="https://www.onlinemachine.com.br/_next/static/media/camera_2.fde87b8e.png";
+  };
+  cameraSwitch.onclick=()=>{
+    const btn = cameraSwitch;
+    buttonFeedback(btn, { vibrate: false });
+    if(cameraVideo.style.display==="block"){ cameraVideo.style.display="none"; cameraIframe.style.display="block"; cameraIframe.src="https://www.onlinemachine.com.br/camera_stream.html"; cameraSwitch.src="https://www.onlinemachine.com.br/_next/static/media/camera_1.361d4152.png"; }
+    else{ cameraVideo.style.display="block"; cameraIframe.style.display="none"; cameraSwitch.src="https://www.onlinemachine.com.br/_next/static/media/camera_2.fde87b8e.png"; }
+  };
+  exitCameraBtn.onclick=()=>{
+    const btn = exitCameraBtn;
+    buttonFeedback(btn, { vibrate: false });
+    cameraArea.style.display="none"; selectSection.style.display="block";
+  };
+
+  // ------------------ Delivery / Outros ------------------
+  document.getElementById("request-delivery-btn").onclick=()=>{
+    const btn = document.getElementById("request-delivery-btn");
+    buttonFeedback(btn, { vibrate: false });
+    const bag=getUserBag(); if(bag.length===0){ showTopNotification("Sua sacola está vazia!",3000); playError(); return; }
+    showTopNotification("Entrega solicitada com sucesso!",4000);
+    // Limpar somente a sacola do usuário logado
+    const bags = JSON.parse(localStorage.getItem("userBags")||"{}"); if(bags[currentUser]) delete bags[currentUser]; localStorage.setItem("userBags", JSON.stringify(bags));
+    updateBagList(); updatePeluciasCount();
+  };
+
+  // ------------------ Intro ------------------
+  const intro=document.getElementById("intro"); const startBtn=document.getElementById("start-btn");
   setTimeout(()=>startBtn.style.display="block",3000);
   startBtn.onclick=()=>{
-    buttonFeedback(startBtn);
-    intro.style.display="none";
-    document.getElementById("site").style.display="block";
+    const btn = startBtn;
+    buttonFeedback(btn, { vibrate: false });
+    intro.style.display="none"; document.getElementById("site").style.display="block";
     playSuccess();
-    showTopNotification("estamos em manutenção! voltaremos em breve.",6000);
   };
+
+  // inicialização UI (ex: se já há usuários no localStorage)
+  window.addEventListener("load", ()=>{
+    // criar usuário de teste se não existir (opcional)
+    if(!localStorage.getItem("users")) saveUsers([]);
+    // mostrar intro/site conforme lógica acima
+  });
 </script>
 </body>
 </html>
-
-
