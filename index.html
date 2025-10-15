@@ -417,11 +417,11 @@ function startPingCheck() {
       const ping = Date.now() - start;
 
       if (ping > 200) {
-        blockSiteWithNotification("Você foi desconectado. Feche e volte a abrir o site.");
+        blockSiteWithNotification("sua conexão esta fraca. Feche e volte a abrir o site.");
       }
     } catch (e) {
       // Se der erro na requisição, também considera desconexão
-      blockSiteWithNotification("Você foi desconectado. Feche e volte a abrir o site.");
+      blockSiteWithNotification("erro na requisição.");
     }
   }, 5000); // verifica a cada 5 segundos
 }
