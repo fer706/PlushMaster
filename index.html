@@ -135,6 +135,8 @@
     <p>Total: R$ <span id="total-price">0.00</span></p>
     <button id="play-machine-btn">Jogar</button>
     <button id="watch-cameras-btn">Assistir câmeras</button>
+    <button id="logout-btn">Sair da Conta</button>
+
 
     <section id="bag-section">
       <h3>Sacola de Pelúcias</h3>
@@ -357,6 +359,15 @@ localStorage.setItem("lastUser", currentUser);
     buttonFeedback(btn, { vibrate: false });
     cameraArea.style.display="none"; selectSection.style.display="block";
   };
+// ------------------ Logout ------------------
+document.getElementById("logout-btn").onclick = () => {
+    buttonFeedback(document.getElementById("logout-btn")); // feedback visual + som
+    currentUser = null;
+    localStorage.removeItem("lastUser"); // impede login automático
+    selectSection.style.display = "none"; 
+    loginSection.style.display = "block"; // volta para o login
+    showTopNotification("Você saiu da conta.", 3000);
+};
 
   // ------------------ Delivery / Outros ------------------
   document.getElementById("request-delivery-btn").onclick=()=>{
