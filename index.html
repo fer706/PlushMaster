@@ -249,6 +249,8 @@
     const user=users.find(u=>u.username===username&&u.password===password);
     if(!user){ showTopNotification("Usuário ou senha inválidos.",5000); playError(); return; }
     currentUser=username; currentUserSpan.innerText=currentUser;
+    // Salva a última conta logada
+localStorage.setItem("lastUser", currentUser);
     loginSection.style.display="none"; selectSection.style.display="block";
     updateCreditsDisplay(); updatePeluciasCount(); updateBagList();
     showTopNotification("Login realizado com sucesso!",3000);
@@ -416,7 +418,7 @@ function startPingCheck() {
       await fetch("https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02"); // URL fictícia, deve existir
       const ping = Date.now() - start;
 
-      if (ping > 200) {
+      if (ping > 250) {
         blockSiteWithNotification("sua conexão esta fraca. Feche e volte a abrir o site.");
       }
     } catch (e) {
@@ -436,6 +438,39 @@ startBtn.onclick = () => {
   startPingCheck(); // inicia verificação de ping
 };
 
+startBtn.onclick = () => {
+  buttonFeedback(startBtn, { vibrate: false });
+  intro.style.display = "none";
+  document.getElementById("site").style.display = "block";
+
+  const lastUser = localStorage.getItem("lastUser");
+  if (lastUser) {
+    const users = getUsers();
+    const user = users.find(u => u.username === lastUser);
+    if (user) {
+      currentUser = user.username;
+      currentUserSpan.innerText = currentUser;
+
+      // Oculta o login e mostra apenas a seleção
+      loginSection.style.display = "none";
+      selectSection.style.display = "block";
+
+      updateCreditsDisplay();
+      updatePeluciasCount();
+      updateBagList();
+      showTopNotification(`Bem-vindo de volta, ${currentUser}! Login automático realizado.`, 3000);
+      playSuccess();
+      
+      startPingCheck();
+      return; // garante que o loginSection não seja mostrado
+    }
+  }
+
+  // Caso não haja login automático, mostra apenas o login
+  loginSection.style.display = "block";
+  selectSection.style.display = "none";
+  startPingCheck();
+};
 
 
 </script>
