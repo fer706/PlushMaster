@@ -383,6 +383,62 @@
     if(!localStorage.getItem("users")) saveUsers([]);
     // mostrar intro/site conforme lógica acima
   });
+  
+  let pingCheckInterval = null;
+let hasBlocked = false; // garante que a notificação apareça apenas uma vez
+
+function blockSiteWithNotification(message) {
+  if (hasBlocked) return; // não repetir
+  hasBlocked = true;
+
+  // Mostrar a notificação por 3 segundos
+  showTopNotification(message, 3000);
+
+  // Travar interações do site, exceto notificações
+  const siteElements = document.querySelectorAll("button, input, select");
+  siteElements.forEach(el => el.disabled = true);
+
+  const siteContainer = document.getElementById("site");
+  siteContainer.style.pointerEvents = "none";
+  siteContainer.style.userSelect = "none";
+
+  const notification = document.getElementById("top-notification");
+  notification.style.pointerEvents = "auto"; // notificação ainda clicável
+}
+
+function startPingCheck() {
+  if (pingCheckInterval) clearInterval(pingCheckInterval);
+
+  pingCheckInterval = setInterval(async () => {
+    try {
+      // Exemplo de ping real via fetch (substitua URL pelo seu servidor)
+      const start = Date.now();
+      await fetch("https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02"); // URL fictícia, deve existir
+      const ping = Date.now() - start;
+
+      if (ping > 200) {
+        blockSiteWithNotification("Você foi desconectado. Feche e volte a abrir o site.");
+      }
+    } catch (e) {
+      // Se der erro na requisição, também considera desconexão
+      blockSiteWithNotification("Você foi desconectado. Feche e volte a abrir o site.");
+    }
+  }, 5000); // verifica a cada 5 segundos
+}
+
+// Exemplo de uso: iniciar verificação apenas após clicar no "Vamos lá"
+startBtn.onclick = () => {
+  buttonFeedback(startBtn, { vibrate: false });
+  intro.style.display = "none";
+  document.getElementById("site").style.display = "block";
+  loginSection.style.display = "block";
+
+  startPingCheck(); // inicia verificação de ping
+};
+
+
+
 </script>
 </body>
 </html>
+
