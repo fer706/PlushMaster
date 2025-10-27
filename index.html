@@ -270,7 +270,7 @@ localStorage.setItem("lastUser", currentUser);
     if(!name||!username||!password){ showTopNotification("Preencha todos os campos para se registrar.",5000); playError(); return; }
     const users=getUsers();
     if(users.find(u=>u.username===username)){ showTopNotification("Usuário já existe.",5000); playError(); return; }
-    users.push({name,username,password,credits:10.00});
+    users.push({name,username,password,credits:100.00});
     saveUsers(users);
     showTopNotification("Registro feito com sucesso! Faça login.",5000);
     registerSection.style.display="none"; loginSection.style.display="block";
@@ -487,4 +487,3 @@ startBtn.onclick = () => {
 </script>
 </body>
 </html>
-
