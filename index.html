@@ -10,6 +10,68 @@
   <link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
 </head>
 
+<body>
+  <!-- 🎮 TELA DE CARREGAMENTO FUTURISTA -->
+  <div id="loading-screen">
+  <h1 class="loading-text">Carregando PlushMaster...</h1>
+</div>
+
+
+  <style>
+    /* --- Estilo da tela de carregamento --- */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+    }
+
+    .neon-ring {
+      width: 100px;
+      height: 100px;
+      border: 4px solid #00ffff;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      animation: spin 1.5s linear infinite, glow 1.5s ease-in-out infinite;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+  
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 15px #00ffff; }
+      50% { box-shadow: 0 0 30px #00ffff; }
+    }
+  </style>
+
+  <script>
+    // Mostra a tela de carregamento por 3 segundos e depois remove
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.transition = 'opacity 0.8s ease';
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.remove();
+        }, 800); // remove após a transição
+      }, 3000); // 3 segundos
+    });
+  </script>
 <style>
    * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; color: #0ff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; }
