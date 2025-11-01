@@ -62,6 +62,154 @@
   });
 </script>
 
+<!-- ENGRENAGEM FIXA -->
+<div id="settings-gear" title="Configurações">⚙️</div>
+
+<!-- MENU DA ENGRENAGEM -->
+<div id="gear-menu">
+  <button id="logout-btn">Sair da Conta</button>
+  <button id="history-btn">Histórico de Atividades</button>
+</div>
+
+<!-- MODAL DO HISTÓRICO -->
+<div id="history-modal">
+  <h2>Histórico de Atividades</h2>
+  <ul id="history-list"></ul>
+  <button id="close-history-btn">Fechar</button>
+</div>
+
+<style>
+  /* Engrenagem fixa no topo esquerdo */
+  #settings-gear {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10000;
+    color: #00ffff;
+    transition: transform 0.3s;
+  }
+  #settings-gear:hover { transform: rotate(20deg); }
+
+  /* Menu da engrenagem */
+  #gear-menu {
+    display: none;
+    position: fixed;
+    left: 60px;
+    top: 20px;
+    background: #000;
+    border: 2px solid #00ffff;
+    padding: 10px;
+    z-index: 10001;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;       /* Corrigido: flex para flex-direction funcionar */
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  #gear-menu button {
+    background: #00ffff;
+    color: #000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  /* Modal do histórico */
+  #history-modal {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #000;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    padding: 20px;
+    z-index: 10002;
+    width: 80%;
+    max-width: 400px;
+    box-sizing: border-box; /* evita overflow do conteúdo */
+  }
+
+  #history-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+
+  #close-history-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    background: #00ffff;
+    color: #000;
+    border: none;
+  }
+</style>
+
+<script>
+  const gear = document.getElementById('settings-gear');
+  const gearMenu = document.getElementById('gear-menu');
+  const logoutBtn = document.getElementById('logout-btn');
+  const historyBtn = document.getElementById('history-btn');
+  const historyModal = document.getElementById('history-modal');
+  const closeHistoryBtn = document.getElementById('close-history-btn');
+  const historyList = document.getElementById('history-list');
+
+  // Alterna visibilidade do menu
+  gear.onclick = () => {
+    gearMenu.style.display = gearMenu.style.display === 'flex' ? 'none' : 'flex';
+  };
+
+  // Abrir histórico
+  historyBtn.onclick = () => {
+    gearMenu.style.display = 'none';
+    showHistory();
+    historyModal.style.display = 'block';
+  };
+
+  // Fechar histórico
+  closeHistoryBtn.onclick = () => {
+    historyModal.style.display = 'none';
+  };
+
+  // Logout
+  logoutBtn.onclick = () => {
+    localStorage.removeItem('lastUser'); // remove login automático
+    location.reload();
+  };
+
+  // Funções de histórico
+  function addToHistory(action) {
+    let history = JSON.parse(localStorage.getItem('activityHistory') || '[]');
+    const timestamp = new Date().toLocaleString();
+    history.unshift(`[${timestamp}] ${action}`);
+    localStorage.setItem('activityHistory', JSON.stringify(history));
+  }
+
+  function showHistory() {
+    const history = JSON.parse(localStorage.getItem('activityHistory') || '[]');
+    historyList.innerHTML = '';
+    if(history.length === 0){
+      historyList.innerHTML = '<li>Nenhuma atividade registrada.</li>';
+    } else {
+      history.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        li.style.borderBottom = '1px solid #0ff';
+        li.style.padding = '5px 0';
+        historyList.appendChild(li);
+      });
+    }
+  }
+
+  // Exemplo inicial
+  addToHistory('Usuário entrou no site');
+</script>
+
 
 <style>
    * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -188,8 +336,7 @@
     <p>Total: R$ <span id="total-price">0.00</span></p>
     <button id="play-machine-btn">Jogar</button>
     <button id="watch-cameras-btn">Assistir câmeras</button>
-    <button id="logout-btn">Sair da Conta</button>
-
+    
 
     <section id="bag-section">
       <h3>Sacola de Pelúcias</h3>
@@ -292,25 +439,41 @@
     setTimeout(()=> btn.classList.remove("btn-flash"), 220);
   }
 
-  // ------------------ Login ------------------
-  document.getElementById("login-btn").onclick = ()=>{
-    const btn = document.getElementById("login-btn");
-    buttonFeedback(btn, { vibrate: false }); // som + flash (sem vibração)
+ // LOGIN
+document.getElementById("login-btn").onclick = () => {
+  const username = document.getElementById("login-username").value.trim();
+  const password = document.getElementById("login-password").value.trim();
 
-    const username=document.getElementById("login-username").value.trim();
-    const password=document.getElementById("login-password").value.trim();
-    if(!username||!password){ showTopNotification("Preencha todos os campos para entrar.",5000); playError(); return; }
-    const users=getUsers();
-    const user=users.find(u=>u.username===username&&u.password===password);
-    if(!user){ showTopNotification("Usuário ou senha inválidos.",5000); playError(); return; }
-    currentUser=username; currentUserSpan.innerText=currentUser;
-    // Salva a última conta logada
-localStorage.setItem("lastUser", currentUser);
-    loginSection.style.display="none"; selectSection.style.display="block";
-    updateCreditsDisplay(); updatePeluciasCount(); updateBagList();
-    showTopNotification("Login realizado com sucesso!",3000);
-    playSuccess();
-  };
+  if (!username || !password) {
+    showTopNotification("Preencha todos os campos para entrar.", 5000);
+    playError();
+    return;
+  }
+
+  const users = getUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (!user) {
+    showTopNotification("Usuário ou senha inválidos.", 5000);
+    playError();
+    return;
+  }
+
+  // Login bem-sucedido
+  currentUser = username;
+  localStorage.setItem("lastUser", currentUser); // ativa login automático
+  currentUserSpan.innerText = currentUser;
+
+  // Atualiza interface sem reload
+  loginSection.style.display = "none";        // esconde login
+  selectSection.style.display = "block";      // mostra painel principal
+  updateCreditsDisplay();
+  updatePeluciasCount();
+  updateBagList();
+
+  showTopNotification(`Bem-vindo, ${currentUser}!`, 3000);
+};
+
 
   // ------------------ Cadastro ------------------
   document.getElementById("register-btn").onclick = ()=>{
@@ -535,6 +698,62 @@ startBtn.onclick = () => {
   selectSection.style.display = "none";
   startPingCheck();
 };
+
+// ------------------ Histórico de Atividades ------------------
+
+// Função para adicionar atividade
+function addToHistory(activity) {
+    let history = JSON.parse(localStorage.getItem("activityHistory")) || [];
+    const timestamp = new Date().toLocaleString();
+    history.unshift(`[${timestamp}] ${activity}`); // adiciona no início
+    localStorage.setItem("activityHistory", JSON.stringify(history));
+
+    // Atualiza lista se o modal estiver aberto
+    if (document.getElementById("history-modal").style.display === "block") {
+        showHistory();
+    }
+}
+
+// Função para mostrar histórico
+function showHistory() {
+    const historyList = document.getElementById("history-list");
+    const history = JSON.parse(localStorage.getItem("activityHistory")) || [];
+    historyList.innerHTML = ""; // limpa lista
+
+    if (history.length === 0) {
+        const li = document.createElement("li");
+        li.innerText = "Nenhuma atividade registrada.";
+        historyList.appendChild(li);
+        return;
+    }
+
+    history.forEach(item => {
+        const li = document.createElement("li");
+        li.innerText = item;
+        li.style.borderBottom = "1px solid #0ff";
+        li.style.padding = "5px 0";
+        historyList.appendChild(li);
+    });
+}
+
+// Abrir modal ao clicar na engrenagem
+document.getElementById("history-gear").onclick = () => {
+    showHistory();
+    document.getElementById("history-modal").style.display = "block";
+};
+
+// Fechar modal
+document.getElementById("close-history-btn").onclick = () => {
+    document.getElementById("history-modal").style.display = "none";
+};
+
+// ------------------ Exemplos de uso ------------------
+// Sempre que ocorrer um evento importante, chame addToHistory
+// Exemplo: login
+// addToHistory(`${currentUser} fez login!`);
+
+// Exemplo: compra de créditos
+// addToHistory(`${currentUser} comprou 10 créditos.`);
 
 
 </script>
