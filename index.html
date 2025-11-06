@@ -156,9 +156,12 @@
   /************************************************************************
    *  CONFIGURAÇÕES
    ************************************************************************/
-  const START_CREDITS = 10;
+  // Créditos iniciais para novos usuários
+  const START_CREDITS = 10; // altere se quiser outro valor
 
+  // Imports Firebase modular (v9+)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
   import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -177,17 +180,22 @@
     onSnapshot
   } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
+  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
     authDomain: "plush-master.firebaseapp.com",
     projectId: "plush-master",
-    storageBucket: "plush-master.appspot.com",
+    storageBucket: "plush-master.firebasestorage.app",
     messagingSenderId: "822751531077",
     appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
     measurementId: "G-JYRNTNQKEB"
   };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  try { getAnalytics(app); } catch(e) { /* analytics pode falhar em localhost */ }
+
+  // Auth & Firestore instances
   const auth = getAuth(app);
   const db = getFirestore(app);
 
