@@ -5,629 +5,432 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>PlushMaster</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
-  <style>
-    /* ===== estilo mantido / adaptado ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; color: #0ff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; }
-    .container { max-width: 900px; width: 100%; background: #111; border: 1px solid #0ff; border-radius: 8px; box-shadow: 0 0 10px #0ff; padding: 20px; position: relative; display: none; }
-    header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; text-align: center; color: #00f0ff; margin-bottom: 20px; text-shadow: 0 0 8px #00f0ff; }
-    section.auth-box, section.select-machine, section.machine-section { margin-bottom: 20px; }
-    section.auth-box h2, section.select-machine h2 { font-size: 1.6rem; margin-bottom: 15px; color: #0ff; }
-    label { display: block; font-weight: 600; margin-bottom: 6px; color: #0ff; }
-    input[type="text"], input[type="password"], input[type="email"], select, input[type="number"] { width: 100%; padding: 10px 12px; margin-bottom: 15px; border: 1px solid #0ff; background: #000; color: #0ff; border-radius: 4px; font-size: 1rem; }
-    input:focus, select:focus { border-color: #00f0ff; outline: none; }
-    button { background: #00f0ff; color: #000; font-weight: 700; font-size: 1.2rem; padding: 14px 30px; border-radius: 30px; border: none; cursor: pointer; box-shadow: 0 0 15px #00f0ff; transition: 0.3s; user-select: none; }
-    button:hover { background: #0ff; box-shadow: 0 0 25px #0ff; }
-    button:active { background: #00ddee; transform: translateY(2px); }
-    .controls { display: grid; grid-template-columns: 100px 100px 100px; grid-template-rows: 70px 70px 70px; gap: 15px; justify-content: center; align-items: center; margin-top: 12px; }
-    #btn-up { grid-column: 2; grid-row: 1; }
-    #btn-left { grid-column: 1; grid-row: 2; }
-    #btn-down { grid-column: 2; grid-row: 2; }
-    #btn-right { grid-column: 3; grid-row: 2; }
-    #btn-grab { grid-column: 2; grid-row: 3; }
-    .status-bar { display: flex; justify-content: space-between; padding: 10px 15px; background: #000; border-radius: 6px; font-weight: 700; font-size: 1.1rem; color: #0ff; border: 1px solid #0ff; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
-    .status-bar span { margin-right: 20px; }
-    #support-btn { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; }
-    #bag-section { margin-top: 20px; background: #111; border: 1px solid #0ff; border-radius: 6px; padding: 15px; color: #0ff; }
-    #bag-list { list-style: none; max-height: 150px; overflow-y: auto; padding-left: 10px; margin-bottom: 10px; }
-    #camera-selection { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
-    #camera-selection img { cursor: pointer; width: 64px; height: 64px; }
-    #camera-video { width: 100%; height: auto; background: #000; margin-bottom: 10px; }
-    #camera-iframe { width: 100%; height: 480px; background: #000; border: 1px solid #0ff; border-radius: 6px; box-shadow: 0 0 10px #0ff; margin-bottom: 10px; display: none; }
-    #ws-status { position: fixed; top: 0; left: 0; right: 0; display: none; background: #d00; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; padding: 8px 0; text-align: center; z-index: 2000; box-shadow: 0 0 15px #d00; }
-    #top-notification { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; border: 3px solid #d00; border-radius: 12px; padding: 14px 28px; color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.25rem; z-index: 3000; display: none; box-shadow: 0 0 15px #d00; max-width: 90%; text-align: center; user-select: none; pointer-events: none; }
-
-    /* Intro */
-    #intro { position: fixed; top:0; left:0; width:100%; height:100%; background:black; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:5000; }
-    #intro h1 { font-size:4rem; color:#00f7ff; text-shadow:0 0 20px #00f7ff, 0 0 40px #00f7ff; opacity:0; animation: glowText 2s ease forwards; }
-    #intro p { margin-top:15px; font-size:1.5rem; color:#00f7ff; opacity:0; animation: fadeIn 2s ease forwards; animation-delay:1.5s; }
-    #start-btn { display:none; background:#0ff; color:#000; padding:12px 30px; font-size:1.5rem; font-weight:700; border:none; border-radius:30px; cursor:pointer; margin-top:30px; box-shadow: 0 0 15px #0ff; }
-    @keyframes glowText { 0% {opacity:0; transform:scale(0.8);} 100% {opacity:1; transform:scale(1);} }
-    @keyframes fadeIn { 0% {opacity:0;} 100% {opacity:1;} }
-
-    /* Neon flash */
-    .btn-flash { box-shadow: 0 0 20px #00f7ff, 0 0 40px #00f7ff; transform: translateY(-2px) scale(1.02); transition: all 0.18s ease; }
-
-    @media (max-width: 768px) { body { padding: 10px; } header h1 { font-size: 2rem; } .container { padding: 15px } .controls { grid-template-columns: 80px 80px 80px; grid-template-rows: 60px 60px 60px; gap: 10px } button { font-size: 1rem; padding: 12px 20px } input { font-size: 0.95rem; padding: 8px 10px } #machine-video-iframe, #camera-iframe { height: 300px } }
-  </style>
 </head>
-<body>
 
-<!-- Intro -->
+   <style>
+  body {
+    background-color: #001F3F;
+  }
+</style>
+
+
 <div id="intro">
-  <h1>PlushMaster</h1>
-  <p>Sua máquina de pelúcia online</p>
-  <button id="start-btn">Vamos lá</button>
+
+  <img src="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png" alt="Logo do Site">
+  <div id="carregando-texto">Carregando...</div>
 </div>
 
-<!-- Conteúdo do site -->
-<div class="container" id="site">
-  <header><h1>PLUSHMASTER</h1></header>
-  <div id="ws-status">A máquina selecionada está desconectada!</div>
-  <div id="top-notification"></div>
+<style>
+  body {
+    margin: 0;
+    background-color: #001F3F;
+    overflow: hidden;
+  }
 
-  <!-- Login -->
-  <section class="auth-box" id="login-section">
-    <h2>Login</h2>
-    <label for="login-email">Email</label>
-    <input type="email" id="login-email" autocomplete="email" />
-    <label for="login-password">Senha</label>
-    <input type="password" id="login-password" autocomplete="current-password" />
-    <button id="login-btn">Entrar</button>
-    <p>Não tem conta? <a href="#" id="show-register">Cadastre-se</a></p>
-  </section>
+  #intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #001F3F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #00BFFF;
+    font-family: 'Orbitron', sans-serif;
+  }
 
-  <!-- Cadastro -->
-  <section class="auth-box" id="register-section" style="display:none;">
-    <h2>Cadastro</h2>
-    <label for="register-name">Nome</label>
-    <input type="text" id="register-name" autocomplete="name" />
-    <label for="register-email">Email</label>
-    <input type="email" id="register-email" autocomplete="email" />
-    <label for="register-password">Senha</label>
-    <input type="password" id="register-password" autocomplete="new-password" />
-    <button id="register-btn">Cadastrar</button>
-    <p>Já tem conta? <a href="#" id="show-login">Faça login</a></p>
-  </section>
+  #intro img {
+    width: 100px;
+    opacity: 0;
+    animation: logoZoom 4s ease-in-out forwards;
+  }
 
-  <!-- Seleção de ação -->
-  <section class="select-machine" id="select-machine-section" style="display:none;">
-    <h2>O que deseja fazer?</h2>
-    <div class="status-bar">
-      <span><strong>Usuário:</strong> <span id="current-user"></span></span>
-      <span><strong>Créditos:</strong> R$ <span id="current-credits">0.00</span></span>
-      <span><strong>Pelúcias:</strong> <span id="pelucias-count">0</span></span>
-    </div>
-    <label for="machine-select">Escolha a máquina:</label>
-    <select id="machine-select">
-      <option value="" disabled selected>Selecione</option>
-      <option value="onlinemachine02" data-price="2.00">Máquina 1 R$2,00 por jogada</option>
-      <option value="onlinemachine03" data-price="5.00">Máquina 2 R$5,00 por jogada</option>
-    </select>
-    <label for="play-quantity">Quantidade de jogadas:</label>
-    <input type="number" id="play-quantity" min="1" max="10" value="1" />
-    <p>Total: R$ <span id="total-price">0.00</span></p>
-    <button id="play-machine-btn">Jogar</button>
-    <button id="watch-cameras-btn">Assistir câmeras</button>
-    <button id="logout-btn" style="display:none">Sair da Conta</button>
+  #carregando-texto {
+    font-size: 1.2em;
+    opacity: 0;
+    margin-top: 20px;
+    animation: aparecerTexto 1s ease-in-out 3s forwards;
+  }
 
-    <section id="bag-section">
-      <h3>Sacola de Pelúcias</h3>
-      <ul id="bag-list"></ul>
-      <button id="request-delivery-btn">Solicitar Entrega</button>
-    </section>
-  </section>
+  @keyframes logoZoom {
+    0% { transform: scale(0.1); opacity: 0; }
+    30% { opacity: 1; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+  }
 
-  <!-- Área da máquina -->
-  <section class="machine-section" id="machine-area" style="display:none;">
-    <iframe id="machine-video-iframe" width="100%" height="480" frameborder="0"></iframe>
-    <div class="controls">
-      <button id="btn-up">↑</button>
-      <button id="btn-left">←</button>
-      <button id="btn-down">↓</button>
-      <button id="btn-right">→</button>
-      <button id="btn-grab">AGARRAR</button>
-    </div>
-    <p>Tempo restante: <span id="game-timer">0</span>s</p>
-    <button id="exit-machine-btn">Sair da Máquina</button>
-  </section>
-
-  <!-- Área das câmeras -->
-  <section id="camera-area" style="display:none;">
-    <video id="camera-video" autoplay muted></video>
-    <iframe id="camera-iframe"></iframe>
-    <div id="camera-selection">
-      <img id="camera-switch" src="https://www.onlinemachine.com.br/_next/static/media/camera_1.361d4152.png" alt="Câmera">
-      <button id="exit-camera-btn">Sair</button>
-    </div>
-  </section>
-</div>
-
-<button id="support-btn">Suporte</button>
+  @keyframes aparecerTexto {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
 
 <script>
-  // Suporte
-  document.getElementById("support-btn").onclick = () => window.open("https://wa.me/5518996925754", "_blank");
+  // Faz a intro sumir depois de 4 segundos
+  setTimeout(() => {
+    const intro = document.getElementById("intro");
+    intro.style.opacity = "0";
+    intro.style.transition = "opacity 1s";
+    
+    // Depois de 1s (transição), esconde a intro e mostra o login
+    setTimeout(() => {
+      intro.style.display = "none";
+      const login = document.getElementById("loginContainer");
+      if (login) login.style.display = "flex"; // Mostra a tela de login
+    }, 1000);
+  }, 4000);
+</script>
+<!-- 🔔 Contêiner das notificações -->
+<div id="notificacoes"></div>
+
+<style>
+  /* ===============================
+     🔵 ESTILO DAS NOTIFICAÇÕES
+  =================================*/
+  #notificacoes {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .notificacao {
+    background: rgba(0, 20, 50, 0.95);
+    border: 1px solid #00bfff;
+    box-shadow: 0 0 15px #00bfff;
+    color: #00bfff;
+    font-family: 'Orbitron', sans-serif;
+    padding: 15px 20px;
+    border-radius: 10px;
+    min-width: 250px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.5s forwards;
+  }
+
+  .notificacao.sucesso {
+    border-color: #00ffcc;
+    box-shadow: 0 0 20px #00ffcc;
+    color: #00ffcc;
+  }
+
+  .notificacao.erro {
+    border-color: #ff0033;
+    box-shadow: 0 0 20px #ff0033;
+    color: #ff0033;
+  }
+
+  .notificacao.info {
+    border-color: #00bfff;
+    box-shadow: 0 0 20px #00bfff;
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOut {
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+</style>
+
+<script>
+  // ===============================
+  // 🚀 FUNÇÃO PARA MOSTRAR NOTIFICAÇÃO
+  // ===============================
+  function mostrarNotificacao(texto, tipo = "info") {
+    const container = document.getElementById("notificacoes");
+
+    const notif = document.createElement("div");
+    notif.classList.add("notificacao", tipo);
+    notif.textContent = texto;
+    container.appendChild(notif);
+
+    // Remove automaticamente depois de 4 segundos
+    setTimeout(() => {
+      notif.style.animation = "slideOut 0.5s forwards";
+      setTimeout(() => notif.remove(), 500);
+    }, 4000);
+  }
+
+  // 💡 Exemplo de uso:
+  // mostrarNotificacao("Bem-vindo ao PlushMaster!", "sucesso");
+  // mostrarNotificacao("Erro ao conectar ao servidor!", "erro");
 </script>
 
-<!-- Firebase + App JS -->
+<!-- 🔒 LOGIN + CADASTRO FUTURISTA -->
+<div id="loginContainer">
+  <div class="login-box">
+    <h2>Login</h2>
+    <input type="email" id="emailLogin" placeholder="Email" required>
+    <input type="password" id="senhaLogin" placeholder="Senha" required>
+    <button id="loginBtn">Entrar</button>
+    <p>Não tem conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+  </div>
+</div>
+
+<div id="cadastroContainer">
+  <div class="login-box">
+    <h2>Criar Conta</h2>
+    <input type="email" id="emailCadastro" placeholder="Email" required>
+    <input type="password" id="senhaCadastro" placeholder="Senha" required>
+    <button id="cadastroBtn">Cadastrar</button>
+    <p>Já tem conta? <a href="#" id="mostrarLogin">Voltar ao login</a></p>
+  </div>
+</div>
+
+<!-- 🔔 NOTIFICAÇÕES -->
+<div id="notificacoes"></div>
+
+<style>
+  /* ===============================
+     ⚙️ ESTILO GERAL
+  =================================*/
+  body {
+    margin: 0;
+    background: radial-gradient(circle at center, #001a33 0%, #000 100%);
+    font-family: 'Orbitron', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* Containers de login e cadastro centralizados */
+  #loginContainer, #cadastroContainer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.7); /* fundo translúcido */
+  }
+
+  .login-box {
+    background: rgba(0, 0, 50, 0.85);
+    border: 2px solid #00bfff;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 25px #00bfff;
+    width: 320px;
+    transition: all 0.4s ease;
+  }
+
+  .login-box h2 {
+    margin-bottom: 20px;
+    color: #00bfff;
+    text-shadow: 0 0 10px #00bfff;
+  }
+
+  .login-box input {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    text-align: center;
+    background: #001a33;
+    color: #00bfff;
+    font-size: 16px;
+  }
+
+  .login-box input::placeholder {
+    color: #00bfff88;
+  }
+
+  .login-box button {
+    width: 100%;
+    padding: 10px;
+    background: #00bfff;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: 0.3s;
+  }
+
+  .login-box button:hover {
+    background: #0099cc;
+    box-shadow: 0 0 20px #00bfff;
+  }
+
+  .login-box p {
+  margin-top: 15px;
+  color: #ffffff; /* texto branco visível */
+  font-size: 14px;
+}
+
+.login-box a {
+  color: #00bfff; /* azul neon */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-box a:hover {
+  text-shadow: 0 0 10px #00bfff;
+}
+
+
+  /* ===============================
+     💬 ESTILO DAS NOTIFICAÇÕES
+  =================================*/
+  #notificacoes {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .notificacao {
+    background: rgba(0, 20, 50, 0.95);
+    border: 1px solid #00bfff;
+    box-shadow: 0 0 15px #00bfff;
+    color: #00bfff;
+    font-family: 'Orbitron', sans-serif;
+    padding: 15px 20px;
+    border-radius: 10px;
+    min-width: 250px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.5s forwards;
+  }
+
+  .notificacao.sucesso {
+    border-color: #00ffcc;
+    box-shadow: 0 0 20px #00ffcc;
+    color: #00ffcc;
+  }
+
+  .notificacao.erro {
+    border-color: #ff0033;
+    box-shadow: 0 0 20px #ff0033;
+    color: #ff0033;
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOut {
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+</style>
+
 <script type="module">
-  /************************************************************************
-   *  CONFIGURAÇÕES
-   ************************************************************************/
-  // Créditos iniciais para novos usuários
-  const START_CREDITS = 10; // altere se quiser outro valor
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+  from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-  // Imports Firebase modular (v9+)
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    updateDoc,
-    arrayUnion,
-    serverTimestamp,
-    onSnapshot
-  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-  // Your web app's Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-    authDomain: "plush-master.firebaseapp.com",
-    projectId: "plush-master",
-    storageBucket: "plush-master.firebasestorage.app",
-    messagingSenderId: "822751531077",
-    appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
-    measurementId: "G-JYRNTNQKEB"
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    projectId: "SEU_PROJETO",
+    storageBucket: "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_ID",
+    appId: "SUA_APP_ID"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  try { getAnalytics(app); } catch(e) { /* analytics pode falhar em localhost */ }
-
-  // Auth & Firestore instances
   const auth = getAuth(app);
-  const db = getFirestore(app);
 
-  /************************************************************************
-   *  REFERÊNCIAS A ELEMENTOS
-   ************************************************************************/
-  const loginSection = document.getElementById("login-section");
-  const registerSection = document.getElementById("register-section");
-  const selectSection = document.getElementById("select-machine-section");
-  const playSection = document.getElementById("machine-area");
-  const cameraArea = document.getElementById("camera-area");
-
-  const loginEmail = document.getElementById("login-email");
-  const loginPassword = document.getElementById("login-password");
-  const loginBtn = document.getElementById("login-btn");
-
-  const registerName = document.getElementById("register-name");
-  const registerEmail = document.getElementById("register-email");
-  const registerPassword = document.getElementById("register-password");
-  const registerBtn = document.getElementById("register-btn");
-
-  const showRegister = document.getElementById("show-register");
-  const showLogin = document.getElementById("show-login");
-
-  const currentUserSpan = document.getElementById("current-user");
-  const currentCreditsEl = document.getElementById("current-credits");
-  const peluciasCount = document.getElementById("pelucias-count");
-  const bagList = document.getElementById("bag-list");
-  const logoutBtn = document.getElementById("logout-btn");
-
-  const machineSelect = document.getElementById("machine-select");
-  const playQuantity = document.getElementById("play-quantity");
-  const totalPriceSpan = document.getElementById("total-price");
-  const playMachineBtn = document.getElementById("play-machine-btn");
-
-  const machineVideoIframe = document.getElementById('machine-video-iframe');
-
-  let currentUser = null;      // usuário logado (obj Firestore)
-  let currentUserUid = null;   // auth.uid
-  let userDocUnsubscribe = null;
-
-  /************************************************************************
-   *  UTILITÁRIOS UI (notificações e sons)
-   ************************************************************************/
-  const topNotification = document.getElementById("top-notification");
-  const beep = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
-  const success = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-video-game-mystery-alert-234.wav");
-  const errorSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-error-voice-2866.mp3");
-
-  function safePlay(audio){ try { audio.currentTime = 0; audio.play().catch(()=>{}); } catch(e){} }
-  function playBeep(){ safePlay(beep); }
-  function playSuccess(){ safePlay(success); }
-  function playError(){ safePlay(errorSound); }
-
-  function showTopNotificationMsg(msg, d = 3000){
-    topNotification.innerText = msg;
-    topNotification.style.display = 'block';
-    clearTimeout(topNotification._timeout);
-    topNotification._timeout = setTimeout(()=> topNotification.style.display = 'none', d);
+  function mostrarNotificacao(texto, tipo = "info") {
+    const container = document.getElementById("notificacoes");
+    const notif = document.createElement("div");
+    notif.classList.add("notificacao", tipo);
+    notif.textContent = texto;
+    container.appendChild(notif);
+    setTimeout(() => {
+      notif.style.animation = "slideOut 0.5s forwards";
+      setTimeout(() => notif.remove(), 500);
+    }, 4000);
   }
 
-  function buttonFeedback(btn, { vibrate = false } = {}) {
-    try { playBeep(); } catch(e) {}
-    if (vibrate && navigator.vibrate) navigator.vibrate(80);
-    btn.classList.add("btn-flash");
-    setTimeout(()=> btn.classList.remove("btn-flash"), 220);
-  }
+  const loginContainer = document.getElementById("loginContainer");
+  const cadastroContainer = document.getElementById("cadastroContainer");
+  const mostrarCadastro = document.getElementById("mostrarCadastro");
+  const mostrarLogin = document.getElementById("mostrarLogin");
 
-  /************************************************************************
-   *  AUTENTICAÇÃO & FIRESTORE: registro / login / logout / listener
-   ************************************************************************/
-  // mostra telas de login / registro
-  showRegister.onclick = (e) => { e.preventDefault(); loginSection.style.display='none'; registerSection.style.display='block'; };
-  showLogin.onclick = (e) => { e.preventDefault(); registerSection.style.display='none'; loginSection.style.display='block'; };
+  mostrarCadastro.addEventListener("click", (e) => {
+    e.preventDefault();
+    loginContainer.style.display = "none";
+    cadastroContainer.style.display = "flex";
+  });
 
-  // Cadastro usando Firebase Auth -> depois cria documento em 'usuarios'
-  registerBtn.onclick = async () => {
-    const name = registerName.value.trim();
-    const email = registerEmail.value.trim();
-    const password = registerPassword.value.trim();
-    if(!name || !email || !password){ showTopNotificationMsg("Preencha todos os campos para se registrar.",5000); playError(); return; }
+  mostrarLogin.addEventListener("click", (e) => {
+    e.preventDefault();
+    cadastroContainer.style.display = "none";
+    loginContainer.style.display = "flex";
+  });
 
+  document.getElementById("loginBtn").addEventListener("click", async () => {
+    const email = document.getElementById("emailLogin").value;
+    const senha = document.getElementById("senhaLogin").value;
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = cred.user.uid;
-
-      await setDoc(doc(db, 'usuarios', uid), {
-        nome: name,
-        email,
-        creditos: START_CREDITS,
-        pelucias: [],
-        banido: false,
-        createdAt: serverTimestamp(),
-        authUid: uid
-      });
-
-      showTopNotificationMsg("Registro feito com sucesso! Você já está logado.", 4000);
-      playSuccess();
-
-      registerName.value = '';
-      registerEmail.value = '';
-      registerPassword.value = '';
-
-    } catch (e) {
-      console.error(e);
-      showTopNotificationMsg("Erro no cadastro: " + (e.message || e.code), 5000);
-      playError();
-    }
-  };
-
-  // Login com Firebase Auth
-  loginBtn.onclick = async () => {
-    const email = loginEmail.value.trim();
-    const password = loginPassword.value.trim();
-    if(!email || !password){ showTopNotificationMsg("Preencha email e senha.", 4000); playError(); return; }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      showTopNotificationMsg("Login realizado com sucesso!", 3000);
-      playSuccess();
-    } catch (e) {
-      console.error(e);
-      showTopNotificationMsg("Erro no login: " + (e.message || e.code), 5000);
-      playError();
-    }
-  };
-
-  // Logout
-  logoutBtn.onclick = async () => {
-    try {
-      await signOut(auth);
-      showTopNotificationMsg("Você saiu da conta.", 3000);
-      playBeep();
-    } catch (e) {
-      console.error(e);
-      showTopNotificationMsg("Erro ao sair: " + (e.message || e.code), 4000);
-    }
-  };
-
-  // Observa estado da autenticação
-  onAuthStateChanged(auth, async (user) => {
-    if(user){
-      currentUserUid = user.uid;
-      startUserDocListener(currentUserUid);
-
-      loginSection.style.display = 'none';
-      registerSection.style.display = 'none';
-      selectSection.style.display = 'block';
-      document.getElementById('logout-btn').style.display = 'inline-block';
-      document.getElementById('current-user').innerText = user.email.split('@')[0] || user.email;
-
-    } else {
-      currentUserUid = null;
-      currentUser = null;
-      if(userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; }
-      selectSection.style.display = 'none';
-      playSection.style.display = 'none';
-      cameraArea.style.display = 'none';
-      loginSection.style.display = 'block';
-      document.getElementById('current-user').innerText = '';
-      currentCreditsEl.innerText = '0.00';
-      peluciasCount.innerText = '0';
-      bagList.innerHTML = '<li>Sacola vazia.</li>';
-      document.getElementById('logout-btn').style.display = 'none';
+      await signInWithEmailAndPassword(auth, email, senha);
+      mostrarNotificacao("✅ Login realizado com sucesso!", "sucesso");
+    } catch (error) {
+      mostrarNotificacao("❌ Erro ao fazer login: " + error.message, "erro");
     }
   });
 
-  // Inicia listener em tempo real no documento do usuário
-  function startUserDocListener(uid){
-    const userDocRef = doc(db, 'usuarios', uid);
-    if(userDocUnsubscribe) userDocUnsubscribe();
-    userDocUnsubscribe = onSnapshot(userDocRef, (snap) => {
-      if(!snap.exists()){
-        showTopNotificationMsg("Perfil não encontrado no banco.", 4000);
-        return;
-      }
-      const data = snap.data();
-      currentUser = data;
-      currentUserSpan.innerText = data.nome || (data.email||'').split('@')[0];
-      currentCreditsEl.innerText = (Number(data.creditos||0)).toFixed(2);
-      peluciasCount.innerText = (Array.isArray(data.pelucias) ? data.pelucias.length : 0);
-      renderBagList(data.pelucias || []);
-    }, err => {
-      console.error('Erro onSnapshot usuario:', err);
-    });
-  }
-
-  // Renderiza a sacola de pelúcias
-  function renderBagList(arrayPelucias){
-    bagList.innerHTML = '';
-    if(!arrayPelucias || arrayPelucias.length === 0){
-      bagList.innerHTML = '<li>Sacola vazia.</li>';
-      return;
-    }
-    arrayPelucias.forEach((p, i) => {
-      const li = document.createElement('li');
-      li.textContent = `${i+1}: ${p}`;
-      bagList.appendChild(li);
-    });
-  }
-
-  /************************************************************************
-   *  LÓGICA DE JOGO: adicionar créditos, deduzir créditos, ganhar pelúcia
-   ************************************************************************/
-  function updateTotalPrice(){ const option = machineSelect.selectedOptions[0]; if(!option){ totalPriceSpan.textContent='0.00'; return; } const price = parseFloat(option.dataset.price); let qty = parseInt(playQuantity.value); if(isNaN(qty)||qty<1) qty=1; if(qty>10) qty=10; playQuantity.value = qty; totalPriceSpan.textContent = (price*qty).toFixed(2); }
-  machineSelect.onchange = updateTotalPrice; playQuantity.oninput = updateTotalPrice; updateTotalPrice();
-
-  playMachineBtn.onclick = async () => {
-    const btn = playMachineBtn;
-    buttonFeedback(btn, { vibrate: false });
-    if(!currentUserUid){ showTopNotificationMsg("Faça login para jogar.", 4000); playError(); return; }
-    if(currentUser && currentUser.banido){ showTopNotificationMsg("Conta banida. Contate o suporte.", 5000); playError(); return; }
-
-    const qty = parseInt(playQuantity.value) || 1;
-    const pricePerPlay = parseFloat(machineSelect.selectedOptions[0].dataset.price) || 0;
-    const totalPrice = pricePerPlay * qty;
-
+  document.getElementById("cadastroBtn").addEventListener("click", async () => {
+    const email = document.getElementById("emailCadastro").value;
+    const senha = document.getElementById("senhaCadastro").value;
     try {
-      const userRef = doc(db, 'usuarios', currentUserUid);
-      const snap = await getDoc(userRef);
-      const data = snap.exists() ? snap.data() : null;
-      const atual = data && data.creditos ? Number(data.creditos) : 0;
-      if(atual < totalPrice){ showTopNotificationMsg("Você não tem créditos suficientes.", 4000); playError(); return; }
-
-      await updateDoc(userRef, { creditos: atual - totalPrice });
-
-      // set current machine and start queue
-      currentMachine = machineSelect.value;
-      startQueuePlay(qty);
-      machineVideoIframe.src = `https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=${machineSelect.value}`;
-      selectSection.style.display = 'none';
-      playSection.style.display = 'block';
-      updateControlButtonsStatus();
-      checkMachineConnection();
-      startGameTimer(30);
-
-    } catch (e) {
-      console.error(e);
-      showTopNotificationMsg("Erro ao iniciar jogo: " + (e.message || e.code), 4000);
-      playError();
+      await createUserWithEmailAndPassword(auth, email, senha);
+      mostrarNotificacao("🎉 Conta criada com sucesso!", "sucesso");
+      setTimeout(() => {
+        cadastroContainer.style.display = "none";
+        loginContainer.style.display = "flex";
+      }, 1000);
+    } catch (error) {
+      mostrarNotificacao("❌ Erro ao criar conta: " + error.message, "erro");
     }
-  };
+  });
 
-  let playQueue = [], currentPlayIndex = -1;
-  function startQueuePlay(qty){
-    playQueue = new Array(qty).fill(currentUserUid);
-    currentPlayIndex = 0;
-  }
-
-  function finishPlay(){
-    givePeluciaToUser();
-    currentPlayIndex++;
-    if(currentPlayIndex >= playQueue.length){
-      exitMachine();
+  // Mostra login depois da intro (se existir)
+  setTimeout(() => {
+    const intro = document.getElementById("intro");
+    if (intro) {
+      intro.style.opacity = "0";
+      intro.style.transition = "opacity 1s";
+      setTimeout(() => {
+        intro.style.display = "none";
+        loginContainer.style.display = "flex";
+      }, 1000);
     } else {
-      startGameTimer(30);
-      showTopNotificationMsg('Sua próxima jogada vai começar!', 3000);
+      loginContainer.style.display = "flex";
     }
-  }
-
-  async function givePeluciaToUser(){
-    if(!currentUserUid) return;
-    const pelucias = ["Urso de pelúcia","Coelho fofinho","Gato sorridente","Cachorro dorminhoco","Panda fofo"];
-    const nova = pelucias[Math.floor(Math.random()*pelucias.length)];
-    try {
-      const userRef = doc(db, 'usuarios', currentUserUid);
-      await updateDoc(userRef, { pelucias: arrayUnion(nova) });
-      showTopNotificationMsg(`Parabéns! Você ganhou: ${nova}`, 5000);
-      playSuccess();
-    } catch (e) {
-      console.error('Erro ao adicionar pelúcia:', e);
-      showTopNotificationMsg('Erro ao registrar prêmio.', 4000);
-      playError();
-    }
-  }
-
-  document.getElementById('exit-machine-btn').onclick = () => {
-    const btn = document.getElementById('exit-machine-btn');
-    buttonFeedback(btn, { vibrate: false });
-    exitMachine();
-  };
-
-  function exitMachine(){
-    playSection.style.display = 'none';
-    selectSection.style.display = 'block';
-    if(gameTimerInterval) clearInterval(gameTimerInterval);
-    currentMachine = null;
-    checkMachineConnection();
-  }
-
-  let gameTimerInterval = null, gameTime = 30;
-  function startGameTimer(seconds){
-    gameTime = seconds;
-    document.getElementById('game-timer').innerText = gameTime;
-    if(gameTimerInterval) clearInterval(gameTimerInterval);
-    gameTimerInterval = setInterval(()=> {
-      gameTime--;
-      document.getElementById('game-timer').innerText = gameTime;
-      if(gameTime <= 0){
-        clearInterval(gameTimerInterval);
-        finishPlay();
-      }
-    }, 1000);
-  }
-
-  /************************************************************************
-   *  Controles + Câmera + Conexão (mantive sua lógica)
-   ************************************************************************/
-  let currentMachine = null;
-  const machineConnectionStatus = { "onlinemachine02": "connected", "onlinemachine03": "connected" };
-
-  function updateControlButtonsStatus(){
-    const buttons = ["btn-up","btn-left","btn-down","btn-right","btn-grab"];
-    if(!currentMachine){ buttons.forEach(id=>document.getElementById(id).disabled=true); return; }
-    const status = machineConnectionStatus[currentMachine];
-    const disabled = status === "disconnected";
-    buttons.forEach(id=>document.getElementById(id).disabled = disabled);
-  }
-
-  function checkMachineConnection(){
-    if(!currentMachine){ document.getElementById('ws-status').style.display='none'; updateControlButtonsStatus(); return; }
-    const status = machineConnectionStatus[currentMachine];
-    if(status === "disconnected"){
-      document.getElementById('ws-status').style.display = 'block';
-      showTopNotificationMsg("Conexão com a máquina caiu! Você será removido da fila.", 6000);
-      exitMachine();
-    } else {
-      document.getElementById('ws-status').style.display = 'none';
-    }
-    updateControlButtonsStatus();
-  }
-
-  document.getElementById("btn-up").onclick = () => { buttonFeedback(document.getElementById("btn-up"), { vibrate: true }); showTopNotificationMsg("Movimento para cima enviado", 1500); };
-  document.getElementById("btn-down").onclick = () => { buttonFeedback(document.getElementById("btn-down"), { vibrate: true }); showTopNotificationMsg("Movimento para baixo enviado", 1500); };
-  document.getElementById("btn-left").onclick = () => { buttonFeedback(document.getElementById("btn-left"), { vibrate: true }); showTopNotificationMsg("Movimento para esquerda enviado", 1500); };
-  document.getElementById("btn-right").onclick = () => { buttonFeedback(document.getElementById("btn-right"), { vibrate: true }); showTopNotificationMsg("Movimento para direita enviado", 1500); };
-  document.getElementById("btn-grab").onclick = () => { buttonFeedback(document.getElementById("btn-grab"), { vibrate: true }); if(navigator.vibrate) navigator.vibrate([180,80,180]); showTopNotificationMsg("Comando agarrar enviado", 1500); };
-
-  // Câmera
-  document.getElementById("watch-cameras-btn").onclick = () => {
-    buttonFeedback(document.getElementById("watch-cameras-btn"), { vibrate: false });
-    selectSection.style.display='none'; cameraArea.style.display='block'; document.getElementById('camera-video').style.display='block'; document.getElementById('camera-iframe').style.display='none';
-    document.getElementById('camera-switch').src = "https://www.onlinemachine.com.br/_next/static/media/camera_2.fde87b8e.png";
-  };
-  const cameraSwitch = document.getElementById('camera-switch');
-  cameraSwitch.onclick = () => {
-    buttonFeedback(cameraSwitch, { vibrate: false });
-    if(document.getElementById('camera-video').style.display === 'block'){
-      document.getElementById('camera-video').style.display = 'none';
-      document.getElementById('camera-iframe').style.display = 'block';
-      document.getElementById('camera-iframe').src = "https://www.onlinemachine.com.br/camera_stream.html";
-      cameraSwitch.src = "https://www.onlinemachine.com.br/_next/static/media/camera_1.361d4152.png";
-    } else {
-      document.getElementById('camera-video').style.display = 'block';
-      document.getElementById('camera-iframe').style.display = 'none';
-      cameraSwitch.src = "https://www.onlinemachine.com.br/_next/static/media/camera_2.fde87b8e.png";
-    }
-  };
-  document.getElementById('exit-camera-btn').onclick = () => {
-    buttonFeedback(document.getElementById('exit-camera-btn'), { vibrate: false });
-    cameraArea.style.display = 'none';
-    selectSection.style.display = 'block';
-  };
-
-  // Solicitar entrega (limpa array no Firestore)
-  document.getElementById('request-delivery-btn').onclick = async () => {
-    buttonFeedback(document.getElementById('request-delivery-btn'), { vibrate: false });
-    if(!currentUserUid){ showTopNotificationMsg("Faça login para solicitar entrega.", 4000); return; }
-    if(!currentUser || !Array.isArray(currentUser.pelucias) || currentUser.pelucias.length === 0){ showTopNotificationMsg("Sua sacola está vazia!", 3000); playError(); return; }
-
-    try {
-      await updateDoc(doc(db, 'usuarios', currentUserUid), { pelucias: [] });
-      showTopNotificationMsg("Entrega solicitada com sucesso! Sacola limpa.", 4000);
-      playSuccess();
-    } catch (e) {
-      console.error(e);
-      showTopNotificationMsg("Erro ao solicitar entrega.", 4000);
-      playError();
-    }
-  };
-
-  /************************************************************************
-   *  Inicialização UI (intro + auto-login)
-   ************************************************************************/
-  const intro = document.getElementById('intro');
-  const startBtn = document.getElementById('start-btn');
-  setTimeout(()=> startBtn.style.display = 'block', 3000);
-
-  startBtn.onclick = () => {
-    buttonFeedback(startBtn, { vibrate: false });
-    intro.style.display = 'none';
-    document.getElementById('site').style.display = 'block';
-    startPingCheck();
-  };
-
-  /************************************************************************
-   *  Ping check (ajustado)
-   ************************************************************************/
-  let pingCheckInterval = null;
-  function blockSiteWithNotification(message) {
-    showTopNotificationMsg(message, 4000);
-    const siteElements = document.querySelectorAll("button, input, select");
-    siteElements.forEach(el => el.disabled = true);
-    const siteContainer = document.getElementById("site");
-    siteContainer.style.pointerEvents = "none";
-    siteContainer.style.userSelect = "none";
-    const notification = document.getElementById("top-notification");
-    notification.style.pointerEvents = "auto";
-  }
-  function startPingCheck(){
-    if(pingCheckInterval) clearInterval(pingCheckInterval);
-    pingCheckInterval = setInterval(async () => {
-      try {
-        const start = Date.now();
-        // requisição simples para testar latência (pode falhar por CORS)
-        await fetch("https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine02", { method: 'HEAD', mode: 'no-cors' });
-        const ping = Date.now() - start;
-        // limite razoável: 3000ms
-        if(ping > 3000) blockSiteWithNotification("sua conexão esta fraca. Feche e volte a abrir o site.");
-      } catch (e) {
-        // em muitos ambientes fetch cross-origin pode lançar; só logamos e não bloqueamos imediatamente
-        console.warn('Ping check falhou (CORS/erro):', e);
-      }
-    }, 5000);
-  }
-
-  /************************************************************************
-   *  Pequenas proteções e mensagens de console
-   ************************************************************************/
-  console.log('PlushMaster - Firebase integrado (versão modular)');
-  // pronto
-
+  }, 4000);
 </script>
-</body>
-</html>
