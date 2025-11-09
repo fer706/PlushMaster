@@ -1,34 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>PlushMaster</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
-</head>
-
-   <style>
-  body {
-    background-color: #001F3F;
-  }
-</style>
-
-
-<div id="intro">
-
-  <img src="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png" alt="Logo do Site">
-  <div id="carregando-texto">Carregando...</div>
-</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>PlushMaster</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
 
 <style>
   body {
     margin: 0;
-    background-color: #001F3F;
-    overflow: hidden;
+    background-color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+    overflow-y: auto; /* só rola se necessário */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
+  /* INTRO */
   #intro {
     position: fixed;
     top: 0;
@@ -41,7 +31,7 @@
     align-items: center;
     flex-direction: column;
     color: #00BFFF;
-    font-family: 'Orbitron', sans-serif;
+    z-index: 1000;
   }
 
   #intro img {
@@ -68,369 +58,107 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
-</style>
 
-<script>
-  // Faz a intro sumir depois de 4 segundos
-  setTimeout(() => {
-    const intro = document.getElementById("intro");
-    intro.style.opacity = "0";
-    intro.style.transition = "opacity 1s";
-    
-    // Depois de 1s (transição), esconde a intro e mostra o login
-    setTimeout(() => {
-      intro.style.display = "none";
-      const login = document.getElementById("loginContainer");
-      if (login) login.style.display = "flex"; // Mostra a tela de login
-    }, 1000);
-  }, 4000);
-</script>
-<!-- 🔔 Contêiner das notificações -->
-<div id="notificacoes"></div>
-
-<style>
-  /* ===============================
-     🔵 ESTILO DAS NOTIFICAÇÕES
-  =================================*/
-  #notificacoes {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .notificacao {
-    background: rgba(0, 20, 50, 0.95);
-    border: 1px solid #00bfff;
-    box-shadow: 0 0 15px #00bfff;
-    color: #00bfff;
-    font-family: 'Orbitron', sans-serif;
-    padding: 15px 20px;
-    border-radius: 10px;
-    min-width: 250px;
-    opacity: 0;
-    transform: translateX(100%);
-    animation: slideIn 0.5s forwards;
-  }
-
-  .notificacao.sucesso {
-    border-color: #00ffcc;
-    box-shadow: 0 0 20px #00ffcc;
-    color: #00ffcc;
-  }
-
-  .notificacao.erro {
-    border-color: #ff0033;
-    box-shadow: 0 0 20px #ff0033;
-    color: #ff0033;
-  }
-
-  .notificacao.info {
-    border-color: #00bfff;
-    box-shadow: 0 0 20px #00bfff;
-  }
-
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideOut {
-    to {
-      opacity: 0;
-      transform: translateX(100%);
-    }
-  }
-</style>
-
-<script>
-  // ===============================
-  // 🚀 FUNÇÃO PARA MOSTRAR NOTIFICAÇÃO
-  // ===============================
-  function mostrarNotificacao(texto, tipo = "info") {
-    const container = document.getElementById("notificacoes");
-
-    const notif = document.createElement("div");
-    notif.classList.add("notificacao", tipo);
-    notif.textContent = texto;
-    container.appendChild(notif);
-
-    // Remove automaticamente depois de 4 segundos
-    setTimeout(() => {
-      notif.style.animation = "slideOut 0.5s forwards";
-      setTimeout(() => notif.remove(), 500);
-    }, 4000);
-  }
-
-  // 💡 Exemplo de uso:
-  // mostrarNotificacao("Bem-vindo ao PlushMaster!", "sucesso");
-  // mostrarNotificacao("Erro ao conectar ao servidor!", "erro");
-</script>
-
-<!-- 🔒 LOGIN + CADASTRO FUTURISTA -->
-<div id="loginContainer">
-  <div class="login-box">
-    <h2>Login</h2>
-    <input type="email" id="emailLogin" placeholder="Email" required>
-    <input type="password" id="senhaLogin" placeholder="Senha" required>
-    <button id="loginBtn">Entrar</button>
-    <p>Não tem conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-  </div>
-</div>
-
-<div id="cadastroContainer">
-  <div class="login-box">
-    <h2>Criar Conta</h2>
-    <input type="email" id="emailCadastro" placeholder="Email" required>
-    <input type="password" id="senhaCadastro" placeholder="Senha" required>
-    <button id="cadastroBtn">Cadastrar</button>
-    <p>Já tem conta? <a href="#" id="mostrarLogin">Voltar ao login</a></p>
-  </div>
-</div>
-
-<!-- 🔔 NOTIFICAÇÕES -->
-<div id="notificacoes"></div>
-
-<style>
-  /* ===============================
-     ⚙️ ESTILO GERAL
-  =================================*/
-  body {
-    margin: 0;
-    background: radial-gradient(circle at center, #001a33 0%, #000 100%);
-    font-family: 'Orbitron', sans-serif;
-    overflow: hidden;
-    height: 100vh;
-  }
-
-  /* Containers de login e cadastro centralizados */
-  #loginContainer, #cadastroContainer {
+  /* FAIXA AZUL */
+  #faixa {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-    background: rgba(0, 0, 0, 0.7); /* fundo translúcido */
-  }
-
-  .login-box {
-    background: rgba(0, 0, 50, 0.85);
-    border: 2px solid #00bfff;
-    border-radius: 15px;
-    padding: 40px;
-    text-align: center;
-    box-shadow: 0 0 25px #00bfff;
-    width: 320px;
-    transition: all 0.4s ease;
-  }
-
-  .login-box h2 {
-    margin-bottom: 20px;
-    color: #00bfff;
-    text-shadow: 0 0 10px #00bfff;
-  }
-
-  .login-box input {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    text-align: center;
-    background: #001a33;
-    color: #00bfff;
-    font-size: 16px;
-  }
-
-  .login-box input::placeholder {
-    color: #00bfff88;
-  }
-
-  .login-box button {
-    width: 100%;
-    padding: 10px;
-    background: #00bfff;
-    border: none;
-    border-radius: 8px;
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: 0.3s;
-  }
-
-  .login-box button:hover {
-    background: #0099cc;
-    box-shadow: 0 0 20px #00bfff;
-  }
-
-  .login-box p {
-  margin-top: 15px;
-  color: #ffffff; /* texto branco visível */
-  font-size: 14px;
-}
-
-.login-box a {
-  color: #00bfff; /* azul neon */
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.login-box a:hover {
-  text-shadow: 0 0 10px #00bfff;
-}
-
-
-  /* ===============================
-     💬 ESTILO DAS NOTIFICAÇÕES
-  =================================*/
-  #notificacoes {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
+    height: 12vh; /* proporcional à tela */
+    min-height: 80px;
+    background-color: #007bff;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
   }
 
-  .notificacao {
-    background: rgba(0, 20, 50, 0.95);
-    border: 1px solid #00bfff;
-    box-shadow: 0 0 15px #00bfff;
-    color: #00bfff;
-    font-family: 'Orbitron', sans-serif;
-    padding: 15px 20px;
-    border-radius: 10px;
-    min-width: 250px;
-    opacity: 0;
-    transform: translateX(100%);
-    animation: slideIn 0.5s forwards;
+  #faixa h1 {
+    color: #fff;
+    font-size: 4vw;
+    min-font-size: 28px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0;
   }
 
-  .notificacao.sucesso {
-    border-color: #00ffcc;
-    box-shadow: 0 0 20px #00ffcc;
-    color: #00ffcc;
+  /* VÍDEO */
+  #videoWrapper {
+    display: none;
+    width: 95%;
+    max-width: 1200px;
+    aspect-ratio: 16/9;
+    margin: calc(12vh + 20px) auto 20px auto; /* espaço abaixo da faixa */
   }
 
-  .notificacao.erro {
-    border-color: #ff0033;
-    box-shadow: 0 0 20px #ff0033;
-    color: #ff0033;
+  #videoWrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
-  @keyframes slideIn {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  /* BOTÃO ABAIXO DO VÍDEO */
+  #botaoWrapper {
+    display: none;
+    width: 95%;
+    max-width: 1200px;
+    aspect-ratio: 16/3; /* proporcional ao botão */
+    margin: 20px auto 40px auto;
+    position: relative;
+    text-align: center;
   }
 
-  @keyframes slideOut {
-    to {
-      opacity: 0;
-      transform: translateX(100%);
-    }
+  #botaoWrapper a {
+    display: inline-block;
+    max-width: 300px;
+    max-height: 80px;
+    width: 20%;
+    height: 50%;
+    background-image: url('https://i.postimg.cc/X7F1gJP3/Imagem-do-Whats-App-de-2025-11-08-a-s-21-46-36-94159710.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-decoration: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>
+</head>
+<body>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-  from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+<!-- INTRO -->
+<div id="intro">
+  <img src="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png" alt="Logo do Site">
+  <div id="carregando-texto">Carregando...</div>
+</div>
 
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY_AQUI",
-    authDomain: "SEU_PROJETO.firebaseapp.com",
-    projectId: "SEU_PROJETO",
-    storageBucket: "SEU_PROJETO.appspot.com",
-    messagingSenderId: "SEU_ID",
-    appId: "SUA_APP_ID"
-  };
+<!-- FAIXA AZUL -->
+<div id="faixa">
+  <h1>PLUSHMASTER</h1>
+</div>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+<!-- VÍDEO LIVE -->
+<div id="videoWrapper">
+  <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?name=onlinemachine" allowfullscreen></iframe>
+</div>
 
-  function mostrarNotificacao(texto, tipo = "info") {
-    const container = document.getElementById("notificacoes");
-    const notif = document.createElement("div");
-    notif.classList.add("notificacao", tipo);
-    notif.textContent = texto;
-    container.appendChild(notif);
-    setTimeout(() => {
-      notif.style.animation = "slideOut 0.5s forwards";
-      setTimeout(() => notif.remove(), 500);
-    }, 4000);
-  }
+<!-- BOTÃO ABAIXO DO VÍDEO -->
+<div id="botaoWrapper">
+  <a href="#" target="_blank"></a>
+</div>
 
-  const loginContainer = document.getElementById("loginContainer");
-  const cadastroContainer = document.getElementById("cadastroContainer");
-  const mostrarCadastro = document.getElementById("mostrarCadastro");
-  const mostrarLogin = document.getElementById("mostrarLogin");
-
-  mostrarCadastro.addEventListener("click", (e) => {
-    e.preventDefault();
-    loginContainer.style.display = "none";
-    cadastroContainer.style.display = "flex";
-  });
-
-  mostrarLogin.addEventListener("click", (e) => {
-    e.preventDefault();
-    cadastroContainer.style.display = "none";
-    loginContainer.style.display = "flex";
-  });
-
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("emailLogin").value;
-    const senha = document.getElementById("senhaLogin").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      mostrarNotificacao("✅ Login realizado com sucesso!", "sucesso");
-    } catch (error) {
-      mostrarNotificacao("❌ Erro ao fazer login: " + error.message, "erro");
-    }
-  });
-
-  document.getElementById("cadastroBtn").addEventListener("click", async () => {
-    const email = document.getElementById("emailCadastro").value;
-    const senha = document.getElementById("senhaCadastro").value;
-    try {
-      await createUserWithEmailAndPassword(auth, email, senha);
-      mostrarNotificacao("🎉 Conta criada com sucesso!", "sucesso");
-      setTimeout(() => {
-        cadastroContainer.style.display = "none";
-        loginContainer.style.display = "flex";
-      }, 1000);
-    } catch (error) {
-      mostrarNotificacao("❌ Erro ao criar conta: " + error.message, "erro");
-    }
-  });
-
-  // Mostra login depois da intro (se existir)
+<script>
   setTimeout(() => {
-    const intro = document.getElementById("intro");
-    if (intro) {
-      intro.style.opacity = "0";
-      intro.style.transition = "opacity 1s";
-      setTimeout(() => {
-        intro.style.display = "none";
-        loginContainer.style.display = "flex";
-      }, 1000);
-    } else {
-      loginContainer.style.display = "flex";
-    }
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("faixa").style.display = "flex";
+    document.getElementById("videoWrapper").style.display = "block";
+    document.getElementById("botaoWrapper").style.display = "block";
   }, 4000);
 </script>
+
+</body>
+</html>
