@@ -1,254 +1,203 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>PlushMaster</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Plush Master</title>
+
+<!-- 🔔 Container das notificações -->
+<div id="notificacaoContainer"></div>
 
 <style>
-  body {
-    margin: 0;
-    background-color: #ffffff;
-    font-family: 'Orbitron', sans-serif;
-    overflow-y: auto; /* rolagem só se necessário */
+  /* Container das notificações */
+  #notificacaoContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
+    z-index: 9999;
   }
 
-  /* INTRO */
-  #intro {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #001F3F;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: #00BFFF;
-    z-index: 1000;
+  .notificacao {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px #ff0000;
+    color: #ff5555;
+    font-family: "Orbitron", sans-serif;
+    font-size: 14px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    animation: aparecer 0.4s ease, desaparecer 0.5s ease 3.5s forwards;
+    backdrop-filter: blur(4px);
   }
 
-  #intro img {
-    width: 100px;
-    opacity: 0;
-    animation: logoZoom 4s ease-in-out forwards;
+  @keyframes aparecer {
+    from { opacity:0; transform: translateX(50px);}
+    to { opacity:1; transform: translateX(0);}
+  }
+  @keyframes desaparecer {
+    to { opacity:0; transform: translateX(50px);}
   }
 
-  #carregando-texto {
-    font-size: 1.2em;
-    opacity: 0;
-    margin-top: 20px;
-    animation: aparecerTexto 1s ease-in-out 3s forwards;
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; background:black; }
 
-  @keyframes logoZoom {
-    0% { transform: scale(0.1); opacity: 0; }
-    30% { opacity: 1; }
-    60% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(3); opacity: 0; }
-  }
-
-  @keyframes aparecerTexto {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* FAIXA AZUL */
-  #faixa {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 12vh;
-    min-height: 80px;
-    background-color: #007bff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-
-  #faixa h1 {
-    color: #fff;
-    font-size: clamp(28px, 4vw, 42px); /* mínimo 28px, ideal 4vw, máximo 42px */
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin: 0;
-  }
-
-  /* VÍDEO */
-  #videoWrapper {
-    display: none;
-    width: 95%;
-    max-width: 1200px;
-    aspect-ratio: 16/9;
-    margin: calc(12vh + 20px) auto 20px auto;
-  }
-
-  #videoWrapper iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* BOTÃO ABAIXO DO VÍDEO */
-  #botaoWrapper {
-    display: none;
-    width: 95%;
-    max-width: 1200px;
-    height: 200px;
-    margin: 20px auto 40px auto;
-    position: relative;
-    text-align: center;
-  }
-
-  #botaoWrapper a {
-    display: inline-block;
-    width: 250px;   /* maior largura */
-    height: 100px;  /* maior altura */
-    background-image: url('https://i.postimg.cc/X7F1gJP3/Imagem-do-Whats-App-de-2025-11-08-a-s-21-46-36-94159710.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    text-decoration: none;
+  .tela {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 0.5s ease;
   }
 
-  /* RESPONSIVO: aumenta botão em telas pequenas */
-  @media screen and (max-width: 600px) {
-    #botaoWrapper a {
-      width: 300px;  /* largura maior no celular */
-      height: 120px; /* altura maior no celular */
-    }
+  /* Telas */
+  #tela1 {
+    background-image: url('https://i.postimg.cc/qqmMFMZm/IMG-1599.jpg');
+    z-index: 2;
+    display: block;
   }
+  #tela2 {
+    background-image: url('https://i.postimg.cc/4x6j4FsD/IMG-1600.jpg');
+    display: none;
+    z-index: 3;
+  }
+  #tela3 {
+    background-image: url('https://i.postimg.cc/gkPmd7hY/IMG-1601.jpg');
+    display: none;
+    z-index: 4;
+  }
+
+  /* Botões invisíveis */
+button {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Botão da primeira tela */
+#botaoComecar {
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 10%;
+}
+
+/* Campos de e-mail e senha */
+#emailInput, #senhaInput {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  border-radius: 10px;
+  padding-left: 10px;
+  border: none;
+  font-size: 1rem;
+}
+
+#emailInput { top: 46%; height: 5%; }   /* campo de e-mail */
+#senhaInput { top: 54%; height: 5%; }   /* campo de senha */
+
+/* Botões invisíveis da segunda e terceira tela */
+#botaoVerificar {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 5%;
+  top: 52%;  /* logo abaixo do campo de e-mail */
+}
+
+#botaoSenha {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 5%;
+  top: 68%;  /* logo abaixo do campo de senha */
+}
+
 </style>
 </head>
 <body>
 
-<!-- INTRO -->
-<div id="intro">
-  <img src="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png" alt="Logo do Site">
-  <div id="carregando-texto">Carregando...</div>
+<!-- Primeira tela -->
+<div id="tela1" class="tela">
+  <button id="botaoComecar"></button>
 </div>
 
-<!-- FAIXA AZUL -->
-<div id="faixa">
-  <h1>PLUSHMASTER</h1>
+<!-- Segunda tela -->
+<div id="tela2" class="tela">
+  <input type="email" id="emailInput" placeholder="Digite seu e-mail" />
+  <button id="botaoVerificar"></button>
 </div>
 
-<!-- VÍDEO LIVE -->
-<div id="videoWrapper">
-  <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?name=onlinemachine" allowfullscreen></iframe>
-</div>
-
-<!-- BOTÃO ABAIXO DO VÍDEO -->
-<div id="botaoWrapper">
-  <a href="#" target="_blank"></a>
+<!-- Terceira tela -->
+<div id="tela3" class="tela">
+  <input type="password" id="senhaInput" placeholder="Digite sua senha" />
+  <button id="botaoSenha"></button>
 </div>
 
 <script>
-  const intro = document.getElementById("intro");
-  const logo = intro.querySelector("img");
-  const faixa = document.getElementById("faixa");
-  const videoWrapper = document.getElementById("videoWrapper");
-  const botaoWrapper = document.getElementById("botaoWrapper");
+  const tela1 = document.getElementById("tela1");
+  const tela2 = document.getElementById("tela2");
+  const tela3 = document.getElementById("tela3");
+  const botaoComecar = document.getElementById("botaoComecar");
+  const botaoVerificar = document.getElementById("botaoVerificar");
+  const botaoSenha = document.getElementById("botaoSenha");
+  const emailInput = document.getElementById("emailInput");
+  const senhaInput = document.getElementById("senhaInput");
 
-  // Quando a animação da logo terminar, mostra o conteúdo
-  logo.addEventListener("animationend", () => {
-    intro.style.display = "none";
-    faixa.style.display = "flex";
-    videoWrapper.style.display = "block";
-    botaoWrapper.style.display = "block";
-  });
-</script>
-<!-- LOGIN/CADASTRO -->
-<div id="authContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center;">
-  <div style="background-color:#001F3F; padding:30px; border-radius:10px; color:white; width:90%; max-width:400px; text-align:center;">
-    <h2>Login / Cadastro</h2>
-    <input type="email" id="email" placeholder="Email" style="width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px;">
-    <input type="password" id="senha" placeholder="Senha" style="width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px;">
-    <button id="loginBtn" style="padding:10px 20px; margin:10px; border:none; border-radius:5px; background-color:#007bff; color:white; cursor:pointer;">Login</button>
-    <button id="cadastroBtn" style="padding:10px 20px; margin:10px; border:none; border-radius:5px; background-color:#28a745; color:white; cursor:pointer;">Cadastrar</button>
-    <div id="notificacao" style="margin-top:10px; color:#ff0;"></div>
-  </div>
-</div>
-
-<!-- Firebase SDK -->
-<script type="module">
-  // Importa funções do Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-
-  // Configuração do Firebase (substitua pelos seus dados)
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "SEU_AUTH_DOMAIN",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_STORAGE_BUCKET",
-    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-    appId: "SEU_APP_ID"
-  };
-
-  // Inicializa Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Referências dos elementos
-  const authContainer = document.getElementById("authContainer");
-  const notificacao = document.getElementById("notificacao");
-  const loginBtn = document.getElementById("loginBtn");
-  const cadastroBtn = document.getElementById("cadastroBtn");
-
-  // FUNÇÃO PARA ABRIR A TELA DE LOGIN/CADASTRO
-  function abrirAuth() {
-    authContainer.style.display = "flex";
+  function mostrarNotificacao(texto){
+    const container = document.getElementById("notificacaoContainer");
+    const notif = document.createElement("div");
+    notif.className = "notificacao";
+    notif.textContent = texto;
+    container.appendChild(notif);
+    setTimeout(()=>{ notif.remove(); },4000);
   }
 
-  // LOGIN
-  loginBtn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
+  // Tela 1 → Tela 2
+  botaoComecar.addEventListener("click", ()=>{
+    tela1.style.opacity="0";
+    setTimeout(()=>{
+      tela1.style.display="none";
+      tela2.style.display="block";
+      tela2.style.opacity="1";
+    },500);
+  });
 
-    try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      notificacao.style.color = "#00ff00";
-      notificacao.innerText = "Login realizado com sucesso!";
-      authContainer.style.display = "none";
-    } catch (error) {
-      notificacao.style.color = "#ff4444";
-      notificacao.innerText = "Erro: " + error.message;
+  // Tela 2 → Tela 3
+  botaoVerificar.addEventListener("click", ()=>{
+    const email = emailInput.value.trim();
+    if(email===""){
+      mostrarNotificacao("Digite seu e-mail antes de continuar!");
+    } else {
+      mostrarNotificacao("E-mail verificado com sucesso!");
+      tela2.style.display="none";
+      tela3.style.display="block";
+      tela3.style.opacity="1";
+      console.log("Email do usuário:", email);
     }
   });
 
-  // CADASTRO
-  cadastroBtn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    try {
-      await createUserWithEmailAndPassword(auth, email, senha);
-      notificacao.style.color = "#00ff00";
-      notificacao.innerText = "Conta criada com sucesso!";
-      authContainer.style.display = "none";
-    } catch (error) {
-      notificacao.style.color = "#ff4444";
-      notificacao.innerText = "Erro: " + error.message;
+  // Tela 3 → Ação final (exemplo)
+  botaoSenha.addEventListener("click", ()=>{
+    const senha = senhaInput.value.trim();
+    if(senha===""){
+      mostrarNotificacao("Digite sua senha antes de continuar!");
+    } else {
+      mostrarNotificacao("Login efetuado com sucesso!");
+      console.log("Senha do usuário:", senha);
+      // Aqui você pode redirecionar ou abrir a próxima tela
     }
   });
-
-  document.querySelector("#botaoWrapper a").addEventListener("click", function(e) {
-  e.preventDefault(); // evita que a página recarregue
-  abrirAuth();         // abre o login/cadastro
-});
-
 </script>
+
+</body>
+</html>
