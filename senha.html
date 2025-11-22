@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlushMaster - Senha</title>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #37bdf8;
+        }
+
+        #tela3 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background: #37bdf8;
+        }
+
+        #tela3 .logo { margin-top: 40px; }
+        #tela3 .logo img { width: 240px; }
+
+        #tela3 .box {
+            background: #f7eadf;
+            width: 85%;
+            max-width: 400px;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        #tela3 label {
+            float: left;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #002b4c;
+        }
+
+        #tela3 input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        #tela3 .btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(#0dd0ff, #0074d9);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        #tela3 .footer {
+            margin-top: auto;
+            margin-bottom: 20px;
+            color: #003c5c;
+            font-size: 14px;
+        }
+
+        .notif {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4444;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            opacity: 0;
+            pointer-events: none;
+            font-size: 15px;
+            transition: opacity .4s;
+        }
+
+        .notif.show { opacity: 1; }
+    </style>
+</head>
+
+<body>
+
+    <div id="tela3">
+        <div class="logo">
+            <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+        </div>
+
+        <div class="box">
+            <h2>Crie sua senha</h2>
+            <p>Digite sua nova senha para continuar</p>
+
+            <label>Senha</label>
+            <input type="password" id="senhaInput" placeholder="Digite uma senha">
+
+            <button class="btn" onclick="validarSenha()">Continuar</button>
+        </div>
+
+        <div class="footer">© 2025 Ababuta</div>
+    </div>
+
+    <div id="notif" class="notif"></div>
+
+    <script>
+        function validarSenha() {
+            const senha = document.getElementById("senhaInput").value;
+
+            if (senha.length >= 4) {
+                localStorage.setItem("senhaUsuario", senha);
+                location.href = "dashboard.html"; // Próxima página
+            } else {
+                mostrarNotificacao("A senha deve ter pelo menos 4 caracteres!");
+            }
+        }
+
+        function mostrarNotificacao(texto) {
+            const notif = document.getElementById("notif");
+            notif.textContent = texto;
+            notif.classList.add("show");
+            setTimeout(() => notif.classList.remove("show"), 2500);
+        }
+    </script>
+
+</body>
+</html>
