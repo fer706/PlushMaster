@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlushMaster - Email</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #37bdf8;
+        }
+
+        #tela2 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background: #37bdf8;
+        }
+
+        #tela2 .logo { margin-top: 40px; }
+        #tela2 .logo img { width: 240px; }
+
+        #tela2 .box {
+            background: #f7eadf;
+            width: 85%;
+            max-width: 400px;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        #tela2 label {
+            float: left;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #002b4c;
+        }
+
+        #tela2 input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        #tela2 .btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(#0dd0ff, #0074d9);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        #tela2 .footer {
+            margin-top: auto;
+            margin-bottom: 20px;
+            color: #003c5c;
+            font-size: 14px;
+        }
+
+        .notif {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4444;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            opacity: 0;
+            pointer-events: none;
+            font-size: 15px;
+            transition: opacity .4s;
+        }
+
+        .notif.show { opacity: 1; }
+    </style>
+</head>
+
+<body>
+
+    <div id="tela2">
+        <div class="logo">
+            <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+        </div>
+
+        <div class="box">
+            <h2>Entre ou cadastre-se</h2>
+            <p>Informe seu e-mail para continuar</p>
+
+            <label>E-mail</label>
+            <input type="email" id="emailInput" placeholder="exemplo@email.com">
+
+            <button class="btn" onclick="validarEmail()">Continuar</button>
+        </div>
+
+        <div class="footer">© 2025 Ababuta</div>
+    </div>
+
+    <div id="notif" class="notif"></div>
+
+    <script>
+        function validarEmail() {
+            const email = document.getElementById("emailInput").value;
+            const padrao = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (padrao.test(email)) {
+                localStorage.setItem("emailDigitado", email);
+                location.href = "senha.html";
+            } else {
+                mostrarNotificacao("E-mail inválido! Tente novamente.");
+            }
+        }
+
+        function mostrarNotificacao(texto) {
+            const notif = document.getElementById("notif");
+            notif.textContent = texto;
+            notif.classList.add("show");
+            setTimeout(() => notif.classList.remove("show"), 2500);
+        }
+    </script>
+
+</body>
+</html>
