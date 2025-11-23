@@ -116,17 +116,50 @@
 
     <div id="notif" class="notif"></div>
 
-    <script>
-        function validarEmail() {
+    <!-- FIREBASE + LÓGICA -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, fetchSignInMethodsForEmail }
+            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        // ======= SUA CONFIG DO FIREBASE =======
+        const firebaseConfig = {
+            apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+            authDomain: "plush-master.firebaseapp.com",
+            projectId: "plush-master",
+            storageBucket: "plush-master.firebasestorage.app",
+            messagingSenderId: "822751531077",
+            appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ======= VALIDAR EMAIL =======
+        window.validarEmail = function () {
             const email = document.getElementById("emailInput").value;
             const padrao = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (padrao.test(email)) {
-                localStorage.setItem("emailDigitado", email);
-                location.href = "senha.html";
-            } else {
+            if (!padrao.test(email)) {
                 mostrarNotificacao("E-mail inválido! Tente novamente.");
+                return;
             }
+
+            localStorage.setItem("emailDigitado", email);
+
+            fetchSignInMethodsForEmail(auth, email)
+                .then(metodos => {
+                    if (metodos.length > 0) {
+                        localStorage.setItem("modoLogin", "login");
+                    } else {
+                        localStorage.setItem("modoLogin", "cadastro");
+                    }
+
+                    location.href = "senha.html";
+                })
+                .catch(() => {
+                    mostrarNotificacao("Erro ao acessar o servidor.");
+                });
         }
 
         function mostrarNotificacao(texto) {
