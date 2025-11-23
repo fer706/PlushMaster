@@ -1,174 +1,84 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlushMaster - Email</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
-
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: #37bdf8;
-        }
-
-        #tela2 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            background: #37bdf8;
-        }
-
-        #tela2 .logo { margin-top: 40px; }
-        #tela2 .logo img { width: 240px; }
-
-        #tela2 .box {
-            background: #f7eadf;
-            width: 85%;
-            max-width: 400px;
-            padding: 25px;
-            margin-top: 25px;
-            border-radius: 18px;
-            text-align: center;
-        }
-
-        #tela2 label {
-            float: left;
-            margin-left: 5px;
-            margin-bottom: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #002b4c;
-        }
-
-        #tela2 input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            margin-top: 5px;
-        }
-
-        #tela2 .btn {
-            margin-top: 20px;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(#0dd0ff, #0074d9);
-            border: none;
-            color: #fff;
-            font-size: 20px;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
-        #tela2 .footer {
-            margin-top: auto;
-            margin-bottom: 20px;
-            color: #003c5c;
-            font-size: 14px;
-        }
-
-        .notif {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ff4444;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 10px;
-            opacity: 0;
-            pointer-events: none;
-            font-size: 15px;
-            transition: opacity .4s;
-        }
-
-        .notif.show { opacity: 1; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster - Email</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:0;font-family:Arial,sans-serif;background:#37bdf8}
+#tela2{display:flex;flex-direction:column;align-items:center;height:100vh;background:#37bdf8}
+#tela2 .logo{margin-top:40px}
+#tela2 .logo img{width:240px}
+#tela2 .box{background:#f7eadf;width:85%;max-width:400px;padding:25px;margin-top:25px;border-radius:18px;text-align:center}
+#tela2 label{float:left;margin-left:5px;margin-bottom:5px;font-size:16px;font-weight:bold;color:#002b4c}
+#tela2 input{width:100%;padding:15px;border-radius:8px;font-size:16px;margin-top:5px}
+#tela2 .btn{margin-top:20px;width:100%;padding:16px;background:linear-gradient(#0dd0ff,#0074d9);border:none;color:#fff;font-size:20px;border-radius:12px;cursor:pointer}
+#tela2 .footer{margin-top:auto;margin-bottom:20px;color:#003c5c;font-size:14px}
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff4444;color:#fff;padding:12px 20px;border-radius:10px;opacity:0;pointer-events:none;font-size:15px;transition:opacity .4s}
+.notif.show{opacity:1}
+</style>
 </head>
-
 <body>
 
-    <div id="tela2">
-        <div class="logo">
-            <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-        </div>
+<div id="tela2">
+  <div class="logo"><img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png"></div>
+  <div class="box">
+    <h2>Entre ou cadastre-se</h2>
+    <p>Informe seu e-mail para continuar</p>
+    <label>E-mail</label>
+    <input type="email" id="emailInput" placeholder="exemplo@email.com">
+    <button class="btn" id="btnContinuar">Continuar</button>
+  </div>
+  <div class="footer">© 2025 PlushMaster</div>
+</div>
 
-        <div class="box">
-            <h2>Entre ou cadastre-se</h2>
-            <p>Informe seu e-mail para continuar</p>
+<div id="notif" class="notif"></div>
 
-            <label>E-mail</label>
-            <input type="email" id="emailInput" placeholder="exemplo@email.com">
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-            <button class="btn" onclick="validarEmail()">Continuar</button>
-        </div>
+const firebaseConfig = {
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    projectId: "plush-master",
+    storageBucket: "plush-master.firebasestorage.app",
+    messagingSenderId: "822751531077",
+    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+};
 
-        <div class="footer">© 2025 PlushMaster</div>
-    </div>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    <div id="notif" class="notif"></div>
+document.getElementById("btnContinuar").addEventListener("click", async () => {
+    const email = document.getElementById("emailInput").value.trim();
+    const padrao = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    <!-- FIREBASE + LÓGICA -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, fetchSignInMethodsForEmail }
-            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    if (!padrao.test(email)) {
+        mostrarNotificacao("E-mail inválido! Tente novamente.");
+        return;
+    }
 
-        // ======= SUA CONFIG DO FIREBASE =======
-        const firebaseConfig = {
-            apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-            authDomain: "plush-master.firebaseapp.com",
-            projectId: "plush-master",
-            storageBucket: "plush-master.firebasestorage.app",
-            messagingSenderId: "822751531077",
-            appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
-        };
+    try {
+        const metodos = await fetchSignInMethodsForEmail(auth, email);
+        // Apenas direciona para a página unificada, a detecção de login/cadastro é feita lá
+        window.location.href = `senha.html?email=${encodeURIComponent(email)}`;
+    } catch(err) {
+        mostrarNotificacao("Erro ao conectar ao Firebase!");
+    }
+});
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // ======= VALIDAR EMAIL =======
-        window.validarEmail = function () {
-            const email = document.getElementById("emailInput").value;
-            const padrao = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!padrao.test(email)) {
-                mostrarNotificacao("E-mail inválido! Tente novamente.");
-                return;
-            }
-
-            localStorage.setItem("emailDigitado", email);
-
-            fetchSignInMethodsForEmail(auth, email)
-                .then(metodos => {
-                    if (metodos.length > 0) {
-                        localStorage.setItem("modoLogin", "login");
-                    } else {
-                        localStorage.setItem("modoLogin", "cadastro");
-                    }
-
-                    location.href = "senha.html";
-                })
-                .catch(() => {
-                    mostrarNotificacao("Erro ao acessar o servidor.");
-                });
-        }
-
-        function mostrarNotificacao(texto) {
-            const notif = document.getElementById("notif");
-            notif.textContent = texto;
-            notif.classList.add("show");
-            setTimeout(() => notif.classList.remove("show"), 2500);
-        }
-    </script>
+function mostrarNotificacao(texto){
+    const notif = document.getElementById("notif");
+    notif.textContent = texto;
+    notif.classList.add("show");
+    setTimeout(()=>notif.classList.remove("show"),2500);
+}
+</script>
 
 </body>
 </html>
+
