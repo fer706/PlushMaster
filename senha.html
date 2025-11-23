@@ -99,13 +99,13 @@
         </div>
 
         <div class="box">
-            <h2>Crie sua senha</h2>
-            <p>Digite sua nova senha para continuar</p>
+            <h2 id="tituloSenha">Carregando...</h2>
+            <p id="descricaoSenha"></p>
 
-            <label>Senha</label>
-            <input type="password" id="senhaInput" placeholder="Digite uma senha">
+            <label id="labelSenha">Senha</label>
+            <input type="password" id="senhaInput" placeholder="">
 
-            <button class="btn" onclick="validarSenha()">Continuar</button>
+            <button class="btn" id="btnContinuar" onclick="validarSenha()">Continuar</button>
         </div>
 
         <div class="footer">© 2025 PlushMaster</div>
@@ -113,15 +113,65 @@
 
     <div id="notif" class="notif"></div>
 
-    <script>
-        function validarSenha() {
-            const senha = document.getElementById("senhaInput").value;
+    <!-- FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-            if (senha.length >= 4) {
-                localStorage.setItem("senhaUsuario", senha);
-                location.href = "dashboard.html"; // Próxima página
-            } else {
+        const firebaseConfig = {
+            apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+            authDomain: "plush-master.firebaseapp.com",
+            projectId: "plush-master",
+            storageBucket: "plush-master.firebasestorage.app",
+            messagingSenderId: "822751531077",
+            appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const email = localStorage.getItem("emailDigitado");
+        const modo = localStorage.getItem("modoLogin");
+
+        // === AJUSTAR A INTERFACE ===
+        const titulo = document.getElementById("tituloSenha");
+        const descricao = document.getElementById("descricaoSenha");
+        const campoSenha = document.getElementById("senhaInput");
+        const btn = document.getElementById("btnContinuar");
+
+        if (modo === "login") {
+            titulo.textContent = "Digite sua senha";
+            descricao.textContent = "Acesse sua conta";
+            campoSenha.placeholder = "Digite sua senha";
+            btn.textContent = "Entrar";
+        } else {
+            titulo.textContent = "Crie sua senha";
+            descricao.textContent = "Defina uma senha para criar sua conta";
+            campoSenha.placeholder = "Crie uma senha";
+            btn.textContent = "Cadastrar";
+        }
+
+        // === VALIDAR SENHA ===
+        window.validarSenha = function () {
+            const senha = campoSenha.value;
+
+            if (senha.length < 4) {
                 mostrarNotificacao("A senha deve ter pelo menos 4 caracteres!");
+                return;
+            }
+
+            if (modo === "cadastro") {
+                createUserWithEmailAndPassword(auth, email, senha)
+                    .then(() => location.href = "dashboard.html")
+                    .catch(err => mostrarNotificacao(err.message));
+            } else {
+                signInWithEmailAndPassword(auth, email, senha)
+                    .then(() => location.href = "dashboard.html")
+                    .catch(() => mostrarNotificacao("Senha incorreta!"));
             }
         }
 
