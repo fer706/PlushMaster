@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster - Cadastro de E-mail</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #3dc8ff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .logo {
+        width: 180px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: #f7e9dd;
+        width: 70%;
+        max-width: 320px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #000;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 15px;
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        width: 85%;
+        margin: 0 auto 5px auto;
+        color: #000;
+        font-weight: bold;
+    }
+
+    input {
+        width: 75%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #000;
+        font-size: 16px;
+        outline: none;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        width: 85%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #4db8ff, #0077e6);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    footer {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #004c73;
+    }
+
+    #notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="notificacoes"></div>
+
+<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<div class="card">
+    <h2>Cadastro de E-mail</h2>
+    <p>Digite seu e-mail para criar uma conta</p>
+
+    <label>E-mail</label>
+    <input type="email" id="email" placeholder="exemplo@email.com">
+
+    <button class="btn" onclick="proximo()">Próximo</button>
+</div>
+
+<footer>© 2025 PlushMaster</footer>
+
+<script>
+    function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+    // Preenche o input com e-mail do localStorage se existir
+    const emailSalvo = localStorage.getItem("emailCadastro");
+    if (emailSalvo) {
+        document.getElementById("email").value = emailSalvo;
+    }
+
+    function proximo() {
+        const email = document.getElementById("email").value.trim();
+
+        if (!email) {
+            notificar("Digite um e-mail válido!");
+            return;
+        }
+
+        // Salva o email para a próxima etapa
+        localStorage.setItem("emailCadastro", email);
+        // Redireciona para tela de senha
+        window.location.href = "verificação.html";
+    }
+</script>
+
+</body>
+</html>
