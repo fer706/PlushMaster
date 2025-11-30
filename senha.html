@@ -3,111 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlushMaster - Senha / Cadastro</title>
-<link rel="icon" type="image/png" href="https://i.postimg.cc/3rZTK3HP/plush-master-logo.png">
+<title>PlushMaster - Digite sua senha</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:0;font-family:Arial,sans-serif;background:#37bdf8}
-#tela{display:flex;flex-direction:column;align-items:center;height:100vh;background:#37bdf8}
-#tela .logo{margin-top:40px}
-#tela .logo img{width:240px}
-#tela .box{background:#f7eadf;width:85%;max-width:400px;padding:25px;margin-top:25px;border-radius:18px;text-align:center}
-#tela label{float:left;margin-left:5px;margin-bottom:5px;font-size:16px;font-weight:bold;color:#002b4c}
-#tela input{width:100%;padding:15px;border-radius:8px;font-size:16px;margin-top:5px}
-#tela .btn{margin-top:20px;width:100%;padding:16px;background:linear-gradient(#0dd0ff,#0074d9);border:none;color:#fff;font-size:20px;border-radius:12px;cursor:pointer}
-#tela .footer{margin-top:auto;margin-bottom:20px;color:#003c5c;font-size:14px}
-.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ff4444;color:#fff;padding:12px 20px;border-radius:10px;opacity:0;pointer-events:none;font-size:15px;transition:opacity .4s}
-.notif.show{opacity:1}
+    body {
+        margin: 0;
+        padding: 0;
+        background: #3dc8ff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .logo {
+        width: 180px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: #f7e9dd;
+        width: 70%;
+        max-width: 320px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #000;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 15px;
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        width: 85%;
+        margin: 0 auto 5px auto;
+        color: #000;
+        font-weight: bold;
+    }
+
+    input {
+        width: 75%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #000;
+        font-size: 16px;
+        outline: none;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        width: 85%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #4db8ff, #0077e6);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    footer {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #004c73;
+    }
+
+    #notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
 </style>
 </head>
+
 <body>
 
-<div id="tela">
-  <div class="logo"><img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png"></div>
-  <div class="box">
-    <h2 id="titulo">Carregando...</h2>
-    <p id="texto">Verificando conta...</p>
+<div id="notificacoes"></div>
+
+<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<div class="card">
+    <h2>Digite sua senha</h2>
+    <p>Para entrar com seu e-mail: <span id="emailExibido"></span></p>
+
     <label>Senha</label>
-    <input type="password" id="senhaInput" placeholder="Digite sua senha">
-    <button class="btn" id="btnAcao">Continuar</button>
-  </div>
-  <div class="footer">© 2025 PlushMaster</div>
+    <input type="password" id="senha" placeholder="Digite sua senha">
+
+    <button class="btn" onclick="entrar()">Entrar</button>
 </div>
 
-<div id="notif" class="notif"></div>
+<footer>© 2025 PlushMaster</footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-const firebaseConfig = {
-    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-    authDomain: "plush-master.firebaseapp.com",
-    projectId: "plush-master",
-    storageBucket: "plush-master.firebasestorage.app",
-    messagingSenderId: "822751531077",
-    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
-};
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+        authDomain: "plush-master.firebaseapp.com",
+        projectId: "plush-master",
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+    function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
 
-const params = new URLSearchParams(window.location.search);
-const email = params.get("email");
-
-if(!email){
-    mostrarNotificacao("Erro: E-mail inválido. Volte para a tela anterior.");
-    document.getElementById("btnAcao").disabled = true;
-}
-
-let modo = ""; // login ou cadastro
-
-async function verificarModo(){
-    try{
-        const metodos = await fetchSignInMethodsForEmail(auth, email);
-        if(metodos.length > 0){
-            modo = "login";
-            document.getElementById("titulo").innerText = "Digite sua senha";
-            document.getElementById("texto").innerText = "Acesse sua conta PlushMaster";
-        } else {
-            modo = "cadastro";
-            document.getElementById("titulo").innerText = "Crie sua senha";
-            document.getElementById("texto").innerText = "Defina uma senha para sua nova conta";
-        }
-    }catch(err){
-        mostrarNotificacao("Erro ao conectar ao Firebase!");
-        document.getElementById("btnAcao").disabled = true;
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
     }
-}
 
-await verificarModo();
-
-document.getElementById("btnAcao").addEventListener("click", async ()=>{
-    const senha = document.getElementById("senhaInput").value;
-    if(senha.length < 4){ mostrarNotificacao("Senha mínima 4 caracteres!"); return; }
-    try{
-        if(modo === "cadastro"){
-            await createUserWithEmailAndPassword(auth,email,senha);
-        } else {
-            await signInWithEmailAndPassword(auth,email,senha);
-        }
-        window.location.href="dashboard.html";
-    }catch(err){
-        mostrarNotificacao("Erro: "+err.message);
+    // Pega o email do localStorage
+    const email = localStorage.getItem("emailLogin");
+    if (!email) {
+        notificar("Nenhum e-mail encontrado. Volte para a tela de login.");
+    } else {
+        document.getElementById("emailExibido").innerText = email;
     }
-});
 
-function mostrarNotificacao(texto){
-    const notif=document.getElementById("notif");
-    notif.textContent=texto;
-    notif.classList.add("show");
-    setTimeout(()=>notif.classList.remove("show"),2500);
-}
+    function entrar() {
+        const senha = document.getElementById("senha").value.trim();
+
+        if (!senha) {
+            notificar("Digite sua senha!");
+            return;
+        }
+
+        auth.signInWithEmailAndPassword(email, senha)
+            .then(() => {
+                notificar("Login realizado com sucesso!");
+                // Redirecionar para a página principal
+                window.location.href = "painel.html"; 
+            })
+            .catch((error) => {
+                if (error.code === "auth/wrong-password") {
+                    notificar("Senha incorreta!");
+                } else {
+                    notificar(error.message);
+                }
+            });
+    }
 </script>
 
 </body>
 </html>
-
-
-
-
