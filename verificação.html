@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster - Verificação de E-mail</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #3dc8ff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .logo {
+        width: 180px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: #f7e9dd;
+        width: 70%;
+        max-width: 320px;
+        margin: 40px auto;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #000;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 15px;
+    }
+
+    .btn {
+        width: 85%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #4db8ff, #0077e6);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-bottom: 15px;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    footer {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #004c73;
+    }
+
+    #notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="notificacoes"></div>
+
+<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<div class="card">
+    <h2>Verificação de E-mail</h2>
+    <p>Enviaremos um link de verificação para: <span id="emailExibido"></span></p>
+
+    <button class="btn" onclick="enviarVerificacao()">Enviar E-mail de Verificação</button>
+    <button class="btn" onclick="verificarStatus()">Já Verifiquei!</button>
+</div>
+
+<footer>© 2025 PlushMaster</footer>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+        authDomain: "plush-master.firebaseapp.com",
+        projectId: "plush-master",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+    // Pega o e-mail do localStorage
+    const email = localStorage.getItem("emailCadastro");
+    if (!email) {
+        notificar("Nenhum e-mail encontrado. Volte para o cadastro.");
+    } else {
+        document.getElementById("emailExibido").innerText = email;
+    }
+
+    let usuario;
+
+    function enviarVerificacao() {
+        if (!email) return;
+
+        // Cria usuário temporário com senha padrão
+        const senhaTemporaria = "Senha123!";
+        auth.createUserWithEmailAndPassword(email, senhaTemporaria)
+            .then((userCredential) => {
+                usuario = userCredential.user;
+                usuario.sendEmailVerification()
+                    .then(() => {
+                        notificar("E-mail de verificação enviado! Verifique sua caixa de entrada.");
+                    })
+                    .catch((error) => {
+                        notificar("Erro ao enviar e-mail: " + error.message);
+                    });
+            })
+            .catch((error) => {
+                if (error.code === "auth/email-already-in-use") {
+                    notificar("E-mail já cadastrado, vá para login.");
+                } else {
+                    notificar(error.message);
+                }
+            });
+    }
+
+    function verificarStatus() {
+        if (!usuario) {
+            notificar("Você precisa enviar o e-mail primeiro!");
+            return;
+        }
+
+        usuario.reload().then(() => {
+            if (usuario.emailVerified) {
+                notificar("E-mail verificado com sucesso!");
+                // Redireciona para criar senha final ou página principal
+                window.location.href = "senhacadastro.html";
+            } else {
+                notificar("Ainda não verificado. Clique no link no seu e-mail.");
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
