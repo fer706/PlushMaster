@@ -6,6 +6,27 @@
 <title>PlushMaster - Cadastro de E-mail</title>
 
 <style>
+    * { box-sizing: border-box; }
+
+    /* === ANIMAÇÃO DE TROCA DE TELA === */
+    .tela {
+        animation: aparecerTela .4s ease;
+    }
+
+    @keyframes aparecerTela {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .saindo {
+        animation: sairTela .35s ease forwards;
+    }
+
+    @keyframes sairTela {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-40px); }
+    }
+
     body {
         margin: 0;
         padding: 0;
@@ -99,10 +120,10 @@
         font-size: 15px;
         margin-top: 10px;
         border-radius: 8px;
-        animation: aparecer .4s ease;
+        animation: aparecerNotif .4s ease;
     }
 
-    @keyframes aparecer {
+    @keyframes aparecerNotif {
         from { opacity: 0; transform: translateX(20px); }
         to { opacity: 1; transform: translateX(0); }
     }
@@ -110,6 +131,8 @@
 </head>
 
 <body>
+
+<div class="tela" id="conteudo">
 
 <div id="notificacoes"></div>
 
@@ -127,7 +150,19 @@
 
 <footer>© 2025 PlushMaster</footer>
 
+</div>
+
 <script>
+    /* === FUNÇÃO DE ANIMAÇÃO PARA TROCAR DE TELA === */
+    function irPara(pagina) {
+        const tela = document.getElementById("conteudo");
+        tela.classList.add("saindo");
+
+        setTimeout(() => {
+            window.location.href = pagina;
+        }, 300);
+    }
+
     function notificar(msg) {
         const div = document.createElement("div");
         div.className = "notif";
@@ -141,7 +176,6 @@
         }, 3500);
     }
 
-    // Preenche o input com e-mail do localStorage se existir
     const emailSalvo = localStorage.getItem("emailCadastro");
     if (emailSalvo) {
         document.getElementById("email").value = emailSalvo;
@@ -155,10 +189,10 @@
             return;
         }
 
-        // Salva o email para a próxima etapa
         localStorage.setItem("emailCadastro", email);
-        // Redireciona para tela de senha
-        window.location.href = "verificação.html";
+
+        /* Agora troca com animação */
+        irPara("verificação.html");
     }
 </script>
 
