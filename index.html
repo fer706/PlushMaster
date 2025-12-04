@@ -17,6 +17,13 @@
             padding: 0;
             font-family: Arial, sans-serif;
             background: #f7eadf;
+            transition: transform 0.4s ease, opacity 0.4s ease; /* animação suave */
+        }
+
+        /* ==== ANIMAÇÃO DE SAÍDA ==== */
+        .fadeOut {
+            transform: translateX(-100%);
+            opacity: 0;
         }
 
         #tela1 {
@@ -61,11 +68,22 @@
             <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
         </div>
 
-        <!-- Leva para email.html -->
-        <button class="start-btn" onclick="location.href='cadastrologin.html'">Vamos começar</button>
+        <!-- AGORA TEM ANIMAÇÃO -->
+        <button class="start-btn" onclick="animarTroca('cadastrologin.html')">Vamos começar</button>
 
         <div class="footer">© 2025 PlushMaster</div>
     </div>
+
+    <!-- SCRIPT DA ANIMAÇÃO -->
+    <script>
+        function animarTroca(pagina) {
+            document.body.classList.add("fadeOut");
+
+            setTimeout(() => {
+                window.location.href = pagina;
+            }, 400); // mesmo tempo da animação
+        }
+    </script>
 
 </body>
 </html>
