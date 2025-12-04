@@ -9,9 +9,16 @@
     body {
         margin: 0;
         padding: 0;
-        background: #3dc8ff; /* azul claro igual ao seu */
+        background: #3dc8ff;
         font-family: Arial, sans-serif;
         text-align: center;
+        transition: transform 0.4s ease, opacity 0.4s ease; /* animação */
+    }
+
+    /* ===== ANIMAÇÃO DE SAÍDA ENTRE ARQUIVOS ===== */
+    .fadeOut {
+        transform: translateX(-100%);
+        opacity: 0;
     }
 
     .logo {
@@ -20,7 +27,7 @@
     }
 
     .card {
-        background: #f7e9dd; /* bege igual ao seu */
+        background: #f7e9dd;
         width: 90%;
         max-width: 380px;
         margin: 40px auto;
@@ -48,7 +55,7 @@
         margin-top: 15px;
         border: none;
         border-radius: 10px;
-        background: linear-gradient(180deg, #4db8ff, #0077e6); /* igual ao botão "Continuar" */
+        background: linear-gradient(180deg, #4db8ff, #0077e6);
         color: white;
         font-size: 18px;
         cursor: pointer;
@@ -75,12 +82,22 @@
     <h2>Entre ou cadastre-se</h2>
     <p>Escolha uma opção para continuar</p>
 
-    <button class="btn" onclick="location.href='email.html'">Login</button>
-    <button class="btn" onclick="location.href='emailcadastro.html'">Cadastro</button>
+    <!-- Agora com animação -->
+    <button class="btn" onclick="animarTroca('email.html')">Login</button>
+    <button class="btn" onclick="animarTroca('emailcadastro.html')">Cadastro</button>
 </div>
 
 <footer>© 2025 PlushMaster</footer>
 
+<!-- SCRIPT DA ANIMAÇÃO -->
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
 </body>
 </html>
-
