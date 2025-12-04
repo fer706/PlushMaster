@@ -6,6 +6,27 @@
 <title>PlushMaster - Login</title>
 
 <style>
+    * { box-sizing: border-box; }
+
+    /* === ANIMAÇÃO DE TRANSIÇÃO === */
+    .tela {
+        animation: aparecerTela .4s ease;
+    }
+
+    @keyframes aparecerTela {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .saindo {
+        animation: sairTela .35s ease forwards;
+    }
+
+    @keyframes sairTela {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-40px); }
+    }
+
     body {
         margin: 0;
         padding: 0;
@@ -73,9 +94,7 @@
         transition: 0.2s;
     }
 
-    .btn:hover {
-        opacity: 0.9;
-    }
+    .btn:hover { opacity: 0.9; }
 
     footer {
         margin-top: 25px;
@@ -111,6 +130,8 @@
 
 <body>
 
+<div class="tela" id="conteudo">
+
 <div id="notificacoes"></div>
 
 <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
@@ -127,6 +148,8 @@
 
 <footer>© 2025 PlushMaster</footer>
 
+</div>
+
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -140,6 +163,13 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+
+    /* === ANIMAÇÃO DE SAÍDA === */
+    function irPara(pagina) {
+        const tela = document.getElementById("conteudo");
+        tela.classList.add("saindo");
+        setTimeout(() => window.location.href = pagina, 300);
+    }
 
     function notificar(msg) {
         const div = document.createElement("div");
@@ -168,7 +198,9 @@
                     notificar("Este e-mail não está cadastrado. Crie uma conta!");
                 } else {
                     localStorage.setItem("emailLogin", email);
-                    window.location.href = "senha.html"; // Redireciona para a página de senha
+
+                    /* AGORA COM ANIMAÇÃO */
+                    irPara("senha.html");
                 }
             })
             .catch((error) => {
