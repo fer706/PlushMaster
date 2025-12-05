@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlushMaster/entrar</title>
-
-<!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<title>PlushMaster - Digite sua senha</title>
 
 <style>
     body {
@@ -40,14 +37,17 @@
 
     .card {
         background: #f7e9dd;
-        width: 85%;
-        max-width: 320px;
+        width: 90%;
+        max-width: 400px;
         margin: 40px auto;
         padding: 30px;
         border-radius: 20px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
 
+
+        /* CARD ENTRANDO SUAVE */
+        animation: cardAnim 0.8s ease-out;
+    }
 
     @keyframes cardAnim {
         from { opacity: 0; transform: translateY(30px) scale(0.95); }
