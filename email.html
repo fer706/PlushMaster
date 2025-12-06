@@ -156,19 +156,23 @@
 
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-        authDomain: "plush-master.firebaseapp.com",
-        projectId: "plush-master",
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+  authDomain: "plush-master.firebaseapp.com",
+  projectId: "plush-master",
+  storageBucket: "plush-master.firebasestorage.app",
+  messagingSenderId: "822751531077",
+  appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
+  measurementId: "G-JYRNTNQKEB"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
 
     /* === ANIMAÇÃO DE SAÍDA === */
     function irPara(pagina) {
@@ -191,29 +195,19 @@
     }
 
     function verificarEmail() {
-        const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-        if (!email) {
-            notificar("Digite um e-mail!");
-            return;
-        }
-
-        auth.fetchSignInMethodsForEmail(email)
-            .then((metodos) => {
-                if (metodos.length === 0) {
-                    notificar("Este e-mail não está cadastrado. Crie uma conta!");
-                } else {
-                    localStorage.setItem("emailLogin", email);
-
-                    /* AGORA COM ANIMAÇÃO */
-                    irPara("senha.html");
-                }
-            })
-            .catch((error) => {
-                notificar("Erro ao verificar e-mail!");
-                console.error(error);
-            });
+    if (!email) {
+        notificar("Digite um e-mail!");
+        return;
     }
+
+    // Não usa fetchSignInMethodsForEmail pois NÃO funciona no compat
+    localStorage.setItem("emailLogin", email);
+
+    irPara("senha.html"); // Com animação
+}
+
 </script>
 
 </body>
