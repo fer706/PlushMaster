@@ -150,46 +150,76 @@
     let usuario;
 
     function enviarVerificacao() {
-        if (!email) return;
+    if (!email) return;
 
-        // Cria usuário temporário com senha padrão
-        const senhaTemporaria = "Senha123!";
-        auth.createUserWithEmailAndPassword(email, senhaTemporaria)
-            .then((userCredential) => {
-                usuario = userCredential.user;
-                usuario.sendEmailVerification()
-                    .then(() => {
-                        notificar("E-mail de verificação enviado! Verifique sua caixa de entrada.");
-                    })
-                    .catch((error) => {
-                        notificar("Erro ao enviar e-mail: " + error.message);
-                    });
-            })
-            .catch((error) => {
-                if (error.code === "auth/email-already-in-use") {
-                    notificar("E-mail já cadastrado, vá para login.");
-                } else {
-                    notificar(error.message);
-                }
-            });
-    }
+    const senhaTemporaria = "Senha123!";
+    auth.createUserWithEmailAndPassword(email, senhaTemporaria)
+        .then((userCredential) => {
+            usuario = userCredential.user;
 
-    function verificarStatus() {
-        if (!usuario) {
-            notificar("Você precisa enviar o e-mail primeiro!");
-            return;
-        }
+            // Salva o e-mail no localStorage para recuperar depois
+            localStorage.setItem("emailCadastro", email);
 
-        usuario.reload().then(() => {
-            if (usuario.emailVerified) {
-                notificar("E-mail verificado com sucesso!");
-                // Redireciona para criar senha final ou página principal
-                window.location.href = "senhacadastro.html";
+            usuario.sendEmailVerification()
+                .then(() => {
+                    notificar("E-mail de verificação enviado! Verifique sua caixa de entrada.");
+
+                    // Timer para deletar a conta temporária após 20 segundos
+                    setTimeout(() => {
+                        usuario.delete().then(() => {
+                            console.log("Conta temporária expirada e deletada!");
+                        }).catch((error) => {
+                            console.error("Erro ao deletar conta temporária:", error);
+                        });
+                    }, 60000); // 20000ms = 20 segundos
+                })
+                .catch((error) => {
+                    notificar("Erro ao enviar e-mail: " + error.message);
+                });
+        })
+        .catch((error) => {
+            if (error.code === "auth/email-already-in-use") {
+                notificar("E-mail já cadastrado, vá para login.");
             } else {
-                notificar("Ainda não verificado. Clique no link no seu e-mail.");
+                notificar(error.message);
             }
         });
+}
+
+
+    function verificarStatus() {
+    if (!usuario) {
+        notificar("Você precisa enviar o e-mail primeiro!");
+        return;
     }
+
+    usuario.reload().then(() => {
+        if (usuario.emailVerified) {
+
+            notificar("E-mail verificado com sucesso!");
+
+            // 🔥 REMOVE a senha temporária imediatamente
+            usuario.updatePassword("SenhaBloqueada_" + Date.now())
+                .then(() => {
+                    console.log("Senha temporária removida!");
+                })
+                .catch(err => console.error("Erro ao remover senha temporária:", err));
+
+            // 🔥 SALVA o momento da verificação para o timer de 2 minutos
+            localStorage.setItem("tempoVerificacao", Date.now());
+            localStorage.setItem("emailCadastro", usuario.email); // salvar email
+            localStorage.setItem("senhaCriada", "false");
+
+            // REDIRECIONA para criar a senha
+            window.location.href = "senhacadastro.html";
+
+        } else {
+            notificar("Ainda não verificado. Clique no link no seu e-mail.");
+        }
+    });
+}
+
+
 </script>
 
 </body>
