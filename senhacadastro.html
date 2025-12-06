@@ -148,19 +148,22 @@
 
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-        authDomain: "plush-master.firebaseapp.com",
-        projectId: "plush-master",
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+  authDomain: "plush-master.firebaseapp.com",
+  projectId: "plush-master",
+  storageBucket: "plush-master.firebasestorage.app",
+  messagingSenderId: "822751531077",
+  appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
+  measurementId: "G-JYRNTNQKEB"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
     /* === FUNÇÃO PARA FAZER A ANIMAÇÃO DE TROCA === */
     function irPara(pagina) {
@@ -186,40 +189,74 @@
     }
 
     const email = localStorage.getItem("emailCadastro");
+if (!email) {
+    notificar("Nenhum e-mail encontrado. Volte para a tela de cadastro.");
+}
 
-    if (!email) {
-        notificar("Nenhum e-mail encontrado. Volte para a tela de cadastro.");
+function criarSenha() {
+    const senha = document.getElementById("senha").value.trim();
+    const confirmSenha = document.getElementById("confirmSenha").value.trim();
+
+    if (!senha || !confirmSenha) {
+        notificar("Preencha todos os campos!");
+        return;
+    }
+    if (senha !== confirmSenha) {
+        notificar("As senhas não coincidem!");
+        return;
     }
 
-    function criarSenha() {
-        const senha = document.getElementById("senha").value.trim();
-        const confirmSenha = document.getElementById("confirmSenha").value.trim();
-
-        if (!senha || !confirmSenha) {
-            notificar("Preencha todos os campos!");
-            return;
-        }
-
-        if (senha !== confirmSenha) {
-            notificar("As senhas não coincidem!");
-            return;
-        }
-
-        auth.createUserWithEmailAndPassword(email, senha)
-            .then(() => {
-                notificar("Conta criada com sucesso!");
-                
-                /* 👉 AGORA SAI COM ANIMAÇÃO */
-                irPara("painel.html");
-            })
-            .catch((error) => {
-                if (error.code === "auth/email-already-in-use") {
-                    notificar("Este e-mail já está cadastrado. Faça login.");
-                } else {
-                    notificar(error.message);
-                }
-            });
+    const usuario = auth.currentUser;
+    if (!usuario) {
+        notificar("Usuário não encontrado. Volte para cadastro.");
+        window.location.href = "cadastro.html";
+        return;
     }
+
+    usuario.updatePassword(senha)
+        .then(() => {
+            localStorage.setItem("senhaCriada", "true");
+            notificar("Senha criada com sucesso!");
+            window.location.href = "painel.html";
+        })
+        .catch(err => notificar(err.message));
+}
+
+
+
+// Timer para excluir a conta temporária se não criar senha em 2 minutos
+const tempoVerificacao = localStorage.getItem("tempoVerificacao");
+let senhaCriada = localStorage.getItem("senhaCriada");
+
+if (tempoVerificacao && senhaCriada !== "true") {
+    const agora = Date.now();
+    const tempoDecorrido = agora - parseInt(tempoVerificacao);
+
+    if (tempoDecorrido > 2 * 60 * 1000) { // 2 minutos
+        const usuario = auth.currentUser;
+        if (usuario) {
+            usuario.delete()
+                .then(() => {
+                    alert("O tempo para criar a senha expirou. Conta excluída.");
+                    localStorage.removeItem("tempoVerificacao");
+                    localStorage.removeItem("senhaCriada");
+                    localStorage.removeItem("emailCadastro");
+                    window.location.href = "cadastro.html";
+                })
+                .catch((error) => {
+                    console.error("Erro ao excluir conta temporária:", error);
+                });
+        } else {
+            localStorage.removeItem("tempoVerificacao");
+            localStorage.removeItem("senhaCriada");
+            localStorage.removeItem("emailCadastro");
+            window.location.href = "cadastro.html";
+        }
+    }
+}
+
+
+
 </script>
 
 </body>
