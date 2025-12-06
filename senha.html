@@ -167,19 +167,22 @@
 
 <footer>© 2025 PlushMaster</footer>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-        authDomain: "plush-master.firebaseapp.com",
-        projectId: "plush-master",
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+const firebaseConfig = {
+  apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+  authDomain: "plush-master.firebaseapp.com",
+  projectId: "plush-master",
+  storageBucket: "plush-master.appspot.com",
+  messagingSenderId: "822751531077",
+  appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
+  measurementId: "G-JYRNTNQKEB"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
     function notificar(msg) {
         const div = document.createElement("div");
