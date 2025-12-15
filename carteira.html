@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlushMaster/carteira</title>
+
+   <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background:#f3f3f3;
+    }
+
+    .topo{
+      background:#4fc3ff;
+      padding:15px 15px 25px 15px;
+      border-bottom-left-radius:20px;
+      border-bottom-right-radius:20px;
+    }
+
+    .linha1{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .voltar{
+      font-size:22px;
+      color:white;
+      cursor:pointer;
+    }
+
+    .logo{
+      font-weight:bold;
+      font-size:20px;
+      color:white;
+    }
+
+    .perfil{
+      width:42px;
+      height:42px;
+      background:white;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+      color:#4fc3ff;
+      font-size:20px;
+    }
+
+    .titulo{
+      margin-top:15px;
+      color:#05326b;
+      font-size:26px;
+      font-weight:bold;
+    }
+
+    .sub{
+      color:#05326b;
+      font-size:16px;
+    }
+
+    .sessao{
+      padding:20px;
+    }
+
+    .saldo-titulo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:22px;
+      font-weight:bold;
+      margin-bottom:15px;
+    }
+
+    .saldo-box{
+      width:100%;
+      background:#59cfff;
+      border-radius:20px;
+      padding:30px 10px;
+      text-align:center;
+      color:white;
+    }
+
+    .saldo-valor{
+      font-size:42px;
+      font-weight:bold;
+    }
+
+    .pelucias{
+      margin-top:10px;
+      font-size:16px;
+      opacity:0.9;
+    }
+
+    .recarga{
+      padding:0 20px 20px 20px;
+    }
+
+    .recarga h3{
+      font-size:22px;
+      margin-bottom:10px;
+    }
+
+    .valor-box{
+      font-size:32px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .cupom{
+      text-decoration:underline;
+      color:#000;
+      cursor:pointer;
+      margin-top:5px;
+    }
+
+    .btn{
+      margin:20px;
+      background:linear-gradient(#24c6ff,#009ef7);
+      color:#fff;
+      border:none;
+      width:calc(100% - 40px);
+      padding:18px;
+      font-size:18px;
+      border-radius:50px;
+      cursor:pointer;
+    }
+    #notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    body.fadeOut {
+    animation: fadeOut 0.4s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-100%); }
+}
+
+  </style>
+</head>
+<body>
+
+  <div id="notificacoes"></div>
+
+  <!-- TOPO -->
+  <div class="topo">
+    <div class="linha1">
+      <div class="voltar" onclick="voltarAnimado()">←</div>
+      <div class="logo">PlushMaster</div>
+      <div class="perfil" id="letraPerfil">U</div>
+    </div>
+
+    <div class="titulo">Carteira</div>
+    <div class="sub" id="nomeUser">Olá, ...</div>
+  </div>
+
+
+  <!-- SALDO -->
+  <div class="sessao">
+    <div class="saldo-titulo">💲 Saldo na carteira</div>
+
+    <div class="saldo-box">
+      <div class="saldo-valor" id="saldoTela">R$ 0,00</div>
+      <div class="pelucias" id="qtdPelucias">0 pelúcias acumuladas</div>
+    </div>
+  </div>
+
+  <!-- RECARGA -->
+  <div class="recarga">
+    <h3>💳 Qual valor você quer adicionar?</h3>
+    <div class="valor-box" id="valorSelecionado">R$ 0,00</div>
+    <div class="cupom">Tenho um cupom</div>
+  </div>
+
+
+  <!-- BOTÃO -->
+  <button class="btn" onclick="pagar()">Prosseguir para o pagamento</button>
+
+  <!-- FIREBASE + SCRIPT -->
+  <script type="module">
+    // IMPORTS
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    import { 
+      getFirestore, doc, getDoc 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { 
+      getAuth, onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // SUA CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+      authDomain: "plush-master.firebaseapp.com",
+      databaseURL: "https://plush-master-default-rtdb.firebaseio.com",
+      projectId: "plush-master",
+      storageBucket: "plush-master.firebasestorage.app",
+      messagingSenderId: "822751531077",
+      appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
+      measurementId: "G-JYRNTNQKEB"
+    };
+
+    // INICIALIZAR
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+    window.voltarAnimado = function () {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        history.back();
+    }, 400);
+};
+
+
+    // BUSCAR DADOS DO USUÁRIO LOGADO
+    onAuthStateChanged(auth, async (user) => {
+      if(!user){
+        window.location.href = "index.html";
+        return;
+      }
+
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+
+      if(snap.exists()){
+        const dados = snap.data();
+
+        document.getElementById("nomeUser").innerText =
+    "Olá, " + (dados.nome || user.email);
+
+
+        document.getElementById("letraPerfil").innerText =
+          (dados.nome || "U").charAt(0).toUpperCase();
+
+        document.getElementById("saldoTela").innerText =
+          "R$ " + (dados.saldo || 0).toFixed(2).replace(".", ",");
+
+        document.getElementById("qtdPelucias").innerText =
+          (dados.pelucias || 0) + " pelúcias acumuladas";
+      }
+    });
+  
+    // BOTÃO PAGAR (SIMULADO)
+    function pagar(){
+      notificar("Pagamento em desenvolvimento 💳");
+    }
+
+    window.pagar = pagar;
+  </script>
+
+
+</body>
+</html>

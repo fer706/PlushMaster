@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/home</title>
+
+<!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(#4fc3ff, #dff5ff);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* TOPO */
+.top-bar{
+    height:70px;
+    background:#4fc3ff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+.menu{
+    width:45px;
+    height:45px;
+    background:linear-gradient(#64d4ff,#2fa4ff);
+    border-radius:15px;
+    color:white;
+    font-size:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+    color:white;
+}
+
+/* CAMERA */
+.camera-box{
+    background:black;
+    margin:10px;
+    border-radius:10px;
+    overflow:hidden;
+    height:230px;
+}
+
+.camera-box iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    background:black;
+}
+
+/* BOTÃO JOGAR */
+.play-area{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.play-btn{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top, #7be5ff, #009dff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:30px;
+    font-weight:bold;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    text-decoration:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.play-btn:active{
+    transform:scale(0.95);
+}
+
+/* MENU INFERIOR */
+.bottom-bar{
+    height:90px;
+    background:#4fc3ff;
+    border-top-left-radius:25px;
+    border-top-right-radius:25px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+}
+
+.nav-item{
+    text-align:center;
+    color:#1a6fa3;
+    font-size:12px;
+}
+
+.nav-circle{
+    width:50px;
+    height:50px;
+    margin:0 auto 5px;
+    border-radius:50%;
+    background:linear-gradient(#aaf0ff,#4fc3ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    color:white;
+}
+.btn-chat {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(#24c6ff, #009ef7);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+  z-index: 1000;
+}
+.btn-chat:hover {
+  transform: scale(1.05);
+}
+
+/* ==== ANIMAÇÃO DE SAÍDA ==== */ 
+.fadeOut {
+     transform: translateX(-100%);
+      opacity: 0; }
+
+      body{ 
+        transition: transform .4s ease, opacity .4s ease; 
+    }
+
+</style>
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPO -->
+<div class="top-bar">
+    <div class="logo">PlushMaster</div>
+    <div style="width:45px;"></div>
+</div>
+
+<div class="btn-chat" onclick="animarTroca('chat.html')">
+  💬
+</div>
+
+<!-- CAMERA -->
+<div class="camera-box">
+    <iframe 
+        src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine03"
+        allow="autoplay; fullscreen"
+        allowfullscreen>
+    </iframe>
+</div>
+
+<!-- BOTÃO JOGAR -->
+<div class="play-area">
+    <a href="selecionar.html" class="play-btn" onclick="animarTroca('selecionar.html'); return false;">JOGAR</a>
+</div>
+
+
+<!-- MENU -->
+<div class="bottom-bar">
+
+    <div class="nav-item" onclick="animarTroca('inicio.html')">
+        <div class="nav-circle">🏠</div>
+        Home
+    </div>
+
+    <div class="nav-item" onclick="animarTroca('carteira.html')">
+        <div class="nav-circle">💰</div>
+        Carteira
+    </div>
+
+    <div class="nav-item" onclick="animarTroca('conta.html')">
+        <div class="nav-circle">👤</div>
+        Conta
+    </div>
+
+    <div class="nav-item" onclick="animarTroca('pelucias.html')">
+        <div class="nav-circle">🧸</div>
+        Pelúcias
+    </div>
+
+</div>
+
+<!-- SCRIPT DA ANIMAÇÃO -->
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+
+</script>
+
+
+<div></div>

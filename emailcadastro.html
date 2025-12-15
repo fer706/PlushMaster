@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/cadastro</title>
+
+ <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+
+<style>
+    * { box-sizing: border-box; }
+
+    /* === ANIMAÇÃO DE TROCA DE TELA === */
+    .tela {
+        animation: aparecerTela .4s ease;
+    }
+
+    @keyframes aparecerTela {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .saindo {
+        animation: sairTela .35s ease forwards;
+    }
+
+    @keyframes sairTela {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-40px); }
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: #3dc8ff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .logo {
+        width: 250px;
+        margin-top: 30px;
+      }
+
+    .card {
+        background: #f7e9dd;
+        width: 90%;
+        max-width: 400px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+
+    h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: #000;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 15px;
+    }
+
+    label {
+        display: block;
+        text-align: left;
+        width: 85%;
+        margin: 0 auto 5px auto;
+        color: #000;
+        font-weight: bold;
+    }
+
+    input {
+        width: 75%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #000;
+        font-size: 16px;
+        outline: none;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        width: 85%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #4db8ff, #0077e6);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    footer {
+        margin-top: 25px;
+        font-size: 14px;
+        color: #004c73;
+    }
+
+    #notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecerNotif .4s ease;
+    }
+
+    @keyframes aparecerNotif {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    /* ==== ANIMAÇÃO DE SAÍDA ==== */ 
+.fadeOut {
+     transform: translateX(-100%);
+      opacity: 0; }
+
+      body{ 
+        transition: transform .4s ease, opacity .4s ease; 
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="tela" id="conteudo">
+
+<div id="notificacoes"></div>
+
+<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<div class="card">
+    <h2>Cadastro de E-mail</h2>
+    <p>Digite seu e-mail para criar uma conta</p>
+
+    <label>E-mail</label>
+    <input type="email" id="email" placeholder="exemplo@email.com">
+
+    <button class="btn" onclick="proximo()">Próximo</button>
+</div>
+
+<footer>© 2025 PlushMaster</footer>
+
+</div>
+
+<script>
+    /* === FUNÇÃO DE ANIMAÇÃO PARA TROCAR DE TELA === */
+    function irPara(pagina) {
+        const tela = document.getElementById("conteudo");
+        tela.classList.add("saindo");
+
+        setTimeout(() => {
+            window.location.href = pagina;
+        }, 300);
+    }
+
+    function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+
+    function proximo() {
+    const email = document.getElementById("email").value.trim();
+
+    if (!email) {
+        notificar("Digite um e-mail válido!");
+        return;
+    }
+
+    // Redireciona para a tela de senha passando o email
+    window.location.href = `senhacadastro.html?email=${encodeURIComponent(email)}`;
+}
+
+<!-- SCRIPT DA ANIMAÇÃO -->
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+
+</script>
+
+</body>
+</html>

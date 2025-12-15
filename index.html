@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlushMaster</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f7eadf;
+            transition: transform 0.4s ease, opacity 0.4s ease; /* animação suave */
+        }
+
+        /* ==== ANIMAÇÃO DE SAÍDA ==== */
+        .fadeOut {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        #tela1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: space-between;
+            background: #f7eadf;
+        }
+
+        #tela1 .logo img {
+            width: 250px;
+            margin-top: 30px;
+        }
+
+        #tela1 .start-btn {
+            background: linear-gradient(#0dd0ff, #0074d9);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 50px;
+            width: 80%;
+            max-width: 330px;
+        }
+
+        #tela1 .footer {
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== TELA 1 ===== -->
+    <div id="tela1">
+        <div class="logo">
+            <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+        </div>
+
+        <!-- AGORA TEM ANIMAÇÃO -->
+        <button class="start-btn" onclick="animarTroca('cadastrologin.html')">Vamos começar</button>
+
+        <div class="footer">© 2025 PlushMaster</div>
+    </div>
+
+    <!-- SCRIPT DA ANIMAÇÃO -->
+    <script>
+        function animarTroca(pagina) {
+            document.body.classList.add("fadeOut");
+
+            setTimeout(() => {
+                window.location.href = pagina;
+            }, 400); // mesmo tempo da animação
+        }
+    </script>
+
+</body>
+</html>

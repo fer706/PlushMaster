@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/Chat</title>
+<!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
+body{
+  background:#f3f3f3;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+/* Topo */
+.topo{
+  background:#4fc3ff;
+  padding:15px 15px 25px 15px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo{
+  font-weight:bold;
+  font-size:20px;
+  color:white;
+}
+.perfil{
+  width:42px;
+  height:42px;
+  background:white;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#4fc3ff;
+  font-size:20px;
+}
+/* Chat */
+#chat-messages{
+  flex:1;
+  padding:15px;
+  overflow-y: auto;
+}
+.message{
+  max-width:70%;
+  margin-bottom:10px;
+  padding:10px 15px;
+  border-radius:15px;
+  word-wrap: break-word;
+}
+.sent{
+  background: #24c6ff;
+  color: #fff;
+  margin-left: auto;
+  text-align: right;
+}
+.received{
+  background: #fff;
+  color: #000;
+  margin-right: auto;
+}
+/* Input */
+.chat-input-container{
+  display:flex;
+  padding:10px 15px;
+  gap:10px;
+  background:#4fc3ff; /* azul bebê */
+}
+#chat-input{
+  flex:1;
+  padding:10px 15px;
+  border-radius:50px;
+  border:none;
+  font-size:16px;
+  background:#e0f7ff;
+  color:#000;
+}
+#send-btn{
+  padding:10px 20px;
+  border:none;
+  border-radius:50px;
+  background: linear-gradient(#24c6ff,#009ef7);
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+}
+
+.topo{
+  background:#4fc3ff;
+  padding:15px 15px 25px 15px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.voltar{
+  font-size:22px;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.logo{
+  font-weight:bold;
+  font-size:20px;
+  color:white;
+  position: absolute;
+  left: 50%;          /* centraliza horizontalmente */
+  transform: translateX(-50%);
+}
+
+/* ==== ANIMAÇÃO DE SAÍDA ==== */ 
+.fadeOut {
+     transform: translateX(-100%);
+      opacity: 0; }
+
+      body{ 
+        transition: transform .4s ease, opacity .4s ease; 
+    }
+
+</style>
+</head>
+<body>
+
+<div class="topo">
+  <div class="voltar" onclick="animarTroca('inicio.html')">←</div>
+  <div class="logo">PlushMaster</div>
+  <div class="perfil" id="perfil">U</div>
+</div>
+
+
+
+<div id="chat-messages"></div>
+
+<div class="chat-input-container">
+  <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
+  <button id="send-btn">Enviar</button>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+  // Config do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    databaseURL: "https://plush-master-default-rtdb.firebaseio.com",
+    projectId: "plush-master",
+    storageBucket: "plush-master.firebasestorage.app",
+    messagingSenderId: "822751531077",
+    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
+  const auth = firebase.auth();
+
+  auth.onAuthStateChanged(user => {
+    if(!user){
+        window.location.href = animarTroca("index.html");
+        return;
+    }
+
+    const userId = user.uid;
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    let nomeUsuario = user.email; // fallback
+
+    // Pega os dados do usuário
+    db.collection('users').doc(userId).get().then(doc => {
+        if(doc.exists){
+            const userData = doc.data();
+            nomeUsuario = userData.nome || user.email;
+            document.getElementById('perfil').innerText = nomeUsuario.charAt(0).toUpperCase();
+        }
+    });
+
+    
+
+    // Enviar mensagem
+    sendBtn.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if(!text) return;
+
+        db.collection('chat').add({
+            user: nomeUsuario,
+            uid: user.uid,
+            message: text,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        chatInput.value = '';
+    });
+
+    // Mostrar mensagens em tempo real
+    db.collection('chat').orderBy('timestamp').onSnapshot(snapshot => {
+        chatMessages.innerHTML = '';
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement('div');
+            div.classList.add('message');
+            div.classList.add(data.uid === user.uid ? 'sent' : 'received');
+            div.textContent = `${data.user}: ${data.message}`;
+            chatMessages.appendChild(div);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+});
+
+</script>
+<!-- SCRIPT DA ANIMAÇÃO -->
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
+
+</body>
+</html>

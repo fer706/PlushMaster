@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/pelucias</title>
+
+<!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:#fdf1e3;
+}
+
+/* TOPO */
+.topo{
+    background: linear-gradient(#2ec7ff,#79dcff);
+    padding:15px;
+    border-bottom-left-radius:20px;
+    border-bottom-right-radius:20px;
+}
+
+.topo .linha{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.voltar{
+    font-size:26px;
+    color:#fff;
+    cursor:pointer;
+}
+
+.logo{
+    font-weight:bold;
+    color:#fff;
+    font-size:20px;
+}
+
+.saldo{
+    background:#0b1b5e;
+    color:#fff;
+    padding:5px 18px;
+    border-radius:8px;
+    font-size:16px;
+}
+
+/* TITULO */
+.info{
+    padding:15px;
+}
+
+.info h1{
+    font-size:22px;
+    color:#002b5c;
+}
+
+.info p{
+    color:#003366;
+    font-size:15px;
+}
+
+/* CONTEÚDO */
+.conteudo{
+    text-align:center;
+    margin-top:30px;
+    padding:10px;
+}
+
+.conteudo h2{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.jogar{
+    color:#1b63ff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* URSO */
+.urso img{
+    width:220px;
+    margin-top:20px;
+}
+
+/* MENU */
+.menu{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#5ad2ff;
+    padding:10px 0;
+    display:flex;
+    justify-content:space-around;
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+}
+
+.item-menu{
+    text-align:center;
+    font-size:12px;
+    color:#0077aa;
+}
+
+.item-menu img{
+    width:30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topo">
+    <div class="linha">
+        <div class="voltar" onclick="history.back()">←</div>
+        <div class="logo">PlushMaster</div>
+        <div class="saldo" id="saldoPelucias">0</div>
+    </div>
+
+    <div class="info">
+        <h1>Minhas pelúcias</h1>
+        <p>Olá,...</p>
+    </div>
+</div>
+
+<div class="conteudo">
+    <h2>Você ainda não possui pelúcias para resgate</h2>
+    <p>Aproveite para <span class="jogar" onclick="irJogar()">JOGAR</span></p>
+
+    <div class="urso">
+        <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    </div>
+</div>
+
+
+<script>
+function irJogar(){
+    window.location.href = "inicio.html";
+}
+</script>
+
+</body>
+</html>

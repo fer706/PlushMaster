@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/informações</title>
+
+<link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+
+body{
+    background:#fdf1e3;
+    min-height:100vh;
+}
+
+/* Topo */
+.topo{
+    background:#4fc3ff;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+.voltar{
+    font-size:26px;
+    color:#fff;
+    cursor:pointer;
+    font-weight:bold;
+}
+.logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* Conteúdo */
+.titulo{
+    font-size:24px;
+    font-weight:bold;
+    color:#4fc3ff;
+    margin:20px;
+}
+.box{
+    background:#fff4e8;
+    margin:0 20px;
+    padding:20px;
+    border-radius:15px;
+}
+.box p{
+    font-size:18px;
+    margin-bottom:15px;
+}
+.label{
+    font-weight:bold;
+    color:#444;
+}
+.valor{
+    color:#000;
+}
+
+/* Links */
+.link{
+    margin:20px;
+    font-size:18px;
+    color:#2e5bd3;
+    cursor:pointer;
+}
+.link:hover{ text-decoration:underline; }
+
+.excluir{
+    margin:40px 20px;
+    font-size:18px;
+    color:#b30000;
+    cursor:pointer;
+}
+.excluir:hover{ text-decoration:underline; }
+
+/* POPUP PARA ALTERAR NOME */
+.popup-bg{
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+}
+
+.popup-box{
+    background:#fff;
+    padding:20px;
+    width:80%;
+    max-width:350px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.popup-box h3{
+    margin-bottom:10px;
+    font-size:20px;
+    color:#4fc3ff;
+}
+
+.popup-input{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:15px;
+}
+
+.popup-btn{
+    background:#4fc3ff;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+.popup-btn:active{ transform:scale(0.95); }
+
+.popup-fundo{
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+
+.popup-caixa{
+  background:#ffffff;
+  width: 85%;
+  max-width: 350px;
+  padding:20px;
+  border-radius:15px;
+  text-align:center;
+  animation: aparecer 0.2s ease-out;
+  font-family: Arial, sans-serif;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.8); opacity:0; }
+  to   { transform: scale(1); opacity:1; }
+}
+
+.popup-titulo{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.popup-texto{
+  font-size:15px;
+  margin-bottom:15px;
+}
+
+.popup-input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:16px;
+  margin-bottom:20px;
+}
+
+.popup-botoes{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.btn-cancelar{
+  flex:1;
+  background:#ccc;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.btn-confirmar{
+  flex:1;
+  background:#ff4d4d;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+
+.cancelar{
+    margin-top:10px;
+    font-size:15px;
+    color:#999;
+    cursor:pointer;
+}
+.cancelar:hover{ text-decoration:underline; }
+
+#notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+</style>
+</head>
+<body>
+
+    <div id="notificacoes"></div>
+
+
+<!-- TOPO -->
+<div class="topo">
+    <div class="voltar" onclick="history.back()">←</div>
+    <div class="logo">PlushMaster</div>
+</div>
+
+<div class="titulo">Minhas informações</div>
+
+<div class="box">
+    <p><span class="label">Apelido:</span> <span class="valor" id="campoNome">Carregando...</span></p>
+
+    <p><span class="label">E-mail:</span> <span class="valor" id="campoEmail">Carregando...</span></p>
+
+    <p><span class="label">Senha:</span> ***************</p>
+</div>
+
+<div class="link" onclick="alterarNome()">Alterar apelido</div>
+<div class="link" onclick="alterarSenha()">Alterar senha</div>
+<div class="excluir" onclick="excluirConta()">Excluir conta</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    projectId: "plush-master",
+    storageBucket: "plush-master.firebasestorage.app",
+    messagingSenderId: "822751531077",
+    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+};
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+
+auth.onAuthStateChanged(async user => {
+    if(!user){
+        window.location.href = "index.html";
+        return;
+    }
+
+    document.getElementById("campoEmail").innerText = user.email;
+
+    const docRef = db.collection("users").doc(user.uid);
+    const snap = await docRef.get();
+
+    if (snap.exists) {
+    const dados = snap.data();
+
+    // Se não tiver campo nome, cria um padrão baseado no email
+    if (!dados.nome) {
+        const nomePadrao = user.email.split("@")[0];
+        await docRef.update({ nome: nomePadrao });
+        dados.nome = nomePadrao;
+    }
+
+    document.getElementById("campoNome").innerText = dados.nome;
+
+    window.jaMudouNome = dados.nomeAlterado === true;
+}
+
+});
+
+// ---------- EXCLUIR CONTA ----------
+function abrirPopupExcluir(){
+    document.getElementById("popupExcluir").style.display = "flex";
+}
+
+function fecharPopupExcluir(){
+    document.getElementById("popupExcluir").style.display = "none";
+}
+
+// CONFIRMAR EXCLUSÃO
+async function confirmarExclusao(){
+    const senha = document.getElementById("senhaExcluir").value.trim();
+    if(senha === ""){
+        alert("Digite sua senha.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    const cred = firebase.auth.EmailAuthProvider.credential(user.email, senha);
+
+    try {
+        // 1️⃣ RE-AUTENTICA
+        await user.reauthenticateWithCredential(cred);
+
+        // 2️⃣ EXCLUI DO AUTH
+        await user.delete();
+
+        // 3️⃣ EXCLUI DO FIRESTORE
+        await db.collection("users").doc(user.uid).delete();
+
+        alert("Conta excluída com sucesso.");
+        window.location.href = "index.html";
+
+    } catch(e){
+        alert("Erro: " + e.message);
+    }
+}
+async function confirmarExclusao(){
+  const senha = document.getElementById("senhaExcluir").value.trim();
+  if(!senha){
+    notificar("Digite sua senha.");
+    return;
+  }
+
+  const user = auth.currentUser;
+  if(!user){
+    notificar("Usuário não autenticado.");
+    return;
+  }
+
+  try {
+    // 1) Reautentica o usuário (compat)
+    const credential = firebase.auth.EmailAuthProvider.credential(user.email, senha);
+    await user.reauthenticateWithCredential(credential);
+
+    // 2) Apaga do Auth (primeiro)
+    await user.delete();
+
+    // 3) Só após excluir no Auth, apaga dados no Firestore
+    await db.collection("users").doc(user.uid).delete();
+
+    notificar("Conta excluída com sucesso.");
+    // fecha popup e redireciona
+    fecharPopupExcluir();
+    setTimeout(() => window.location.href = "index.html", 700);
+
+  } catch (e) {
+    console.error("Erro excluir conta:", e);
+
+    // Mensagens amigáveis por caso comum
+    if (e.code === "auth/wrong-password") {
+      notificar("Senha incorreta.");
+    } else if (e.code === "auth/requires-recent-login") {
+      notificar("Sessão antiga: faça login novamente e tente novamente.");
+      // opcional: forçar logout para que usuário refaça login
+      // await auth.signOut();
+    } else {
+      notificar("Erro ao excluir: " + (e.message || e.code));
+    }
+  }
+}
+;
+// ---------- ALTERAR NOME (UMA VEZ APENAS) ----------
+function alterarNome(){
+    if(window.jaMudouNome){
+        notificar("Você já alterou seu nome uma vez. Não é possível mudar novamente.");
+        return;
+    }
+    document.getElementById("popupNome").style.display = "flex";
+}
+
+function fecharPopup(){
+    document.getElementById("popupNome").style.display = "none";
+}
+
+async function salvarNovoNome(){
+    let novo = document.getElementById("novoNome").value.trim();
+    if(novo.length < 3){
+        notificar("O nome deve ter pelo menos 3 letras.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    const docRef = db.collection("users").doc(user.uid);
+
+    await docRef.update({
+        nome: novo,
+        nomeAlterado: true
+    });
+
+    document.getElementById("campoNome").innerText = novo;
+    fecharPopup();
+    notificar("Apelido alterado com sucesso!");
+}
+
+// ---------- ALTERAR SENHA ----------
+function alterarSenha(){
+    const email = auth.currentUser.email;
+    auth.sendPasswordResetEmail(email)
+    .then(() => notificar("Link de redefinição de senha enviado para: " + email))
+    .catch(err => notificar("Erro: " + err.message));
+}
+
+
+</script>
+<!-- POPUP ALTERAR NOME -->
+<div class="popup-bg" id="popupNome">
+    <div class="popup-box">
+        <h3>Alterar apelido</h3>
+        <input type="text" id="novoNome" class="popup-input" placeholder="Digite o novo nome...">
+        <button class="popup-btn" onclick="salvarNovoNome()">Salvar</button>
+        <div class="cancelar" onclick="fecharPopup()">Cancelar</div>
+    </div>
+</div>
+
+<!-- POPUP EXCLUIR CONTA -->
+<div id="popupExcluir" class="popup-fundo" style="display:none;">
+  <div class="popup-caixa">
+    <div class="popup-titulo">Excluir Conta</div>
+    <p class="popup-texto">Digite sua senha para confirmar a exclusão:</p>
+
+    <input type="password" id="senhaExcluir" class="popup-input" placeholder="Sua senha">
+
+    <div class="popup-botoes">
+      <button class="btn-cancelar" onclick="fecharPopupExcluir()">Cancelar</button>
+      <button class="btn-confirmar" onclick="confirmarExclusao()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Abre a popup
+function excluirConta() {
+    document.getElementById("popupExcluir").style.display = "flex";
+}
+
+// Fecha a popup
+function fecharPopupExcluir() {
+    document.getElementById("popupExcluir").style.display = "none";
+}
+
+// Quando clicar no botão "Excluir"
+function confirmarExclusao() {
+    const user = firebase.auth().currentUser;
+
+    if (!user) {
+        notificar("Você precisa estar logado.");
+        return;
+    }
+
+    // Exclui Firestore
+    db.collection("users").doc(user.uid).delete()
+    .then(() => {
+        // Exclui autenticação
+        return user.delete();
+    })
+    .then(() => {
+        fecharPopupExcluir();
+        notificar("Conta excluída com sucesso!");
+        window.location.href = "index.html";
+    })
+    .catch((error) => {
+        console.error(error);
+        notificar("Erro ao excluir conta. Faça login novamente.");
+    });
+}
+
+
+
+</script>
+
+
+<div></div>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/cadastro</title>
+
+<link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+* { box-sizing: border-box; }
+
+.tela { animation: aparecerTela .4s ease; }
+@keyframes aparecerTela {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.saindo { animation: sairTela .35s ease forwards; }
+@keyframes sairTela {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-40px); }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #3dc8ff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.logo {
+    width: 250px;
+    margin-top: 30px;
+}
+
+.card {
+    background: #f7e9dd;
+    width: 90%;
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+label {
+    display: block;
+    text-align: left;
+    width: 85%;
+    margin: 0 auto 5px auto;
+    color: #000;
+    font-weight: bold;
+}
+
+input {
+    width: 75%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    width: 85%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #4db8ff, #0077e6);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#notificacoes {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 260px;
+    z-index: 999999;
+}
+
+.notif {
+    background: rgba(0,0,0,0.7);
+    border-left: 4px solid #00eaff;
+    padding: 12px;
+    color: #fff;
+    font-size: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    animation: aparecer .4s ease;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+</style>
+</head>
+
+<body>
+<div class="tela" id="conteudo">
+<div id="notificacoes"></div>
+
+<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<div class="card">
+    <h2>Crie sua senha</h2>
+
+    <label>Senha</label>
+    <input type="password" id="senha" placeholder="Digite sua senha">
+
+    <label>Confirmar senha</label>
+    <input type="password" id="confirmSenha" placeholder="Confirme sua senha">
+
+    <button class="btn" onclick="criarSenha()">Cadastrar</button>
+</div>
+
+<footer>© 2025 PlushMaster</footer>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+  authDomain: "plush-master.firebaseapp.com",
+  projectId: "plush-master",
+  storageBucket: "plush-master.firebasestorage.app",
+  messagingSenderId: "822751531077",
+  appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.auth = auth;
+window.db = db;
+window.criarConta = createUserWithEmailAndPassword;
+</script>
+
+<!-- SCRIPT -->
+<script>
+function notificar(msg) {
+    const div = document.createElement("div");
+    div.className = "notif";
+    div.innerText = msg;
+    document.getElementById("notificacoes").appendChild(div);
+
+    setTimeout(() => {
+        div.style.opacity = "0";
+        div.style.transform = "translateX(20px)";
+        setTimeout(() => div.remove(), 300);
+    }, 3000);
+}
+
+
+async function criarSenha() {
+    const senha = document.getElementById("senha").value.trim();
+    const confirmSenha = document.getElementById("confirmSenha").value.trim();
+
+    // Pega o email da URL
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+
+    if (!email) {
+        notificar("Email não encontrado. Volte para a tela de cadastro.");
+        setTimeout(() => {
+            window.location.href = "email.html";
+        }, 1500);
+        return;
+    }
+
+    if (!senha || !confirmSenha) {
+        notificar("Preencha todos os campos!");
+        return;
+    }
+
+    if (senha !== confirmSenha) {
+        notificar("As senhas não coincidem!");
+        return;
+    }
+
+    try {
+        const cred = await window.criarConta(window.auth, email, senha);
+        const user = cred.user;
+
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+
+        await setDoc(doc(window.db, "users", user.uid), {
+            nome: user.email,
+            email: user.email,
+            saldo: 0,
+            pelucias: 0,
+            criadoEm: new Date()
+        });
+
+        notificar("Conta criada com sucesso!");
+
+        setTimeout(() => {
+            window.location.href = "inicio.html";
+        }, 1500);
+
+    } catch (e) {
+        if (e.code === "auth/email-already-in-use") {
+            notificar("Esse e-mail já tem conta. Faça login.");
+        } else {
+            notificar("Erro: " + e.message);
+        }
+    }
+}
+
+</script>

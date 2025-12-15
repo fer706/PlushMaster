@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/Selecionar</title>
+
+<!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(#43c6ff, #e9f7ff);
+    min-height:100vh;
+}
+
+/* TOPO */
+.topo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:15px;
+}
+
+.voltar{
+    width:35px;
+    height:35px;
+    background:#a7e7ff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.logo{
+    font-weight:bold;
+    color:#fff;
+    font-size:20px;
+}
+
+/* TÍTULO */
+.titulo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 20px;
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* CARDS DAS MÁQUINAS */
+.maquinas {
+    display: flex;
+    gap: 12px;
+    padding: 10px 15px;
+}
+
+.card {
+    flex: 1; /* todos os cards crescem igualmente para ocupar a largura */
+    background: #fff1e3;
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-status {
+    width: 100%;        /* ocupa toda a largura do card */
+    height: 36px;
+    margin-top: 8px;
+    background: #00d6ff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nome{
+    font-size:18px;
+    font-weight:bold;
+    color:#25c6ff;
+}
+
+.preco{
+    font-size:20px;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+.btn-status{
+    margin-top:8px;
+    background:#00d6ff;
+    color:#fff;
+    border:none;
+    width:100%;
+    height:36px;              /* ALTURA FIXA */
+    border-radius:20px;
+    font-weight:bold;
+    font-size:13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+/* RANKING */
+.ranking{
+    margin:15px;
+    background: linear-gradient(90deg,#004a9f,#00d6ff);
+    color:#fff;
+    border-radius:20px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* SELECIONAR JOGADAS */
+.jogadas{
+    margin:15px;
+    background: linear-gradient(180deg,#00c6ff,#004a9f);
+    color:#fff;
+    border-radius:20px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:20px;
+}
+
+/* CONTROLES */
+.controles{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    padding:0 15px;
+    margin-top:10px;
+}
+
+.botao{
+    background:linear-gradient(#003f91,#0066ff);
+    color:#9be7ff;
+    border-radius:15px;
+    text-align:center;
+    padding:18px 0;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+/* BOTÃO INICIAR */
+.btn-iniciar{
+    margin:25px 15px;
+    background:linear-gradient(#00d6ff,#0072ff);
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    border-radius:25px;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.selecionada {
+    background: #bdbdbd !important;
+    color: #fff !important;
+}
+
+.disponivel {
+    background: #00d6ff !important;
+    color: #fff !important;
+}
+
+.indisponivel {
+    background: #9e9e9e !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
+}
+
+.texto-manutencao{
+    font-size:16px;       /* diminui o tamanho do texto */
+    line-height:1.2;      /* deixa as linhas mais próximas */
+    text-align:center;    /* centraliza */
+}
+#notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+.loader {
+  border: 4px solid #f3f3f3;        /* cor de fundo da bolinha */
+  border-top: 4px solid #00d6ff;    /* cor do spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  /* centraliza dentro do container */
+  margin: 40px auto; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.maquinas .card {
+    display: none;  /* esconde todos os cards até o Firebase carregar */
+}
+
+/* === ANIMAÇÃO DE TRANSIÇÃO === */
+    .tela {
+        animation: aparecerTela .4s ease;
+    }
+
+    @keyframes aparecerTela {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .saindo {
+        animation: sairTela .35s ease forwards;
+    }
+body {
+    transition: transform .4s ease, opacity .4s ease;
+}
+
+body.animartroca {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+
+</style>
+</head>
+<!-- Firebase -->
+ <!-- Firebase App (obrigatório vir primeiro) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<!-- Firestore -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    databaseURL: "https://plush-master-default-rtdb.firebaseio.com",
+    projectId: "plush-master",
+    storageBucket: "plush-master.firebasestorage.app",
+    messagingSenderId: "822751531077",
+    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+</script>
+<div id="notificacoes"></div>
+
+
+<body>
+
+<!-- TOPO -->
+<div class="topo">
+    <div class="voltar" onclick="animarTroca('inicio.html')">←</div>
+    <div class="logo">PlushMaster</div>
+</div>
+
+<!-- TÍTULO -->
+<div class="titulo">📋 Selecionar máquina</div>
+
+<div id="loader" class="loader"></div>
+
+
+<!-- MÁQUINAS -->
+<div class="maquinas">
+    <div class="card" id="cardPlush" onclick="clicarMaquina('plush')">
+    <div class="nome">Plush Tiger</div>
+    <div class="preco">R$ 2,00 a jogada</div>
+
+    <div class="texto-manutencao" id="msgPlush">
+        Iniciar agora<br>😀 🥳
+    </div>
+
+    <button class="btn-status disponivel" id="statusPlush">Disponível</button>
+</div>
+
+
+    <div class="card" id="cardToy" onclick="clicarMaquina('toy')">
+    <div class="nome">Toy Mix</div>
+    <div class="preco">R$ 5,00 a jogada</div>
+
+    <div class="texto-manutencao" id="msgToy">
+        Iniciar agora<br>😀 🥳
+    </div>
+
+    <button class="btn-status disponivel" id="statusToy">
+        Disponível
+
+        <div class="maquinas" id="maquinasContainer">
+    <div id="loader" class="loader"></div>
+</div>
+
+    </button>
+</div>
+
+    </div>
+</div>
+
+
+
+<!-- SELECIONAR JOGADAS -->
+<div class="jogadas">
+    <div>🎮 Selecionar jogadas</div>
+    <div id="qtdJogadas">00</div>
+</div>
+
+<!-- CONTROLES -->
+<div class="controles">
+    <div class="botao" onclick="alterarJogadas(-1)">➖</div>
+    <div class="botao" onclick="alterarJogadas(1)">➕</div>
+
+    <div class="botao" onclick="setJogadas(5)">05</div>
+    <div class="botao" onclick="setJogadas(10)">10</div>
+    <div class="botao" onclick="setJogadas(15)">15</div>
+    <div class="botao" onclick="setJogadas(20)">20</div>
+</div>
+
+<!-- BOTÃO INICIAR -->
+<div class="btn-iniciar" onclick="iniciarJogo()">Iniciar</div>
+<div id="saldoUsuario" style="
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    color:#004a9f;
+    margin-bottom:30px;
+">
+    Saldo: R$ 0,00
+</div>
+
+
+<script>
+let jogadas = 0;
+let maquinaSelecionada = null;
+let preco = 0;
+
+// Esse objeto depois vai vir do Firebase
+let statusMaquinas = {
+    plush: "disponivel",
+    toy: "disponivel"
+};
+
+
+function clicarMaquina(id) {
+
+    // Bloqueia clique se estiver indisponível
+    if (statusMaquinas[id] === "indisponivel") return;
+
+    const btnPlush = document.getElementById("statusPlush");
+    const btnToy   = document.getElementById("statusToy");
+
+    if (id === "plush") {
+        maquinaSelecionada = "plush";
+
+        btnPlush.innerText = "Selecionada";
+        btnPlush.classList.remove("disponivel");
+        btnPlush.classList.add("selecionada");
+
+        btnToy.innerText = "Disponível";
+        btnToy.classList.remove("selecionada");
+        btnToy.classList.add("disponivel");
+    }
+
+    if (id === "toy") {
+        maquinaSelecionada = "toy";
+
+        btnToy.innerText = "Selecionada";
+        btnToy.classList.remove("disponivel");
+        btnToy.classList.add("selecionada");
+
+        btnPlush.innerText = "Disponível";
+        btnPlush.classList.remove("selecionada");
+        btnPlush.classList.add("disponivel");
+    }
+}
+
+function alterarJogadas(valor){
+    jogadas += valor;
+    if(jogadas < 0) jogadas = 0;
+    atualizarJogadas();
+}
+
+function setJogadas(valor){
+    jogadas = valor;
+    atualizarJogadas();
+}
+
+function atualizarJogadas(){
+    document.getElementById("qtdJogadas").innerText = String(jogadas).padStart(2,"0");
+}
+
+function iniciarJogo(){
+    if(!maquinaSelecionada){
+        notificar("Selecione uma máquina!");
+        return;
+    }
+    if(jogadas <= 0){
+        notificar("Selecione o número de jogadas!");
+        return;
+    }
+
+    // Verifica o status real da máquina
+    const status = statusMaquinas[maquinaSelecionada];
+
+    if(status === "indisponivel" || status === "off"){
+        notificar("A máquina selecionada não está disponível!");
+        return;
+    }
+
+    // Aqui entra o código normal para iniciar a máquina
+    notificar("Máquina iniciada! Boa sorte 🥳");
+}
+
+
+
+function carregarStatusMaquinas() {
+    db.collection("maquinas").onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => {
+            const id = doc.id;
+            const status = doc.data().status;
+
+            statusMaquinas[id] = status;
+
+            const btn = document.getElementById(
+                id === "plush" ? "statusPlush" : "statusToy"
+            );
+
+            const msg = document.getElementById(
+                id === "plush" ? "msgPlush" : "msgToy"
+            );
+
+            if (status === "indisponivel") {
+    btn.innerText = "Indisponível";
+    btn.classList.remove("disponivel", "selecionada");
+    btn.classList.add("indisponivel");
+
+    msg.innerHTML = "manutenção /<br>abastecimento<br>⚙🧸";
+} else {
+    // status "disponivel" ou "off" aparecem visualmente como disponíveis
+    if(maquinaSelecionada !== id){
+        btn.innerText = "Disponível";
+        btn.classList.remove("indisponivel", "selecionada");
+        btn.classList.add("disponivel");
+
+        msg.innerHTML = "Iniciar agora<br>😀 🥳";
+        // Depois que carregar tudo
+document.getElementById("loader").style.display = "none";
+document.querySelector(".maquinas").style.display = "flex";
+// Remove o loader
+document.getElementById("loader").style.display = "none";
+
+// Mostra todos os cards
+document.querySelectorAll(".maquinas .card").forEach(card => {
+    card.style.display = "flex";
+});
+
+
+    }
+}
+
+        });
+    });
+}
+
+// chama ao abrir a página
+carregarStatusMaquinas();
+</script>
+<script>
+firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+        // Se não estiver logado, manda pro login
+        window.location.href = "index.html";
+        return;
+    }
+
+    const userId = user.uid;
+
+    // Agora carrega o saldo do usuário logado
+    db.collection("users").doc(userId).onSnapshot((doc) => {
+        if (!doc.exists) return;
+
+        const saldo = doc.data().saldo || 0;
+
+        document.getElementById("saldoUsuario").innerText =
+            "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
+    });
+});
+function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+    
+    /* === ANIMAÇÃO DE SAÍDA === */
+    function irPara(pagina) {
+        const tela = document.getElementById("conteudo");
+        tela.classList.add("saindo");
+        setTimeout(() => window.location.href = pagina, 300);
+    }
+
+</script>
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("animartroca");
+
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
+
+</body>
+</html>
+

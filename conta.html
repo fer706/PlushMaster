@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster/conta</title>
+
+<!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:#fff5eb;
+}
+
+/* TOPO */
+.topo{
+    background:#4fc3ff;
+    height:120px;
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+.botao-voltar{
+    width:45px;
+    height:45px;
+    background:rgba(255,255,255,0.3);
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    color:#fff;
+    cursor:pointer;
+}
+
+.logo{
+    width:150px;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+/* TÍTULO AREA */
+.info-area{
+    background:#4fc3ff;
+    padding:20px;
+    padding-bottom:40px;
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
+    margin-top:-10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.titulo{
+    font-size:26px;
+    font-weight:bold;
+    color:#003c7a;
+}
+
+.subtitulo{
+    font-size:18px;
+    margin-top:5px;
+    color:#003c7a;
+}
+
+/* AVATAR */
+.avatar{
+    width:55px;
+    height:55px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#003c7a;
+}
+
+/* CARDS */
+.cards{
+    margin:20px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    width:100%;
+    margin-bottom:20px;
+    box-shadow:0 2px 4px rgba(0,0,0,0.15);
+    cursor:pointer;
+}
+
+.card h3{
+    font-size:22px;
+    color:#35b6ff;
+    font-weight:bold;
+}
+
+/* SAIR DA CONTA */
+.sair{
+    margin:50px 20px;
+    font-size:18px;
+    color:#444;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.sair span{
+    font-size:22px;
+}
+.logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    font-family: Arial, sans-serif;
+}
+
+/* ==== ANIMAÇÃO DE SAÍDA ==== */ 
+.fadeOut {
+     transform: translateX(-100%);
+      opacity: 0; }
+
+      body{ 
+        transition: transform .4s ease, opacity .4s ease; 
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+body.animartroca {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- TOPO -->
+<div class="topo">
+    <div class="botao-voltar" onclick="voltarInicio()">←</div>
+    <div class="logo">PlushMaster</div>
+</div>
+
+<!-- ÁREA DO NOME -->
+<div class="info-area">
+    <div>
+        <div class="titulo">Minha conta</div>
+        <div class="subtitulo" id="textoOla">Olá, ...</div>
+    </div>
+
+    <div class="avatar" id="avatarLetra">U</div>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+    <div class="card" onclick="animarTroca('historico.html')">
+        <h3>📊 Histórico de atividades</h3>
+    </div>
+
+    <div class="card" onclick="animarTroca('informacoes.html')">
+    <h3>📘 Minhas informações</h3>
+</div>
+
+
+<!-- SAIR -->
+<div class="sair" onclick="sairConta()">
+    <span>↺</span> Sair da conta
+</div>
+
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    projectId: "plush-master",
+    storageBucket: "plush-master.firebasestorage.app",
+    messagingSenderId: "822751531077",
+    appId: "1:822751531077:web:ffba31a45d08c22a7e132c"
+};
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function notificar(msg) {
+        const div = document.createElement("div");
+        div.className = "notif";
+        div.innerText = msg;
+        document.getElementById("notificacoes").appendChild(div);
+
+        setTimeout(() => {
+            div.style.opacity = "0";
+            div.style.transform = "translateX(20px)";
+            setTimeout(() => div.remove(), 300);
+        }, 3500);
+    }
+
+    
+/* CARREGAR DADOS DO USUÁRIO */
+auth.onAuthStateChanged(async user => {
+    if(!user){
+        window.location.href = "index.html";
+        return;
+    }
+
+    const ref = db.collection("users").doc(user.uid);
+    const snap = await ref.get();
+
+    let nome = "";
+
+    if (snap.exists) {
+        const dados = snap.data();
+        nome = dados.nome || user.email.split("@")[0];
+    } else {
+        // Se não existir no banco, cria nome padrão
+        nome = user.email.split("@")[0];
+        await ref.set({ nome });
+    }
+
+    document.getElementById("textoOla").innerText = "Olá, " + nome;
+    document.getElementById("avatarLetra").innerText = nome.charAt(0).toUpperCase()
+});
+
+
+/* SAIR DA CONTA */
+function sairConta(){
+    auth.signOut()
+    .then(() => animarTroca("index.html"))
+    .catch(e => notificar("Erro ao sair: " + e.message));
+}
+</script>
+
+
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("animartroca");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
+
+
+</script>
+<!-- SCRIPT DA ANIMAÇÃO -->
+<script>
+function animarTroca(pagina) {
+    document.body.classList.add("fadeOut");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+
+
+</script>
+
+
+<script>
+function voltarInicio() {
+    document.body.classList.add("animartroca");
+    setTimeout(() => {
+        window.location.href = "inicio.html";
+    }, 400);
+}
+
+function animarTroca(pagina) {
+    document.body.classList.add("animartroca");
+    setTimeout(() => {
+        window.location.href = pagina;
+    }, 400);
+}
+</script>
+
+</body>
+</html>
