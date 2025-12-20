@@ -214,7 +214,7 @@ if (!email) {
 // Se ainda não tiver email, volta para a tela de login
 if (!email) {
     notificar("Email não encontrado. Volte para a tela de login.");
-    setTimeout(() => go("email.html"), 1500);
+    setTimeout(() => window.location.href = "inicio.html", 1500);
 } else {
     // Exibe o email na tela
     document.getElementById("emailExibido").innerText = email;
@@ -222,7 +222,7 @@ if (!email) {
 
 if (!email) {
     notificar("Email não encontrado. Volte para a tela de login.");
-    setTimeout(() => go("email.html"), 1500);
+    setTimeout(() => window.location.href = "index.html", 1500);
 }
 
     function entrar() {
@@ -236,7 +236,7 @@ if (!email) {
         auth.signInWithEmailAndPassword(email, senha)
             .then(() => {
                 notificar("Login realizado com sucesso!");
-                 go("carteira.html");
+                 window.location.href = "inicio.html"; 
 
             })
             .catch((error) => {
@@ -248,15 +248,6 @@ if (!email) {
             });
     }
     
-</script>
-<script>
-function go(url) {
-  const a = document.createElement("a");
-  a.href = url;
-  a.style.display = "none";
-  document.body.appendChild(a);
-  a.click();
-}
 </script>
 
 
