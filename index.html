@@ -1,89 +1,902 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlushMaster</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlushMaster</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{overflow:hidden}
 
-    <style>
-        * { box-sizing: border-box; }
+/* TELAS */
+.tela{
+    position:fixed;
+    inset:0;
+    background:#3dc8ff;
+    transform:translateX(100%);
+    transition:.4s ease;
+    pointer-events:none;
+}
+.tela.base{
+    transform:translateX(0);
+    pointer-events:auto;
+    z-index:1;
+}
+.tela.entrando{
+    transform:translateX(0);
+    z-index:2;
+}
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: #f7eadf;
-            transition: transform 0.4s ease, opacity 0.4s ease; /* animação suave */
-        }
+/* GERAL */
+.logo{width:240px;margin:25px auto;display:block}
+.card{
+    background:#f7e9dd;
+    width:90%;
+    max-width:380px;
+    margin:20px auto;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+}
+.btn{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(#4db8ff,#0077e6);
+    color:#fff;
+    font-size:18px;
+    cursor:pointer;
+}
+input{
+    width:90%;
+    padding:12px;
+    border-radius:10px;
+    border:2px solid #000;
+    margin:10px 0;
+}
+footer{text-align:center;margin-top:15px}
 
-        /* ==== ANIMAÇÃO DE SAÍDA ==== */
-        .fadeOut {
-            transform: translateX(-100%);
-            opacity: 0;
-        }
+#telaHome{
+    background: linear-gradient(#4fc3ff,#dff5ff);
+    display:flex;
+    flex-direction:column;
+}
+.top-bar{
+    height:70px;
+    background:#4fc3ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:20px;
+    font-weight:bold;
+}
+.camera-box{
+    background:black;
+    margin:10px;
+    border-radius:10px;
+    height:230px;
+    overflow:hidden;
+}
+.camera-box iframe{
+    width:100%;
+    height:100%;
+    border:none;
+}
+.play-area{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.play-btn{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top, #7be5ff, #009dff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    font-weight:bold;
+    color:white;
+    text-decoration:none;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:0.2s;
+}
+.play-btn:active{
+    transform:scale(0.95);
+}
+.bottom-bar{
+    height:90px;
+    background:#4fc3ff;
+    border-top-left-radius:25px;
+    border-top-right-radius:25px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+}
+.nav-item{
+    text-align:center;
+    font-size:12px;
+    color:#1a6fa3;
+}
+.nav-circle{
+    width:50px;
+    height:50px;
+    margin:0 auto 5px;
+    border-radius:50%;
+    background:linear-gradient(#aaf0ff,#4fc3ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    color:white;
+}
+.play-btn{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top, #7be5ff, #009dff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    font-weight:bold;
+    color:white;
+    text-decoration:none;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:0.2s;
+}
 
-        #tela1 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: space-between;
-            background: #f7eadf;
-        }
+.btn-chat {
+    position: fixed;      /* fica sempre fixo na tela */
+    top: 10px;            /* distância do topo */
+    right: 10px;          /* distância da borda direita */
+    background: linear-gradient(#24c6ff, #009ef7);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10000;       /* sempre acima de tudo */
+    transition: transform 0.2s;
+}
 
-        #tela1 .logo img {
-            width: 250px;
-            margin-top: 30px;
-        }
+.btn-chat:hover {
+    transform: scale(1.05);
+}
+/* ================= CHAT ================= */
+#telaChat{
+  background:#f3f3f3;
+  display:flex;
+  flex-direction:column;
+}
 
-        #tela1 .start-btn {
-            background: linear-gradient(#0dd0ff, #0074d9);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            font-size: 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 50px;
-            width: 80%;
-            max-width: 330px;
-        }
+#telaChat .topo{
+  background:#4fc3ff;
+  padding:15px 15px 25px 15px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+}
 
-        #tela1 .footer {
-            margin-bottom: 20px;
-            color: #333;
-        }
-    </style>
+#telaChat .voltar{
+  font-size:22px;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#telaChat .logo{
+  font-weight:bold;
+  font-size:20px;
+  color:white;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+#telaChat .perfil{
+  width:42px;
+  height:42px;
+  background:white;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#4fc3ff;
+  font-size:20px;
+}
+
+/* chat messages */
+#chat-messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+}
+
+#chat-messages .message{
+  max-width:70%;
+  margin-bottom:10px;
+  padding:10px 15px;
+  border-radius:15px;
+  word-wrap:break-word;
+}
+
+#chat-messages .sent{
+  background:#24c6ff;
+  color:#fff;
+  margin-left:auto;
+  text-align:right;
+}
+
+#chat-messages .received{
+  background:#fff;
+  color:#000;
+  margin-right:auto;
+}
+
+/* input */
+#telaChat .chat-input-container{
+  display:flex;
+  padding:10px 15px;
+  gap:10px;
+  background:#4fc3ff;
+}
+
+#chat-input{
+  flex:1;
+  padding:10px 15px;
+  border-radius:50px;
+  border:none;
+  font-size:16px;
+  background:#e0f7ff;
+  color:#000;
+}
+
+#send-btn{
+  padding:10px 20px;
+  border:none;
+  border-radius:50px;
+  background: linear-gradient(#24c6ff,#009ef7);
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(#43c6ff, #e9f7ff);
+    min-height:100vh;
+}
+
+/* TOPO */
+.topo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:15px;
+}
+
+.voltar{
+    width:35px;
+    height:35px;
+    background:#a7e7ff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.logo{
+    font-weight:bold;
+    color:#fff;
+    font-size:20px;
+}
+
+/* TÍTULO */
+.titulo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 20px;
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* CARDS DAS MÁQUINAS */
+.maquinas {
+    display: flex;
+    gap: 12px;
+    padding: 10px 15px;
+}
+
+.card {
+    flex: 1; /* todos os cards crescem igualmente para ocupar a largura */
+    background: #fff1e3;
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-status {
+    width: 100%;        /* ocupa toda a largura do card */
+    height: 36px;
+    margin-top: 8px;
+    background: #00d6ff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nome{
+    font-size:18px;
+    font-weight:bold;
+    color:#25c6ff;
+}
+
+.preco{
+    font-size:20px;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+.btn-status{
+    margin-top:8px;
+    background:#00d6ff;
+    color:#fff;
+    border:none;
+    width:100%;
+    height:36px;              /* ALTURA FIXA */
+    border-radius:20px;
+    font-weight:bold;
+    font-size:13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+/* RANKING */
+.ranking{
+    margin:15px;
+    background: linear-gradient(90deg,#004a9f,#00d6ff);
+    color:#fff;
+    border-radius:20px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* SELECIONAR JOGADAS */
+.jogadas{
+    margin:15px;
+    background: linear-gradient(180deg,#00c6ff,#004a9f);
+    color:#fff;
+    border-radius:20px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:20px;
+}
+
+/* CONTROLES */
+.controles{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    padding:0 15px;
+    margin-top:10px;
+}
+
+.botao{
+    background:linear-gradient(#003f91,#0066ff);
+    color:#9be7ff;
+    border-radius:15px;
+    text-align:center;
+    padding:18px 0;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+/* BOTÃO INICIAR */
+.btn-iniciar{
+    margin:25px 15px;
+    background:linear-gradient(#00d6ff,#0072ff);
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    border-radius:25px;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.selecionada {
+    background: #bdbdbd !important;
+    color: #fff !important;
+}
+
+.disponivel {
+    background: #00d6ff !important;
+    color: #fff !important;
+}
+
+.indisponivel {
+    background: #9e9e9e !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
+}
+
+.texto-manutencao{
+    font-size:16px;       /* diminui o tamanho do texto */
+    line-height:1.2;      /* deixa as linhas mais próximas */
+    text-align:center;    /* centraliza */
+}
+#notificacoes {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 260px;
+        z-index: 999999;
+    }
+
+    .notif {
+        background: rgba(0,0,0,0.7);
+        border-left: 4px solid #00eaff;
+        padding: 12px;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+        animation: aparecer .4s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateX(20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+.loader {
+  border: 4px solid #f3f3f3;        /* cor de fundo da bolinha */
+  border-top: 4px solid #00d6ff;    /* cor do spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  /* centraliza dentro do container */
+  margin: 40px auto; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.maquinas .card {
+    display: none;  /* esconde todos os cards até o Firebase carregar */
+}
+
+
+</style>
 </head>
-
 <body>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    projectId: "plush-master"
+  });
+}
 
-    <!-- ===== TELA 1 ===== -->
-    <div id="tela1">
-        <div class="logo">
-            <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-        </div>
+const auth = firebase.auth();
+const db = firebase.firestore();
+</script>
 
-        <!-- AGORA TEM ANIMAÇÃO -->
-        <button class="start-btn" onclick="animarTroca('cadastrologin.html')">Vamos começar</button>
+<!-- TELA 1 -->
+<section id="tela1" class="tela base">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    <div class="card">
+        <button class="btn" onclick="irPara('telacadastro/login')">Vamos começar</button>
+    </div>
+    <footer>© 2025 PlushMaster</footer>
+</section>
 
-        <div class="footer">© 2025 PlushMaster</div>
+<!-- TELA 2 -->
+<section id="telacadastro/login" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    <div class="card">
+        <h2>Entre ou cadastre-se</h2>
+        <button class="btn" onclick="irPara('telaLogin')">Login</button>
+        <button class="btn" onclick="irPara('telaLogin')">Cadastro</button>
+    </div>
+</section>
+
+<!-- LOGIN EMAIL -->
+<section id="telaLogin" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    <div class="card">
+        <h2>Login</h2>
+        <input id="emailLogin" type="email" placeholder="email@email.com">
+        <button class="btn" onclick="verificarEmail()">Continuar</button>
+        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+    </div>
+</section>
+
+<!-- SENHA -->
+<section id="telaSenha" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    <div class="card">
+        <h2>Senha</h2>
+        <p id="emailExibido"></p>
+        <input id="senha" type="password" placeholder="Senha">
+        <button class="btn" onclick="entrar()">Entrar</button>
+        <button class="btn" onclick="irPara('telaLogin')">Voltar</button>
+    </div>
+</section>
+
+
+<!-- ================= HOME ================= -->
+<section id="telaHome" class="tela">
+    <!-- TOPO -->
+    <div class="top-bar">
+        <div class="btn-chat" onclick="irPara('telaChat')">💬</div>
+        <div>PlushMaster</div>
+        <div style="width:45px;"></div> <!-- espaço à direita para equilibrar -->
     </div>
 
-    <!-- SCRIPT DA ANIMAÇÃO -->
-    <script>
-        function animarTroca(pagina) {
-            document.body.classList.add("fadeOut");
+    <!-- CÂMERA -->
+    <div class="camera-box">
+        <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine03"
+        allow="autoplay; fullscreen"></iframe>
+    </div>
 
-            setTimeout(() => {
-                window.location.href = pagina;
-            }, 400); // mesmo tempo da animação
+    <!-- BOTÃO JOGAR -->
+<div class="play-area">
+    <button class="play-btn" onclick="irPara('telaSelecionar')" style="border:none; outline:none;">JOGAR</button>
+</div>
+
+
+  
+    <!-- MENU INFERIOR -->
+    <div class="bottom-bar">
+        <div class="nav-item" onclick="irPara('telaHome')">
+            <div class="nav-circle">🏠</div>
+            Home
+        </div>
+        <div class="nav-item" onclick="irPara('telaCarteira')">
+            <div class="nav-circle">💰</div>
+            Carteira
+        </div>
+        <div class="nav-item" onclick="irPara('telaConta')">
+            <div class="nav-circle">👤</div>
+            Conta
+        </div>
+        <div class="nav-item" onclick="irPara('telaPelucias')">
+            <div class="nav-circle">🧸</div>
+            Pelúcias
+        </div>
+    </div>
+</section>
+<!-- TELA SELECIONAR -->
+<section id="telaSelecionar" class="tela">
+  <!-- TOPO -->
+  <div class="topo">
+    <div class="voltar" onclick="irPara('telaHome')">←</div>
+    <div class="logo">PlushMaster</div>
+  </div>
+
+  <!-- TÍTULO -->
+  <div class="titulo">📋 Selecionar máquina</div>
+
+  <!-- LOADER -->
+  <div id="loader" class="loader"></div>
+
+  <!-- MÁQUINAS -->
+  <div class="maquinas">
+    <div class="card" id="cardPlush" onclick="clicarMaquina('plush')">
+      <div class="nome">Plush Tiger</div>
+      <div class="preco">R$ 2,00 a jogada</div>
+      <div class="texto-manutencao" id="msgPlush">
+        Iniciar agora<br>😀 🥳
+      </div>
+      <button class="btn-status disponivel" id="statusPlush">Disponível</button>
+    </div>
+
+    <div class="card" id="cardToy" onclick="clicarMaquina('toy')">
+      <div class="nome">Toy Mix</div>
+      <div class="preco">R$ 5,00 a jogada</div>
+      <div class="texto-manutencao" id="msgToy">
+        Iniciar agora<br>😀 🥳
+      </div>
+      <button class="btn-status disponivel" id="statusToy">Disponível</button>
+    </div>
+  </div>
+
+  <!-- SELECIONAR JOGADAS -->
+  <div class="jogadas">
+    <div>🎮 Selecionar jogadas</div>
+    <div id="qtdJogadas">00</div>
+  </div>
+
+  <!-- CONTROLES -->
+  <div class="controles">
+    <div class="botao" onclick="alterarJogadas(-1)">➖</div>
+    <div class="botao" onclick="alterarJogadas(1)">➕</div>
+    <div class="botao" onclick="setJogadas(5)">05</div>
+    <div class="botao" onclick="setJogadas(10)">10</div>
+    <div class="botao" onclick="setJogadas(15)">15</div>
+    <div class="botao" onclick="setJogadas(20)">20</div>
+  </div>
+
+  <!-- BOTÃO INICIAR -->
+  <div class="btn-iniciar" onclick="iniciarJogo()">Iniciar</div>
+
+  <!-- SALDO -->
+  <div id="saldoUsuario" style="text-align:center; font-size:20px; font-weight:bold; color:#004a9f; margin-bottom:30px;">
+    Saldo: R$ 0,00
+  </div>
+
+  <div id="notificacoes"></div>
+</section>
+
+<script>
+let jogadas = 0;
+let maquinaSelecionada = null;
+let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
+
+function clicarMaquina(id) {
+  if (statusMaquinas[id] === "indisponivel") return;
+
+  const btnPlush = document.getElementById("statusPlush");
+  const btnToy = document.getElementById("statusToy");
+
+  if (id === "plush") {
+    maquinaSelecionada = "plush";
+    btnPlush.innerText = "Selecionada";
+    btnPlush.classList.replace("disponivel", "selecionada");
+    btnToy.innerText = "Disponível";
+    btnToy.classList.replace("selecionada", "disponivel");
+  }
+
+  if (id === "toy") {
+    maquinaSelecionada = "toy";
+    btnToy.innerText = "Selecionada";
+    btnToy.classList.replace("disponivel", "selecionada");
+    btnPlush.innerText = "Disponível";
+    btnPlush.classList.replace("selecionada", "disponivel");
+  }
+}
+
+function alterarJogadas(valor) {
+  jogadas += valor;
+  if (jogadas < 0) jogadas = 0;
+  atualizarJogadas();
+}
+
+function setJogadas(valor) {
+  jogadas = valor;
+  atualizarJogadas();
+}
+
+function atualizarJogadas() {
+  document.getElementById("qtdJogadas").innerText = String(jogadas).padStart(2, "0");
+}
+
+function iniciarJogo() {
+  if (!maquinaSelecionada) return notificar("Selecione uma máquina!");
+  if (jogadas <= 0) return notificar("Selecione o número de jogadas!");
+
+  const status = statusMaquinas[maquinaSelecionada];
+  if (status === "indisponivel" || status === "off") return notificar("A máquina selecionada não está disponível!");
+
+  notificar("Máquina iniciada! Boa sorte 🥳");
+}
+
+function carregarStatusMaquinas() {
+  db.collection("maquinas").onSnapshot((snapshot) => {
+    console.log("Snapshot recebido:", snapshot.docs.map(d => d.data())); // <-- debug
+
+    snapshot.forEach((doc) => {
+      const id = doc.id;
+      const status = doc.data().status;
+      statusMaquinas[id] = status;
+
+      const btn = document.getElementById(id === "plush" ? "statusPlush" : "statusToy");
+      const msg = document.getElementById(id === "plush" ? "msgPlush" : "msgToy");
+
+      if (status === "indisponivel") {
+        btn.innerText = "Indisponível";
+        btn.className = "btn-status indisponivel";
+        msg.innerHTML = "manutenção /<br>abastecimento<br>⚙🧸";
+      } else {
+        if (maquinaSelecionada !== id) {
+          btn.innerText = "Disponível";
+          btn.className = "btn-status disponivel";
+          msg.innerHTML = "Iniciar agora<br>😀 🥳";
         }
-    </script>
+      }
+
+      // Loader
+      document.getElementById("loader").style.display = "none";
+      document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "flex");
+    });
+  });
+}
+
+carregarStatusMaquinas();
+
+
+// Saldo do usuário
+firebase.auth().onAuthStateChanged((user) => {
+  if (!user) return irPara('tela1');
+
+  db.collection("users").doc(user.uid).onSnapshot((doc) => {
+    if (!doc.exists) return;
+    const saldo = doc.data().saldo || 0;
+    document.getElementById("saldoUsuario").innerText = "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
+  });
+});
+
+// Notificações
+function notificar(msg) {
+  const div = document.createElement("div");
+  div.className = "notif";
+  div.innerText = msg;
+  document.getElementById("notificacoes").appendChild(div);
+  setTimeout(() => { div.style.opacity = "0"; div.style.transform = "translateX(20px)"; setTimeout(() => div.remove(), 300); }, 3500);
+}
+</script>
+
+
+<!-- TELA CHAT -->
+<section id="telaChat" class="tela">
+  <div class="topo">
+    <div class="voltar" onclick="irPara('telaHome')">←</div>
+    <div class="logo">PlushMaster</div>
+    <div class="perfil" id="perfil">U</div>
+  </div>
+
+  <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto;"></div>
+
+  <div class="chat-input-container" style="display:flex; padding:10px; gap:10px; background:#4fc3ff;">
+    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." style="flex:1; padding:10px 15px; border-radius:50px; border:none; font-size:16px; background:#e0f7ff; color:#000;">
+    <button id="send-btn" style="padding:10px 20px; border:none; border-radius:50px; background: linear-gradient(#24c6ff,#009ef7); color:white; cursor:pointer; font-size:16px;">Enviar</button>
+  </div>
+</section>
+
+<script>
+const perfil = document.getElementById('perfil');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+const sendBtn = document.getElementById('send-btn');
+
+
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    // Se não estiver logado, volta para a tela de login
+    irPara('telaLogin');
+    return;
+  }
+
+  // Mostra a inicial do perfil
+  perfil.innerText = user.email.charAt(0).toUpperCase();
+
+  sendBtn.onclick = async () => {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  // Busca o nome do usuário no Firestore
+  const userDoc = await db.collection('users').doc(user.uid).get();
+  let nomeUsuario = user.email; // fallback
+  if (userDoc.exists) {
+    const data = userDoc.data();
+    if (data.nome) nomeUsuario = data.nome;
+  }
+
+  db.collection('chat').add({
+    user: nomeUsuario,
+    uid: user.uid,
+    message: text,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  chatInput.value = '';
+};
+
+
+  // Receber mensagens em tempo real
+  db.collection('chat').orderBy('timestamp')
+    .onSnapshot(snapshot => {
+      chatMessages.innerHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.classList.add('message');
+        div.classList.add(data.uid === user.uid ? 'sent' : 'received');
+        div.textContent = `${data.user}: ${data.message}`;
+        chatMessages.appendChild(div);
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+});
+</script>
+
+
+<!-- LÓGICA -->
+<script>
+let telaAtual=document.querySelector(".tela.base");
+
+function irPara(id){
+    const nova=document.getElementById(id);
+    nova.classList.add("entrando");
+    setTimeout(()=>{
+        telaAtual.classList.remove("base");
+        nova.classList.remove("entrando");
+        nova.classList.add("base");
+        telaAtual=nova;
+    },400);
+}
+
+function verificarEmail(){
+    const email=document.getElementById("emailLogin").value.trim();
+    if(!email){alert("Digite o email");return;}
+    localStorage.setItem("emailLogin",email);
+    document.getElementById("emailExibido").innerText=email;
+    irPara("telaSenha");
+}
+
+function entrar(){
+    const email=localStorage.getItem("emailLogin");
+    const senha=document.getElementById("senha").value.trim();
+    if(!senha){alert("Digite a senha");return;}
+    auth.signInWithEmailAndPassword(email,senha)
+        .then(()=>irPara("telaHome"))
+        .catch(()=>alert("Erro no login"));
+}
+
+
+</script>
 
 </body>
 </html>
