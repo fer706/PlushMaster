@@ -511,6 +511,63 @@ body{
 .maquinas .card {
     display: none;  /* esconde todos os cards até o Firebase carregar */
 }
+/* INTRO */
+#intro {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* BOLINHA AZUL */
+.ball {
+  width: 40px;
+  height: 40px;
+  background: #00c3ff;
+  border-radius: 50%;
+  animation: jumpGrow 1.6s ease-in-out forwards;
+}
+
+/* LOGO DA INTRO */
+.intro-logo {
+  position: absolute;
+  width: 220px;
+  opacity: 0;
+  animation: logoFade 0.5s ease forwards;
+  animation-delay: 1.6s;
+}
+
+
+/* PULO BAIXO + CRESCIMENTO */
+@keyframes jumpGrow {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    transform: translateY(-12px) scale(1);
+  }
+  40% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: scale(50);
+  }
+}
+
+/* APARECER LOGO */
+@keyframes logoFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 
 </style>
@@ -532,7 +589,40 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 </script>
+<!-- INTRO -->
+<div id="intro">
+  <div class="ball"></div>
+  <img class="intro-logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+  const logo  = document.querySelector(".intro-logo");
+  const intro = document.getElementById("intro");
+  const tela1 = document.getElementById("tela1");
+
+  if (!logo || !intro || !tela1) return;
+
+  // quando a animação da LOGO terminar
+  logo.addEventListener("animationend", () => {
+
+    // espera 2 segundos com a tela parada
+    setTimeout(() => {
+
+      // remove a intro
+      intro.remove();
+
+      // ativa a Tela 1
+      tela1.classList.add("base");
+      tela1.style.pointerEvents = "auto";
+
+    }, 2000); // ⏱ 2 segundos
+
+  }, { once: true });
+  
+});
+
+</script>
 <!-- TELA 1 -->
 <section id="tela1" class="tela base">
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
@@ -548,7 +638,7 @@ const db = firebase.firestore();
     <div class="card">
         <h2>Entre ou cadastre-se</h2>
         <button class="btn" onclick="irPara('telaLogin')">Login</button>
-        <button class="btn" onclick="irPara('telaLogin')">Cadastro</button>
+        <button class="btn" onclick="irPara('telaCadastroEmail')">Cadastro</button>
     </div>
 </section>
 
@@ -574,6 +664,73 @@ const db = firebase.firestore();
         <button class="btn" onclick="irPara('telaLogin')">Voltar</button>
     </div>
 </section>
+<!-- TELA EMAIL -->
+<section id="telaCadastroEmail" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+    <div class="card">
+        <h2>Criar conta</h2>
+
+        <input
+          type="email"
+          id="emailCadastro"
+          placeholder="Digite seu email"
+        >
+
+        <button class="btn" onclick="irParaUsuario()">Continuar</button>
+
+        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+    </div>
+</section>
+
+
+<!-- TELA USUÁRIO -->
+<section id="telaCadastroUsuario" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+    <div class="card">
+        <h2>Nome de usuário</h2>
+
+        <input
+          type="text"
+          id="usernameCadastro"
+          placeholder="Crie um nome de usuário"
+        >
+
+        <button class="btn" onclick="irParaSenha()">Continuar</button>
+
+        <button class="btn" onclick="irPara('telaCadastroEmail')">Voltar</button>
+    </div>
+</section>
+
+
+<!-- TELA SENHA -->
+<section id="telaCadastroSenha" class="tela">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+    <div class="card">
+        <h2>Criar senha</h2>
+
+        <input
+          type="password"
+          id="senha1"
+          placeholder="Digite a senha"
+        >
+
+        <input
+          type="password"
+          id="senha2"
+          placeholder="Digite novamente"
+        >
+
+        <button class="btn" onclick="finalizarCadastro()">Criar conta</button>
+
+        <button class="btn" onclick="irPara('telaCadastroUsuario')">Voltar</button>
+    </div>
+</section>
+
+
+
 
 
 <!-- ================= HOME ================= -->
@@ -812,56 +969,66 @@ const chatMessages = document.getElementById('chat-messages');
 const sendBtn = document.getElementById('send-btn');
 
 
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(async (user) => {
   if (!user) {
     // Se não estiver logado, volta para a tela de login
     irPara('telaLogin');
     return;
   }
 
-  // Mostra a inicial do perfil
-  perfil.innerText = user.email.charAt(0).toUpperCase();
+  // Mostra a inicial do perfil (username)
+  const userDoc = await db.collection('users').doc(user.uid).get();
+  if (userDoc.exists) {
+    const username = userDoc.data().username;
+    perfil.innerText = username.charAt(0).toUpperCase();
+  }
 
   sendBtn.onclick = async () => {
-  const text = chatInput.value.trim();
-  if (!text) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
+
 
   // Busca o nome do usuário no Firestore
   const userDoc = await db.collection('users').doc(user.uid).get();
-  let nomeUsuario = user.email; // fallback
-  if (userDoc.exists) {
-    const data = userDoc.data();
-    if (data.nome) nomeUsuario = data.nome;
-  }
+let nomeUsuario = 'Usuário';
 
-  db.collection('chat').add({
-    user: nomeUsuario,
-    uid: user.uid,
-    message: text,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
+if (userDoc.exists && userDoc.data().username) {
+  nomeUsuario = userDoc.data().username;
+}
 
-  chatInput.value = '';
+await db.collection('chat').add({
+  username: nomeUsuario, // ✅ campo correto
+  uid: user.uid,
+  message: text,
+  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+});
+
+chatInput.value = '';
 };
 
 
+
   // Receber mensagens em tempo real
-  db.collection('chat').orderBy('timestamp')
-    .onSnapshot(snapshot => {
-      chatMessages.innerHTML = '';
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const div = document.createElement('div');
-        div.classList.add('message');
-        div.classList.add(data.uid === user.uid ? 'sent' : 'received');
-        div.textContent = `${data.user}: ${data.message}`;
-        chatMessages.appendChild(div);
-      });
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+db.collection('chat').orderBy('timestamp')
+  .onSnapshot(snapshot => {
+    chatMessages.innerHTML = '';
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const div = document.createElement('div');
+
+      div.classList.add('message');
+      div.classList.add(data.uid === user.uid ? 'sent' : 'received');
+
+      const nome = data.user || 'Usuário'; // 👈 garante nome
+      div.textContent = `${data.username}: ${data.message}`;
+
+
+      chatMessages.appendChild(div);
     });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
 });
 </script>
-
 
 <!-- LÓGICA -->
 <script>
@@ -896,7 +1063,83 @@ function entrar(){
 }
 
 
+
+let emailCadastro = "";
+let usernameCadastro = "";
+
+function mostrarTela(id){
+  document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+
+function irParaUsuario(){
+  const email = document.getElementById('emailCadastro').value.trim();
+  if(!email) return alert("Digite o email");
+
+  emailCadastro = email;
+  irPara('telaCadastroUsuario');
+}
+
+
+async function irParaSenha(){
+  const username = document.getElementById('usernameCadastro').value.trim();
+  if(!username) return alert("Digite o nome de usuário");
+
+  const snap = await db.collection("users")
+    .where("username", "==", username)
+    .get();
+
+  if(!snap.empty){
+    alert("Nome de usuário já existe");
+    return;
+  }
+
+  usernameCadastro = username;
+  irPara('telaCadastroSenha');
+}
+
+
+
+async function finalizarCadastro(){
+  const senha1 = document.getElementById('senha1').value;
+  const senha2 = document.getElementById('senha2').value;
+
+  if(!senha1 || !senha2){
+    alert("Digite a senha duas vezes");
+    return;
+  }
+
+  if(senha1 !== senha2){
+    alert("As senhas não são iguais");
+    return;
+  }
+
+  try{
+    const cred = await auth.createUserWithEmailAndPassword(emailCadastro, senha1);
+
+    await db.collection("users").doc(cred.user.uid).set({
+      email: emailCadastro,
+      username: usernameCadastro,
+      saldo: 0,
+      pelucias: 0,
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("Conta criada com sucesso!");
+    irPara('telaHome'); // 🔥 entra direto
+
+  }catch(err){
+    alert(err.message);
+  }
+}
+
+
 </script>
 
+
+
+</script>
+
+</script>
 </body>
 </html>
