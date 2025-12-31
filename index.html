@@ -7,8 +7,10 @@
 <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{overflow:hidden}
+body{
+  overflow-y: auto;   /* permite rolagem vertical */
+  overflow-x: hidden; /* bloqueia rolagem lateral */
+}
 
 /* TELAS */
 .tela{
@@ -19,6 +21,12 @@ body{overflow:hidden}
     transition:.4s ease;
     pointer-events:none;
 }
+.tela{
+  overflow-y: auto;                 /* 🔥 rolagem interna */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* iOS suave */
+}
+
 .tela.base{
     transform:translateX(0);
     pointer-events:auto;
@@ -469,24 +477,38 @@ body{
     line-height:1.2;      /* deixa as linhas mais próximas */
     text-align:center;    /* centraliza */
 }
-#notificacoes {
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        width: 260px;
-        z-index: 999999;
-    }
+.notificacao{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;                 /* FUNDO PRETO */
+  color: #fff;                      /* TEXTO BRANCO */
+  padding: 14px 22px;
+  border-radius: 12px;
 
-    .notif {
-        background: rgba(0,0,0,0.7);
-        border-left: 4px solid #00eaff;
-        padding: 12px;
-        color: #fff;
-        font-size: 15px;
-        margin-top: 10px;
-        border-radius: 8px;
-        animation: aparecer .4s ease;
-    }
+  border: 2px solid #ff2b2b;        /* BORDA VERMELHA */
+  box-shadow: 
+    0 0 10px #ff2b2b,
+    0 0 25px rgba(255,43,43,0.6);
+
+  font-family: Orbitron, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+
+  z-index: 999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s, top .4s;
+}
+
+.notificacao.ativa{
+  opacity: 1;
+  top: 40px;
+}
+
+
 
     @keyframes aparecer {
         from { opacity: 0; transform: translateX(20px); }
@@ -573,6 +595,8 @@ body{
 </style>
 </head>
 <body>
+<div id="notificacoes"></div>
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -834,7 +858,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Saldo: R$ 0,00
   </div>
 
-  <div id="notificacoes"></div>
+  
 </section>
 
 <script>
@@ -935,14 +959,7 @@ firebase.auth().onAuthStateChanged((user) => {
   });
 });
 
-// Notificações
-function notificar(msg) {
-  const div = document.createElement("div");
-  div.className = "notif";
-  div.innerText = msg;
-  document.getElementById("notificacoes").appendChild(div);
-  setTimeout(() => { div.style.opacity = "0"; div.style.transform = "translateX(20px)"; setTimeout(() => div.remove(), 300); }, 3500);
-}
+
 </script>
 
 
@@ -1047,7 +1064,7 @@ function irPara(id){
 
 function verificarEmail(){
     const email=document.getElementById("emailLogin").value.trim();
-    if(!email){alert("Digite o email");return;}
+    if(!email){notificar("Digite o email");return;}
     localStorage.setItem("emailLogin",email);
     document.getElementById("emailExibido").innerText=email;
     irPara("telaSenha");
@@ -1056,10 +1073,10 @@ function verificarEmail(){
 function entrar(){
     const email=localStorage.getItem("emailLogin");
     const senha=document.getElementById("senha").value.trim();
-    if(!senha){alert("Digite a senha");return;}
+    if(!senha){notificar("Digite a senha");return;}
     auth.signInWithEmailAndPassword(email,senha)
         .then(()=>irPara("telaHome"))
-        .catch(()=>alert("Erro no login"));
+        .catch(()=>notificar("Erro no login"));
 }
 
 
@@ -1074,7 +1091,7 @@ function mostrarTela(id){
 
 function irParaUsuario(){
   const email = document.getElementById('emailCadastro').value.trim();
-  if(!email) return alert("Digite o email");
+  if(!email) return notificar("Digite o email");
 
   emailCadastro = email;
   irPara('telaCadastroUsuario');
@@ -1083,14 +1100,14 @@ function irParaUsuario(){
 
 async function irParaSenha(){
   const username = document.getElementById('usernameCadastro').value.trim();
-  if(!username) return alert("Digite o nome de usuário");
+  if(!username) return notificar("Digite o nome de usuário");
 
   const snap = await db.collection("users")
     .where("username", "==", username)
     .get();
 
   if(!snap.empty){
-    alert("Nome de usuário já existe");
+    notificar("Nome de usuário já existe");
     return;
   }
 
@@ -1105,12 +1122,12 @@ async function finalizarCadastro(){
   const senha2 = document.getElementById('senha2').value;
 
   if(!senha1 || !senha2){
-    alert("Digite a senha duas vezes");
+    notificar("Digite a senha duas vezes");
     return;
   }
 
   if(senha1 !== senha2){
-    alert("As senhas não são iguais");
+    notificar("As senhas não são iguais");
     return;
   }
 
@@ -1125,21 +1142,46 @@ async function finalizarCadastro(){
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    alert("Conta criada com sucesso!");
+    notificar("Conta criada com sucesso!");
     irPara('telaHome'); // 🔥 entra direto
 
   }catch(err){
-    alert(err.message);
+    notificar(err.message);
   }
 }
 
 
+
+function notificar(msg) {
+  const container = document.getElementById("notificacoes");
+  if (!container) return;
+
+  const div = document.createElement("div");
+  div.className = "notificacao"; // 🔥 CLASSE CERTA
+  div.innerText = msg;
+
+  container.appendChild(div);
+
+  // força o navegador a reconhecer o elemento antes da animação
+  requestAnimationFrame(() => {
+    div.classList.add("ativa");
+  });
+
+  // remove após 3 segundos
+  setTimeout(() => {
+    div.classList.remove("ativa");
+    setTimeout(() => div.remove(), 400);
+  }, 3000);
+}
 </script>
 
 
 
-</script>
 
-</script>
+
+
+
+
+
 </body>
 </html>
