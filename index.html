@@ -284,17 +284,21 @@ footer{text-align:center;margin-top:15px}
   cursor:pointer;
   font-size:16px;
 }
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
 }
 
+
+
 body{
-    background: linear-gradient(#43c6ff, #e9f7ff);
-    min-height:100vh;
+  background: linear-gradient(#43c6ff, #e9f7ff);
+  min-height:100vh;
 }
+
 
 /* TOPO */
 .topo{
@@ -590,6 +594,131 @@ body{
     opacity: 1;
   }
 }
+/* ================= TELA CARTEIRA ================= */
+
+
+#telaCarteira{
+  background:#f3f3f3;
+  overflow-y:auto;
+  min-height:100vh;
+}
+
+/* TOPO */
+.carteira-topo{
+  background:#4fc3ff;
+  padding:15px 15px 25px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+}
+
+.carteira-linha{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.carteira-voltar{
+  font-size:22px;
+  color:#fff;
+  cursor:pointer;
+}
+
+.carteira-logo{
+  font-size:20px;
+  font-weight:bold;
+  color:#fff;
+}
+
+.carteira-perfil{
+  width:42px;
+  height:42px;
+  background:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#4fc3ff;
+}
+
+/* TITULOS */
+.carteira-titulo{
+  margin-top:15px;
+  font-size:26px;
+  font-weight:bold;
+  color:#05326b;
+}
+
+.carteira-sub{
+  font-size:16px;
+  color:#05326b;
+}
+
+/* CONTEÚDO */
+.carteira-sessao{
+  padding:20px;
+}
+
+.saldo-titulo{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.saldo-box{
+  background:#59cfff;
+  border-radius:20px;
+  padding:25px 10px;
+  text-align:center;
+  color:#fff;
+}
+
+.saldo-valor{
+  font-size:38px;
+  font-weight:bold;
+}
+
+.pelucias{
+  margin-top:8px;
+  font-size:15px;
+  opacity:.9;
+}
+
+/* RECARGA */
+.recarga{
+  padding:0 20px 20px;
+}
+
+.recarga h3{
+  font-size:20px;
+  margin-bottom:10px;
+}
+
+.valor-box{
+  font-size:30px;
+  font-weight:bold;
+}
+
+.cupom{
+  margin-top:6px;
+  font-size:14px;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+/* BOTÃO */
+.carteira-btn{
+  margin:20px;
+  width:calc(100% - 40px);
+  padding:18px;
+  font-size:18px;
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(#24c6ff,#009ef7);
+  color:#fff;
+  cursor:pointer;
+}
+
 
 
 </style>
@@ -799,6 +928,41 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
 </section>
+<!-- ================= CARTEIRA ================= -->
+<section id="telaCarteira" class="tela">
+
+  <div class="carteira-topo">
+    <div class="carteira-linha">
+      <div class="carteira-voltar" onclick="irPara('telaHome')">←</div>
+      <div class="carteira-logo">PlushMaster</div>
+      <div class="carteira-perfil" id="letraPerfil">U</div>
+    </div>
+
+    <div class="carteira-titulo">Carteira</div>
+    <div class="carteira-sub" id="nomeUser">Olá, ...</div>
+  </div>
+
+  <div class="carteira-sessao">
+    <div class="saldo-titulo">💲 Saldo na carteira</div>
+
+    <div class="saldo-box">
+      <div class="saldo-valor" id="saldoCarteira">R$ 0,00</div>
+      <div class="pelucias" id="peluciasCarteira">0 pelúcias acumuladas</div>
+    </div>
+  </div>
+
+  <div class="recarga">
+    <h3>💳 Qual valor você quer adicionar?</h3>
+    <div class="valor-box" id="valorSelecionado">R$ 0,00</div>
+    <div class="cupom">Tenho um cupom</div>
+  </div>
+
+  <button class="carteira-btn" onclick="pagar()">Prosseguir para o pagamento</button>
+
+</section>
+
+
+
 <!-- TELA SELECIONAR -->
 <section id="telaSelecionar" class="tela">
   <!-- TOPO -->
@@ -1174,6 +1338,80 @@ function notificar(msg) {
   }, 3000);
 }
 </script>
+<script>
+
+
+
+/* ================= VARIÁVEIS ================= */
+let valorRecarga = 0;
+
+/* ================= SELECIONAR VALOR ================= */
+function selecionarValor(valor){
+  valorRecarga = valor;
+
+  const el = document.getElementById("valorSelecionado");
+  if(el){
+    el.innerText = "R$ " + valor.toFixed(2).replace(".", ",");
+  }
+}
+
+/* ================= PAGAMENTO (SIMULADO) ================= */
+function pagar(){
+  if(valorRecarga <= 0){
+    notificar("Selecione um valor para recarga");
+    return;
+  }
+
+  notificar("Pagamento em desenvolvimento 💳");
+}
+
+/* ================= ATUALIZAÇÃO EM TEMPO REAL ================= */
+firebase.auth().onAuthStateChanged((user) => {
+  if(!user) return;
+
+  db.collection("users").doc(user.uid)
+    .onSnapshot((doc) => {
+      if(!doc.exists) return;
+
+      const dados = doc.data();
+      const saldo = dados.saldo || 0;
+      const pelucias = dados.pelucias || 0;
+const nomeUser = document.getElementById("nomeUser");
+const letraPerfil = document.getElementById("letraPerfil");
+
+if(nomeUser){
+  nomeUser.innerText = "Olá, " + (dados.username || "Usuário");
+}
+
+if(letraPerfil && dados.username){
+  letraPerfil.innerText = dados.username.charAt(0).toUpperCase();
+}
+
+      /* ===== TELA SELECIONAR ===== */
+      const saldoSel = document.getElementById("saldoUsuario");
+      if(saldoSel){
+        saldoSel.innerText =
+          "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
+      }
+
+      /* ===== TELA CARTEIRA ===== */
+      const saldoCart = document.getElementById("saldoCarteira");
+      const pelCart   = document.getElementById("peluciasCarteira");
+
+      if(saldoCart){
+        saldoCart.innerText =
+          "R$ " + saldo.toFixed(2).replace(".", ",");
+      }
+
+      if(pelCart){
+        pelCart.innerText =
+          pelucias + " pelúcias acumuladas";
+      }
+    });
+});
+</script>
+
+
 
 
 
