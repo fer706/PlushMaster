@@ -1073,10 +1073,44 @@ function iniciarJogo() {
   if (jogadas <= 0) return notificar("Selecione o número de jogadas!");
 
   const status = statusMaquinas[maquinaSelecionada];
-  if (status === "indisponivel" || status === "off") return notificar("A máquina selecionada não está disponível!");
+  if (status === "indisponivel" || status === "off")
+    return notificar("A máquina selecionada não está disponível!");
 
-  notificar("Máquina iniciada! Boa sorte 🥳");
+  // ================= COBRAR CRÉDITOS =================
+  firebase.auth().onAuthStateChanged((user) => {
+    if (!user) return;
+
+    const userRef = db.collection("users").doc(user.uid);
+    userRef.get().then((doc) => {
+      if (!doc.exists) return;
+
+      const dados = doc.data();
+      let saldo = dados.saldo || 0;
+
+      // define o valor por jogada
+      let valorJogada = 0;
+      if (maquinaSelecionada === "toy") valorJogada = 5;
+      if (maquinaSelecionada === "plush") valorJogada = 2;
+
+      const total = jogadas * valorJogada;
+
+      if (saldo < total) {
+        return notificar("Saldo insuficiente para essa quantidade de jogadas!");
+      }
+
+      saldo -= total;
+
+      userRef.update({ saldo }).then(() => {
+        // mantém a notificação original
+        notificar("Máquina iniciada! Boa sorte 🥳");
+        // atualiza o saldo na tela
+        const saldoEl = document.getElementById("saldoUsuario");
+        if (saldoEl) saldoEl.innerText = "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
+      });
+    });
+  });
 }
+
 
 function carregarStatusMaquinas() {
   db.collection("maquinas").onSnapshot((snapshot) => {
