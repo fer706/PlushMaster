@@ -83,18 +83,22 @@ footer{text-align:center;margin-top:15px}
     font-size:20px;
     font-weight:bold;
 }
-.camera-box{
-    background:black;
-    margin:10px;
-    border-radius:10px;
-    height:230px;
-    overflow:hidden;
+.camera-box {
+    background: black;
+    margin: 10px auto;       /* centraliza */
+    border-radius: 2px;      /* quase quadrado */
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 16/9;
+    overflow: hidden;
 }
-.camera-box iframe{
-    width:100%;
-    height:100%;
-    border:none;
+.camera-box iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }
+
+
 .play-area{
     flex:1;
     display:flex;
@@ -489,7 +493,7 @@ body{
   background: #000;                 /* FUNDO PRETO */
   color: #fff;                      /* TEXTO BRANCO */
   padding: 14px 22px;
-  border-radius: 12px;
+  border-radius: 8px;
 
   border: 2px solid #ff2b2b;        /* BORDA VERMELHA */
   box-shadow: 
@@ -1304,15 +1308,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- CÂMERA -->
     <div class="camera-box">
-        <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine03"
+        <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine0"
         allow="autoplay; fullscreen"></iframe>
     </div>
 
     <!-- BOTÃO JOGAR -->
-<div class="play-area">
-    <button class="play-btn" onclick="irPara('telaSelecionar')" style="border:none; outline:none;">JOGAR</button>
-</div>
-
+    <div class="play-area">
+         <button class="play-btn" onclick="abrirTelaSelecionar('telaselecionar')"style="border:none; outline:none;">JOGAR</button>
+    </div>
 
   
     <!-- MENU INFERIOR -->
@@ -1519,9 +1522,23 @@ function iniciarJogo() {
 }
 
 
-function carregarStatusMaquinas() {
-  db.collection("maquinas").onSnapshot((snapshot) => {
-    console.log("Snapshot recebido:", snapshot.docs.map(d => d.data())); // <-- debug
+// Guardar referência do listener para poder remover depois, se necessário
+let listenerMaquinas = null;
+
+function abrirTelaSelecionar() {
+  // Ativa a tela
+  irPara('telaSelecionar');
+
+  // Mostra loader e esconde cards
+  document.getElementById("loader").style.display = "block";
+  document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "none");
+
+  // Cancela listener antigo, se houver
+  if (listenerMaquinas) listenerMaquinas();
+
+  // Escuta os dados das máquinas APENAS nesta abertura
+  listenerMaquinas = db.collection("maquinas").onSnapshot((snapshot) => {
+    console.log("Snapshot recebido:", snapshot.docs.map(d => d.data()));
 
     snapshot.forEach((doc) => {
       const id = doc.id;
@@ -1542,27 +1559,13 @@ function carregarStatusMaquinas() {
           msg.innerHTML = "Iniciar agora<br>😀 🥳";
         }
       }
-
-      // Loader
-      document.getElementById("loader").style.display = "none";
-      document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "flex");
     });
+
+    // Esconde loader e mostra cards
+    document.getElementById("loader").style.display = "none";
+    document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "flex");
   });
 }
-
-carregarStatusMaquinas();
-
-
-// Saldo do usuário
-firebase.auth().onAuthStateChanged((user) => {
-  if (!user) return irPara('tela1');
-
-  db.collection("users").doc(user.uid).onSnapshot((doc) => {
-    if (!doc.exists) return;
-    const saldo = doc.data().saldo || 0;
-    document.getElementById("saldoUsuario").innerText = "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
-  });
-});
 
 
 </script>
@@ -2052,18 +2055,6 @@ async function salvarNovoNome(){
     notificar("Apelido alterado com sucesso!");
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
