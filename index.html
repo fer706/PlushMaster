@@ -719,6 +719,329 @@ body{
   cursor:pointer;
 }
 
+/* ===== TELA CONTA ===== */
+#telaConta{
+    background:#fff5eb;
+}
+
+/* TOPO */
+#telaConta .topo{
+    background:#4fc3ff;
+    height:120px;
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+#telaConta .botao-voltar{
+    width:45px;
+    height:45px;
+    background:rgba(255,255,255,0.3);
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    color:#fff;
+    cursor:pointer;
+}
+
+#telaConta .logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* INFO */
+#telaConta .info-area{
+    background:#4fc3ff;
+    padding:20px;
+    padding-bottom:40px;
+    border-bottom-left-radius:25px;
+    border-bottom-right-radius:25px;
+    margin-top:-10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+#telaConta .titulo{
+    font-size:26px;
+    font-weight:bold;
+    color:#003c7a;
+}
+
+#telaConta .subtitulo{
+    font-size:18px;
+    margin-top:5px;
+    color:#003c7a;
+}
+
+/* AVATAR */
+#telaConta .avatar{
+    width:55px;
+    height:55px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#003c7a;
+}
+
+/* CARDS */
+#telaConta .cards{
+    margin:20px;
+}
+
+#telaConta .card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 2px 4px rgba(0,0,0,0.15);
+    cursor:pointer;
+}
+
+#telaConta .card h3{
+    font-size:22px;
+    color:#35b6ff;
+    font-weight:bold;
+}
+
+/* SAIR */
+#telaConta .sair{
+    margin:50px 20px;
+    font-size:18px;
+    color:#444;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+/* ===== TELA MINHAS INFORMAÇÕES ===== */
+#telaInformacoes{
+    background:#fdf1e3;
+    min-height:100vh;
+}
+
+/* TOPO */
+#telaInformacoes .topo{
+    background:#4fc3ff;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+#telaInformacoes .voltar{
+    font-size:26px;
+    color:#fff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+#telaInformacoes .logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* TÍTULO */
+#telaInformacoes .titulo{
+    font-size:24px;
+    font-weight:bold;
+    color:#4fc3ff;
+    margin:20px;
+}
+
+/* CAIXA DE DADOS */
+#telaInformacoes .box{
+    background:#fff4e8;
+    margin:0 20px;
+    padding:20px;
+    border-radius:15px;
+}
+
+#telaInformacoes .box p{
+    font-size:18px;
+    margin-bottom:15px;
+}
+
+#telaInformacoes .label{
+    font-weight:bold;
+    color:#444;
+}
+
+#telaInformacoes .valor{
+    color:#000;
+}
+
+/* LINKS */
+#telaInformacoes .link{
+    margin:20px;
+    font-size:18px;
+    color:#2e5bd3;
+    cursor:pointer;
+}
+
+#telaInformacoes .link:hover{
+    text-decoration:underline;
+}
+
+/* EXCLUIR */
+#telaInformacoes .excluir{
+    margin:40px 20px;
+    font-size:18px;
+    color:#b30000;
+    cursor:pointer;
+}
+
+#telaInformacoes .excluir:hover{
+    text-decoration:underline;
+}
+
+/* ===== POPUP ALTERAR NOME ===== */
+#telaInformacoes .popup-bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+#telaInformacoes .popup-box{
+    background:#fff;
+    padding:20px;
+    width:80%;
+    max-width:350px;
+    border-radius:15px;
+    text-align:center;
+}
+
+#telaInformacoes .popup-box h3{
+    margin-bottom:10px;
+    font-size:20px;
+    color:#4fc3ff;
+}
+
+#telaInformacoes .popup-input{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:15px;
+}
+
+#telaInformacoes .popup-btn{
+    background:#4fc3ff;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#telaInformacoes .popup-btn:active{
+    transform:scale(0.95);
+}
+
+#telaInformacoes .cancelar{
+    margin-top:10px;
+    font-size:15px;
+    color:#999;
+    cursor:pointer;
+}
+
+#telaInformacoes .cancelar:hover{
+    text-decoration:underline;
+}
+
+/* ===== POPUP EXCLUIR CONTA ===== */
+#telaInformacoes .popup-fundo{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+#telaInformacoes .popup-caixa{
+    background:#ffffff;
+    width:85%;
+    max-width:350px;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    animation: popupAparecer 0.2s ease-out;
+}
+
+@keyframes popupAparecer{
+    from{ transform:scale(0.85); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+}
+
+#telaInformacoes .popup-titulo{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+#telaInformacoes .popup-texto{
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+#telaInformacoes .popup-botoes{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+#telaInformacoes .btn-cancelar{
+    flex:1;
+    background:#ccc;
+    border:none;
+    padding:10px;
+    border-radius:10px;
+    font-size:16px;
+}
+
+#telaInformacoes .btn-confirmar{
+    flex:1;
+    background:#ff4d4d;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+
 
 
 </style>
@@ -880,6 +1203,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <button class="btn" onclick="irPara('telaCadastroUsuario')">Voltar</button>
     </div>
+</section>
+<section id="telaConta" class="tela">
+
+    <div class="topo">
+        <div class="botao-voltar" onclick="irPara('telaHome')">←</div>
+        <div class="logo">PlushMaster</div>
+    </div>
+
+    <div class="info-area">
+        <div>
+            <div class="titulo">Minha conta</div>
+            <div class="subtitulo" id="textoOla">Olá, ...</div>
+        </div>
+
+        <div class="avatar" id="avatarLetra">U</div>
+    </div>
+
+    <div class="cards">
+        <div class="card" onclick="irPara('telaHistorico')">
+            <h3>📊 Histórico de atividades</h3>
+        </div>
+
+        <div class="card" onclick="irPara('telaInformacoes')">
+    <h3>📘 Minhas informações</h3>
+</div>
+
+    </div>
+
+    <div class="sair" onclick="sairConta()">
+        <span>↺</span> Sair da conta
+    </div>
+
+</section>
+<section id="telaInformacoes" class="tela">
+
+    <!-- TOPO -->
+    <div class="topo">
+        <div class="voltar" onclick="irPara('telaConta')">←</div>
+        <div class="logo">PlushMaster</div>
+    </div>
+
+    <div class="titulo">Minhas informações</div>
+
+    <div class="box">
+        <p><span class="label">Apelido:</span>
+            <span class="valor" id="campoNome">Carregando...</span>
+        </p>
+
+        <p><span class="label">E-mail:</span>
+            <span class="valor" id="campoEmail">Carregando...</span>
+        </p>
+
+        <p><span class="label">Senha:</span> ***************</p>
+    </div>
+
+    <div class="link" onclick="alterarNome()">Alterar apelido</div>
+    <div class="link" onclick="alterarSenha()">Alterar senha</div>
+    <div class="excluir" onclick="excluirConta()">Excluir conta</div>
+
+    <!-- POPUP ALTERAR NOME -->
+    <div class="popup-bg" id="popupNome">
+        <div class="popup-box">
+            <h3>Alterar apelido</h3>
+            <input type="text" id="novoNome" class="popup-input" placeholder="Digite o novo nome">
+            <button class="popup-btn" onclick="salvarNovoNome()">Salvar</button>
+            <div class="cancelar" onclick="fecharPopup()">Cancelar</div>
+        </div>
+    </div>
+
+    <!-- POPUP EXCLUIR CONTA -->
+    <div id="popupExcluir" class="popup-fundo" style="display:none;">
+        <div class="popup-caixa">
+            <div class="popup-titulo">Excluir Conta</div>
+            <p class="popup-texto">Digite sua senha para confirmar:</p>
+
+            <input type="password" id="senhaExcluir" class="popup-input" placeholder="Sua senha">
+
+            <div class="popup-botoes">
+                <button class="btn-cancelar" onclick="fecharPopupExcluir()">Cancelar</button>
+                <button class="btn-confirmar" onclick="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 
@@ -1444,6 +1851,209 @@ if(letraPerfil && dados.username){
     });
 });
 </script>
+<script>
+
+auth.onAuthStateChanged(async (user) => {
+  if (!user) return;
+
+  const textoOla = document.getElementById("textoOla");
+  const avatar   = document.getElementById("avatarLetra");
+
+  if (!textoOla || !avatar) return;
+
+  try {
+    const snap = await db.collection("users").doc(user.uid).get();
+
+    let username = "Usuário";
+
+    if (snap.exists && snap.data().username) {
+      username = snap.data().username;
+    }
+
+    textoOla.innerText = "Olá, " + username;
+    avatar.innerText   = username.charAt(0).toUpperCase();
+
+  } catch (e) {
+    console.error("Erro ao carregar nome:", e);
+  }
+});
+</script>
+
+<script>
+function sairConta(){
+    auth.signOut().then(() => {
+        abrirTela("tela1");
+    });
+}
+</script>
+<script>
+auth.onAuthStateChanged(async user => {
+    if (!user) return;
+
+    const emailEl = document.getElementById("campoEmail");
+    const nomeEl  = document.getElementById("campoNome");
+
+    if (!emailEl || !nomeEl) return;
+
+    emailEl.innerText = user.email;
+
+    const ref = db.collection("users").doc(user.uid);
+    const snap = await ref.get();
+
+    let username = "—";
+
+    if (snap.exists) {
+        const dados = snap.data();
+        if (dados.username) {
+            username = dados.username;
+        }
+    }
+
+    nomeEl.innerText = username;
+});
+</script>
+
+<script>
+
+function fecharPopup(){
+    document.getElementById("popupNome").style.display = "none";
+}
+
+async function salvarNovoNome(){
+    const novo = document.getElementById("novoNome").value.trim();
+
+    if (novo.length < 3) {
+        notificar("O nome deve ter pelo menos 3 letras.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+
+
+    document.getElementById("campoNome").innerText = novo;
+    window.jaMudouNome = true;
+    fecharPopup();
+    notificar("Apelido alterado com sucesso!");
+}
+</script>
+<script>
+function alterarSenha(){
+    const email = auth.currentUser.email;
+    auth.sendPasswordResetEmail(email)
+        .then(() => notificar("Link de redefinição enviado para " + email))
+        .catch(e => notificar(e.message));
+}
+</script>
+<script>
+function excluirConta(){
+    document.getElementById("popupExcluir").style.display = "flex";
+}
+
+function fecharPopupExcluir(){
+    document.getElementById("popupExcluir").style.display = "none";
+}
+
+async function confirmarExclusao(){
+    const senha = document.getElementById("senhaExcluir").value.trim();
+    if (!senha) {
+        notificar("Digite sua senha.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        const cred = firebase.auth.EmailAuthProvider.credential(user.email, senha);
+        await user.reauthenticateWithCredential(cred);
+
+        await db.collection("users").doc(user.uid).delete();
+        await user.delete();
+
+        notificar("Conta excluída com sucesso.");
+        irPara("tela1");
+
+    } catch (e) {
+        notificar("Erro: " + e.message);
+    }
+}
+</script>
+<script>
+let podeAlterarUsername = false;
+
+auth.onAuthStateChanged(async user => {
+    if (!user) return;
+
+    const ref = db.collection("users").doc(user.uid);
+    const snap = await ref.get();
+
+    if (!snap.exists) return;
+
+    const dados = snap.data();
+
+    // Mostra username
+    document.getElementById("campoNome").innerText =
+        dados.username || "—";
+
+    // controla se pode alterar
+    if (dados.usernameAlterado === true) {
+        podeAlterarUsername = false;
+    } else {
+        podeAlterarUsername = true;
+    }
+});
+
+function alterarNome(){
+    if (!podeAlterarUsername) {
+        notificar("Você só pode alterar o apelido uma vez.");
+        return;
+    }
+    document.getElementById("popupNome").style.display = "flex";
+}
+
+function fecharPopup(){
+    document.getElementById("popupNome").style.display = "none";
+}
+
+async function salvarNovoNome(){
+    const novo = document.getElementById("novoNome").value.trim();
+
+    if (novo.length < 3) {
+        notificar("O apelido deve ter pelo menos 3 letras.");
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    // 🔎 verifica duplicado
+    const consulta = await db
+        .collection("users")
+        .where("username", "==", novo)
+        .get();
+
+    if (!consulta.empty) {
+        notificar("Esse apelido já está em uso.");
+        return;
+    }
+
+    // ✅ salva definitivamente
+    await db.collection("users").doc(user.uid).update({
+        username: novo,
+        usernameAlterado: true
+    });
+
+    document.getElementById("campoNome").innerText = novo;
+    podeAlterarUsername = false;
+
+    fecharPopup();
+    notificar("Apelido alterado com sucesso!");
+}
+</script>
+
+
 
 
 
