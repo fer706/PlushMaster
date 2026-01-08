@@ -1679,24 +1679,13 @@ function verificarEmail(){
 }
 
 function entrar(){
-    const email = localStorage.getItem("emailLogin");
-    const senha = document.getElementById("senha").value.trim();
-
-    if(!senha){
-        notificar("Digite a senha");
-        return;
-    }
-
-    auth.signInWithEmailAndPassword(email, senha)
-      .then(() => {
-        // ✅ permite login automático
-        localStorage.setItem("loginAutomatico", "true");
-
-        irPara("telaHome");
-      })
-      .catch(() => notificar("Erro no login"));
+    const email=localStorage.getItem("emailLogin");
+    const senha=document.getElementById("senha").value.trim();
+    if(!senha){notificar("Digite a senha");return;}
+    auth.signInWithEmailAndPassword(email,senha)
+        .then(()=>irPara("telaHome"))
+        .catch(()=>notificar("email ou senha incorreto"));
 }
-
 
 
 
@@ -1895,14 +1884,10 @@ auth.onAuthStateChanged(async (user) => {
 
 <script>
 function sairConta(){
-    // ❌ impede login automático
-    localStorage.removeItem("loginAutomatico");
-
     auth.signOut().then(() => {
-        irPara("tela1");
+        abrirTela("tela1");
     });
 }
-
 </script>
 <script>
 auth.onAuthStateChanged(async user => {
@@ -2069,28 +2054,7 @@ async function salvarNovoNome(){
     fecharPopup();
     notificar("Apelido alterado com sucesso!");
 }
-
-
-
-auth.onAuthStateChanged((user) => {
-  const auto = localStorage.getItem("loginAutomatico");
-
-  if (user && auto === "true") {
-
-    // garante que a tela atual já foi renderizada
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        irPara("telaHome"); // anima normalmente
-      }, 50); // delay mínimo só para ativar a animação
-    });
-
-  }
-});
-
-
 </script>
-
-
 
 </body>
 </html>
