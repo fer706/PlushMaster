@@ -58,7 +58,16 @@ body{
     color:#fff;
     font-size:18px;
     cursor:pointer;
+
+    /* 🔥 CORREÇÃO DO LOADER */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:52px; /* altura real com padding */
 }
+
+
+
 input{
     width:90%;
     padding:12px;
@@ -1044,7 +1053,55 @@ body{
     font-size:16px;
     font-weight:bold;
 }
+.btn{
+  position: relative;
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(#4db8ff,#0077e6);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* texto do botão */
+.btn .btn-text{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .2s;
+}
+
+/* loader */
+.btn .btn-loader{
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  opacity: 0;
+}
+
+/* estado carregando */
+.btn.loading .btn-text{
+  opacity: 0;
+}
+
+.btn.loading .btn-loader{
+  opacity: 1;
+}
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
 
 
 
@@ -1128,7 +1185,10 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="card">
         <h2>Login</h2>
         <input id="emailLogin" type="email" placeholder="email@email.com">
-        <button class="btn" onclick="verificarEmail()">Continuar</button>
+        <button id="btnContinuar" class="btn" onclick="verificarEmail(this)">
+  <span class="btn-text">Continuar</span>
+  <span class="btn-loader"></span>
+</button>
         <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
@@ -1140,7 +1200,12 @@ document.addEventListener("DOMContentLoaded", () => {
         <h2>Senha</h2>
         <p id="emailExibido"></p>
         <input id="senha" type="password" placeholder="Senha">
-        <button class="btn" onclick="entrar()">Entrar</button>
+        <button id="btnEntrar" class="btn" onclick="entrar()">
+  <span class="btn-text">Entrar</span>
+  <span class="btn-loader"></span>
+</button>
+
+       </button>
         <button class="btn" onclick="irPara('telaLogin')">Voltar</button>
     </div>
 </section>
@@ -1157,7 +1222,12 @@ document.addEventListener("DOMContentLoaded", () => {
           placeholder="Digite seu email"
         >
 
-        <button class="btn" onclick="irParaUsuario()">Continuar</button>
+        <button class="btn" onclick="irParaUsuario(this)">
+  <span class="btn-text">Continuar</span>
+  <span class="btn-loader"></span>
+</button>
+
+
 
         <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
     </div>
@@ -1177,7 +1247,12 @@ document.addEventListener("DOMContentLoaded", () => {
           placeholder="Crie um nome de usuário"
         >
 
-        <button class="btn" onclick="irParaSenha()">Continuar</button>
+        <button class="btn" onclick="irParaSenha(this)">
+  <span class="btn-text">Continuar</span>
+  <span class="btn-loader"></span>
+</button>
+
+
 
         <button class="btn" onclick="irPara('telaCadastroEmail')">Voltar</button>
     </div>
@@ -1203,7 +1278,10 @@ document.addEventListener("DOMContentLoaded", () => {
           placeholder="Digite novamente"
         >
 
-        <button class="btn" onclick="finalizarCadastro()">Criar conta</button>
+        <button class="btn" onclick="finalizarCadastro(this)">
+      <span class="btn-text">Criar conta</span>
+      <span class="btn-loader"></span>
+    </button>
 
         <button class="btn" onclick="irPara('telaCadastroUsuario')">Voltar</button>
     </div>
@@ -1670,23 +1748,53 @@ function irPara(id){
     },400);
 }
 
-function verificarEmail(){
-    const email=document.getElementById("emailLogin").value.trim();
-    if(!email){notificar("Digite o email");return;}
-    localStorage.setItem("emailLogin",email);
-    document.getElementById("emailExibido").innerText=email;
+function verificarEmail(btn){
+  const email = document.getElementById("emailLogin").value.trim();
+
+  if(!email){
+    notificar("Digite o email");
+    return;
+  }
+
+  setBtnLoading(btn, true);
+
+  setTimeout(() => {
+    localStorage.setItem("emailLogin", email);
+    document.getElementById("emailExibido").innerText = email;
+
+    setBtnLoading(btn, false);
     irPara("telaSenha");
+  }, 600);
 }
 
 function entrar(){
-    const email=localStorage.getItem("emailLogin");
-    const senha=document.getElementById("senha").value.trim();
-    if(!senha){notificar("Digite a senha");return;}
-    auth.signInWithEmailAndPassword(email,senha)
-        .then(()=>irPara("telaHome"))
-        .catch(()=>notificar("email ou senha incorreto"));
-}
+  const email = localStorage.getItem("emailLogin");
+  const senha = document.getElementById("senha").value.trim();
 
+  if(!senha){
+    notificar("Digite a senha");
+    return;
+  }
+
+  // ativa loader
+  setBtnLoading("btnEntrar", true);
+
+  auth.signInWithEmailAndPassword(email, senha)
+    .then(() => {
+      localStorage.setItem("loginAutomatico", "true");
+
+      // 🔥 DESLIGA O LOADER ANTES DE TROCAR DE TELA
+      setBtnLoading("btnEntrar", false);
+
+      irPara("telaHome");
+    })
+    .catch(() => {
+      notificar("Email ou senha incorreto");
+
+      // erro → remove loader
+      setBtnLoading("btnEntrar", false);
+    });
+}
 
 
 let emailCadastro = "";
@@ -1697,35 +1805,62 @@ function mostrarTela(id){
   document.getElementById(id).classList.add('ativa');
 }
 
-function irParaUsuario(){
+function irParaUsuario(btn){
   const email = document.getElementById('emailCadastro').value.trim();
-  if(!email) return notificar("Digite o email");
-
-  emailCadastro = email;
-  irPara('telaCadastroUsuario');
-}
-
-
-async function irParaSenha(){
-  const username = document.getElementById('usernameCadastro').value.trim();
-  if(!username) return notificar("Digite o nome de usuário");
-
-  const snap = await db.collection("users")
-    .where("username", "==", username)
-    .get();
-
-  if(!snap.empty){
-    notificar("Nome de usuário já existe");
+  if(!email){
+    notificar("Digite o email");
     return;
   }
 
-  usernameCadastro = username;
-  irPara('telaCadastroSenha');
+  // 🔥 ativa loader no botão
+  setBtnLoading(btn, true);
+
+  setTimeout(() => {
+    emailCadastro = email;
+
+    // ❌ desativa loader antes de trocar a tela
+    setBtnLoading(btn, false);
+
+    irPara('telaCadastroUsuario');
+  }, 500);
+}
+
+
+async function irParaSenha(btn){
+  const username = document.getElementById('usernameCadastro').value.trim();
+  if(!username){
+    notificar("Digite o nome de usuário");
+    return;
+  }
+
+  // 🔥 ativa loader
+  setBtnLoading(btn, true);
+
+  try{
+    const snap = await db.collection("users")
+      .where("username", "==", username)
+      .get();
+
+    if(!snap.empty){
+      notificar("Nome de usuário já existe");
+      setBtnLoading(btn, false); // ❌ erro → remove loader
+      return;
+    }
+
+    usernameCadastro = username;
+
+    setBtnLoading(btn, false); // ✅ DESLIGA
+    irPara('telaCadastroSenha');
+
+  }catch(err){
+    notificar("Erro ao verificar usuário");
+    setBtnLoading(btn, false); // ❌ erro → remove loader
+  }
 }
 
 
 
-async function finalizarCadastro(){
+async function finalizarCadastro(btn){
   const senha1 = document.getElementById('senha1').value;
   const senha2 = document.getElementById('senha2').value;
 
@@ -1739,6 +1874,9 @@ async function finalizarCadastro(){
     return;
   }
 
+  // 🔥 ATIVA LOADER NO BOTÃO
+  setBtnLoading(btn, true);
+
   try{
     const cred = await auth.createUserWithEmailAndPassword(emailCadastro, senha1);
 
@@ -1751,10 +1889,18 @@ async function finalizarCadastro(){
     });
 
     notificar("Conta criada com sucesso!");
-    irPara('telaHome'); // 🔥 entra direto
+
+    // ✅ DESLIGA O LOADER ANTES DA TROCA
+    setBtnLoading(btn, false);
+
+    // 🔥 ANIMAÇÃO NORMAL
+    irPara('telaHome');
 
   }catch(err){
     notificar(err.message);
+
+    // ❌ ERRO → REMOVE LOADER
+    setBtnLoading(btn, false);
   }
 }
 
@@ -2055,6 +2201,26 @@ async function salvarNovoNome(){
     notificar("Apelido alterado com sucesso!");
 }
 </script>
+<script>
+function setBtnLoading(btn, loading){
+  // aceita ID ou elemento
+  if (typeof btn === "string") {
+    btn = document.getElementById(btn);
+  }
 
+  if (!btn) return;
+
+  if (loading) {
+    btn.classList.add("loading");
+    btn.disabled = true;
+  } else {
+    btn.classList.remove("loading");
+    btn.disabled = false;
+  }
+}
+
+
+
+</script>
 </body>
 </html>
