@@ -339,161 +339,191 @@ body{
     font-size:20px;
 }
 
-/* TÍTULO */
-.titulo{
+/* =========================
+   TELA SELECIONAR (ISOLADO)
+========================= */
+
+#telaSelecionar{
+    background:#fff5eb;
+}
+
+/* TOPO */
+.sel-topo{
+    background:#4fc3ff;
+    height:80px;
     display:flex;
     align-items:center;
-    gap:8px;
-    padding:10px 20px;
+    justify-content:center;
+    position:relative;
+}
+
+.sel-voltar{
+    position:absolute;
+    left:15px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.3);
     color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.sel-logo{
     font-size:22px;
     font-weight:bold;
+    color:#fff;
 }
 
-/* CARDS DAS MÁQUINAS */
-.maquinas {
-    display: flex;
-    gap: 12px;
-    padding: 10px 15px;
+/* SELECIONAR JOGADAS */
+/* SELECIONAR JOGADAS */
+.sel-jogadas{
+    margin:15px 20px;
+    background:#ffffff;
+    border-radius:18px;
+    padding:10px 14px;
+
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
 }
 
-.card {
-    flex: 1; /* todos os cards crescem igualmente para ocupar a largura */
-    background: #fff1e3;
-    border-radius: 20px;
-    padding: 15px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+/* TEXTO */
+.sel-jogadas-texto{
+    font-size:15px;
+    font-weight:bold;
+    color:#4fc3ff;
+    white-space:nowrap;
 }
 
-.btn-status {
-    width: 100%;        /* ocupa toda a largura do card */
-    height: 36px;
-    margin-top: 8px;
-    background: #00d6ff;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* SELECT COM SCROLL */
+.sel-jogadas select{
+    border:none;
+    background:#f3eadf;
+    padding:6px 10px;
+    font-size:15px;
+    border-radius:12px;
+    outline:none;
+
+    width:80px;
+    max-height:140px;     /* mostra 5 opções */
+    overflow-y:auto;      /* rolagem */
 }
 
-.nome{
+
+/* TÍTULO */
+.sel-titulo{
+    padding:0 20px;
+    font-size:22px;
+    font-weight:bold;
+    color:#333;
+}
+
+/* MÁQUINAS */
+.sel-maquinas{
+    display:flex;
+    gap:15px;
+    padding:20px;
+}
+
+.sel-card{
+    flex:1;
+    background:#ffffff;
+    border-radius:20px;
+    padding:15px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.sel-card img{
+    width:100%;
+    border-radius:15px;
+}
+
+/* PREÇO */
+.sel-preco{
     font-size:18px;
     font-weight:bold;
-    color:#25c6ff;
+    margin:10px 0;
 }
 
-.preco{
-    font-size:20px;
-    font-weight:bold;
-    margin:8px 0;
-}
-
-.btn-status{
-    margin-top:8px;
-    background:#00d6ff;
-    color:#fff;
-    border:none;
+/* BOTÃO STATUS */
+.sel-btn-status{
     width:100%;
-    height:36px;              /* ALTURA FIXA */
+    height:36px;
+    border:none;
     border-radius:20px;
     font-weight:bold;
-    font-size:13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size:14px;
     display:flex;
     align-items:center;
     justify-content:center;
 }
 
-
-/* RANKING */
-.ranking{
-    margin:15px;
-    background: linear-gradient(90deg,#004a9f,#00d6ff);
+/* STATUS */
+.sel-disponivel{
+    background:#4fc3ff;
     color:#fff;
-    border-radius:20px;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
 }
 
-/* SELECIONAR JOGADAS */
-.jogadas{
-    margin:15px;
-    background: linear-gradient(180deg,#00c6ff,#004a9f);
+.sel-selecionada{
+    background:#bdbdbd;
     color:#fff;
-    border-radius:20px;
+}
+
+.sel-indisponivel{
+    background:#9e9e9e;
+    color:#fff;
+    cursor:not-allowed;
+}
+
+/* SALDO */
+.sel-saldo{
+    background:#ffffff;
+    margin:20px;
     padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:20px;
-}
-
-/* CONTROLES */
-.controles{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    padding:0 15px;
-    margin-top:10px;
-}
-
-.botao{
-    background:linear-gradient(#003f91,#0066ff);
-    color:#9be7ff;
-    border-radius:15px;
-    text-align:center;
-    padding:18px 0;
-    font-size:22px;
+    border-radius:20px;
+    font-size:18px;
     font-weight:bold;
-    cursor:pointer;
-    user-select:none;
 }
 
-/* BOTÃO INICIAR */
-.btn-iniciar{
-    margin:25px 15px;
-    background:linear-gradient(#00d6ff,#0072ff);
+/* BOTÃO FINAL */
+.sel-btn-iniciar{
+    margin:20px;
+    background:linear-gradient(#00c6ff,#0072ff);
     color:#fff;
     text-align:center;
     padding:18px;
-    border-radius:25px;
+    border-radius:30px;
     font-size:22px;
     font-weight:bold;
     cursor:pointer;
 }
-
-.selecionada {
-    background: #bdbdbd !important;
-    color: #fff !important;
+/* CARD DA MÁQUINA */
+.sel-card{
+  background:#fff;
+  border-radius:20px;
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
 }
 
-.disponivel {
-    background: #00d6ff !important;
-    color: #fff !important;
+/* CONTAINER DA IMAGEM */
+.sel-card img{
+  width:100%;
+  height:160px;          /* ALTURA PADRÃO PARA TODAS */
+  object-fit:contain;   /* NÃO DISTORCE */
+  display:block;
 }
 
-.indisponivel {
-    background: #9e9e9e !important;
-    color: #ffffff !important;
-    cursor: not-allowed;
-}
 
-.texto-manutencao{
-    font-size:16px;       /* diminui o tamanho do texto */
-    line-height:1.2;      /* deixa as linhas mais próximas */
-    text-align:center;    /* centraliza */
-}
+
 .notificacao{
   position: fixed;
   top: 20px;
@@ -1451,67 +1481,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-<!-- TELA SELECIONAR -->
 <section id="telaSelecionar" class="tela">
-  <!-- TOPO -->
-  <div class="topo">
-    <div class="voltar" onclick="irPara('telaHome')"><</div>
-    <div class="logo">PlushMaster</div>
+
+  <div class="sel-topo">
+    <div class="sel-voltar" onclick="irPara('telaHome')"><</div>
+    <div class="sel-logo">PlushMaster</div>
   </div>
 
-  <!-- TÍTULO -->
-  <div class="titulo">📋 Selecionar máquina</div>
+<div class="sel-jogadas">
+  <div class="sel-jogadas-texto">😊 Selecionar jogadas</div>
 
-  <!-- LOADER -->
+  <select onchange="jogadas=parseInt(this.value)">
+    <option value="0" selected>00</option>
+
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+    <option value="19">19</option>
+    <option value="20">20</option>
+
+    <option value="21">21</option>
+    <option value="22">22</option>
+    <option value="23">23</option>
+    <option value="24">24</option>
+    <option value="25">25</option>
+    <option value="26">26</option>
+    <option value="27">27</option>
+    <option value="28">28</option>
+    <option value="29">29</option>
+    <option value="30">30</option>
+  </select>
+</div>
+
+
+  <div class="sel-titulo">📱 Selecionar máquina</div>
+
   <div id="loader" class="loader"></div>
 
-  <!-- MÁQUINAS -->
-  <div class="maquinas">
-    <div class="card" id="cardPlush" onclick="clicarMaquina('plush')">
-      <div class="nome">Plush Tiger</div>
-      <div class="preco">R$ 2,00 a jogada</div>
-      <div class="texto-manutencao" id="msgPlush">
-        Iniciar agora<br>😀 🥳
-      </div>
-      <button class="btn-status disponivel" id="statusPlush">Disponível</button>
+  <div class="sel-maquinas">
+
+    <div class="sel-card" onclick="clicarMaquina('plush')">
+      <img src="https://i.postimg.cc/6345mtXp/maquina-de-2-imagem-removebg-preview.png">
+      <div class="sel-preco">R$ 2,00 a jogada</div>
+      <button class="sel-btn-status sel-disponivel" id="statusPlush">
+        Selecionar
+      </button>
     </div>
 
-    <div class="card" id="cardToy" onclick="clicarMaquina('toy')">
-      <div class="nome">Toy Mix</div>
-      <div class="preco">R$ 5,00 a jogada</div>
-      <div class="texto-manutencao" id="msgToy">
-        Iniciar agora<br>😀 🥳
-      </div>
-      <button class="btn-status disponivel" id="statusToy">Disponível</button>
+    <div class="sel-card" onclick="clicarMaquina('toy')">
+      <img src="https://i.postimg.cc/59Pn3Jtg/toy-mix-imagem-removebg-preview.png">
+      <div class="sel-preco">R$ 5,00 a jogada</div>
+      <button class="sel-btn-status sel-disponivel" id="statusToy">
+        Selecionar
+      </button>
     </div>
+
   </div>
 
-  <!-- SELECIONAR JOGADAS -->
-  <div class="jogadas">
-    <div>🎮 Selecionar jogadas</div>
-    <div id="qtdJogadas">00</div>
+  <div class="sel-saldo">
+    💰 Saldo na carteira
+    <div id="saldoUsuario">R$ 0,00</div>
   </div>
 
-  <!-- CONTROLES -->
-  <div class="controles">
-    <div class="botao" onclick="alterarJogadas(-1)">➖</div>
-    <div class="botao" onclick="alterarJogadas(1)">➕</div>
-    <div class="botao" onclick="setJogadas(5)">05</div>
-    <div class="botao" onclick="setJogadas(10)">10</div>
-    <div class="botao" onclick="setJogadas(15)">15</div>
-    <div class="botao" onclick="setJogadas(20)">20</div>
+  <div class="sel-btn-iniciar" onclick="iniciarJogo()">
+    Entrar na fila
   </div>
 
-  <!-- BOTÃO INICIAR -->
-  <div class="btn-iniciar" onclick="iniciarJogo()">Iniciar</div>
-
-  <!-- SALDO -->
-  <div id="saldoUsuario" style="text-align:center; font-size:20px; font-weight:bold; color:#004a9f; margin-bottom:30px;">
-    Saldo: R$ 0,00
-  </div>
-
-  
 </section>
+
 
 <script>
 let jogadas = 0;
@@ -1519,132 +1572,144 @@ let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
 
 function clicarMaquina(id) {
-  if (statusMaquinas[id] === "indisponivel") return;
-
-  const btnPlush = document.getElementById("statusPlush");
-  const btnToy = document.getElementById("statusToy");
-
-  if (id === "plush") {
-    maquinaSelecionada = "plush";
-    btnPlush.innerText = "Selecionada";
-    btnPlush.classList.replace("disponivel", "selecionada");
-    btnToy.innerText = "Disponível";
-    btnToy.classList.replace("selecionada", "disponivel");
+  // se estiver indisponível, bloqueia
+  if (statusMaquinas[id] !== "disponivel") {
+    notificar("Essa máquina não está disponível no momento!");
+    return;
   }
 
-  if (id === "toy") {
-    maquinaSelecionada = "toy";
-    btnToy.innerText = "Selecionada";
-    btnToy.classList.replace("disponivel", "selecionada");
-    btnPlush.innerText = "Disponível";
-    btnPlush.classList.replace("selecionada", "disponivel");
+  // 🔁 TOGGLE: se clicar na já selecionada, desseleciona
+  if (maquinaSelecionada === id) {
+    maquinaSelecionada = null;
+
+    ["plush","toy"].forEach(m => {
+      const btn = document.getElementById(
+        "status" + m.charAt(0).toUpperCase() + m.slice(1)
+      );
+      if (!btn) return;
+
+      if (statusMaquinas[m] === "disponivel") {
+        btn.innerText = "Selecionar";
+        btn.className = "sel-btn-status sel-disponivel";
+      } else {
+        btn.innerText = "Indisponível";
+        btn.className = "sel-btn-status sel-indisponivel";
+      }
+    });
+
+    return;
   }
+
+  // seleção normal
+  maquinaSelecionada = id;
+
+  ["plush","toy"].forEach(m => {
+    const btn = document.getElementById(
+      "status" + m.charAt(0).toUpperCase() + m.slice(1)
+    );
+    if (!btn) return;
+
+    if (statusMaquinas[m] !== "disponivel") {
+      btn.innerText = "Indisponível";
+      btn.className = "sel-btn-status sel-indisponivel";
+      return;
+    }
+
+    if (m === id) {
+      btn.innerText = "Selecionada";
+      btn.className = "sel-btn-status sel-selecionada";
+    } else {
+      btn.innerText = "Selecionar";
+      btn.className = "sel-btn-status sel-disponivel";
+    }
+  });
 }
 
-function alterarJogadas(valor) {
-  jogadas += valor;
-  if (jogadas < 0) jogadas = 0;
-  atualizarJogadas();
-}
-
-function setJogadas(valor) {
-  jogadas = valor;
-  atualizarJogadas();
-}
-
-function atualizarJogadas() {
-  document.getElementById("qtdJogadas").innerText = String(jogadas).padStart(2, "0");
-}
 
 function iniciarJogo() {
   if (!maquinaSelecionada) return notificar("Selecione uma máquina!");
   if (jogadas <= 0) return notificar("Selecione o número de jogadas!");
 
-  const status = statusMaquinas[maquinaSelecionada];
-  if (status === "indisponivel" || status === "off")
+  if (statusMaquinas[maquinaSelecionada] !== "disponivel")
     return notificar("A máquina selecionada não está disponível!");
 
-  // ================= COBRAR CRÉDITOS =================
-  firebase.auth().onAuthStateChanged((user) => {
+  firebase.auth().onAuthStateChanged(user => {
     if (!user) return;
 
     const userRef = db.collection("users").doc(user.uid);
-    userRef.get().then((doc) => {
+    userRef.get().then(doc => {
       if (!doc.exists) return;
 
-      const dados = doc.data();
-      let saldo = dados.saldo || 0;
+      let saldo = doc.data().saldo || 0;
+      let valorJogada = maquinaSelecionada === "toy" ? 5 : 2;
+      let total = jogadas * valorJogada;
 
-      // define o valor por jogada
-      let valorJogada = 0;
-      if (maquinaSelecionada === "toy") valorJogada = 5;
-      if (maquinaSelecionada === "plush") valorJogada = 2;
-
-      const total = jogadas * valorJogada;
-
-      if (saldo < total) {
-        return notificar("Saldo insuficiente para essa quantidade de jogadas!");
-      }
+      if (saldo < total)
+        return notificar("Saldo insuficiente!");
 
       saldo -= total;
 
       userRef.update({ saldo }).then(() => {
-        // mantém a notificação original
-        notificar("Máquina iniciada! Boa sorte 🥳");
-        // atualiza o saldo na tela
-        const saldoEl = document.getElementById("saldoUsuario");
-        if (saldoEl) saldoEl.innerText = "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
+        notificar("Máquina iniciada! Boa sorte 🧸");
+        document.getElementById("saldoUsuario").innerText =
+          "R$ " + saldo.toFixed(2).replace(".", ",");
       });
     });
   });
 }
 
-
-// Guardar referência do listener para poder remover depois, se necessário
+/* LISTENER DAS MÁQUINAS */
 let listenerMaquinas = null;
 
 function abrirTelaSelecionar() {
-  // Ativa a tela
-  irPara('telaSelecionar');
+  irPara("telaSelecionar");
 
-  // Mostra loader e esconde cards
   document.getElementById("loader").style.display = "block";
-  document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "none");
+  document.querySelectorAll(".sel-maquinas .sel-card")
+    .forEach(c => c.style.display = "none");
 
-  // Cancela listener antigo, se houver
   if (listenerMaquinas) listenerMaquinas();
 
-  // Escuta os dados das máquinas APENAS nesta abertura
-  listenerMaquinas = db.collection("maquinas").onSnapshot((snapshot) => {
-    console.log("Snapshot recebido:", snapshot.docs.map(d => d.data()));
-
-    snapshot.forEach((doc) => {
+  listenerMaquinas = db.collection("maquinas").onSnapshot(snapshot => {
+    snapshot.forEach(doc => {
       const id = doc.id;
       const status = doc.data().status;
       statusMaquinas[id] = status;
 
-      const btn = document.getElementById(id === "plush" ? "statusPlush" : "statusToy");
-      const msg = document.getElementById(id === "plush" ? "msgPlush" : "msgToy");
+      const btn = document.getElementById(
+        id === "plush" ? "statusPlush" : "statusToy"
+      );
 
-      if (status === "indisponivel") {
+      const card = btn.closest(".sel-card");
+
+      if (status !== "disponivel") {
         btn.innerText = "Indisponível";
-        btn.className = "btn-status indisponivel";
-        msg.innerHTML = "manutenção /<br>abastecimento<br>⚙🧸";
+        btn.className = "sel-btn-status sel-indisponivel";
+
+        card.style.pointerEvents = "none";
+        card.style.opacity = "0.5";
+
+        if (maquinaSelecionada === id) {
+          maquinaSelecionada = null;
+        }
       } else {
         if (maquinaSelecionada !== id) {
-          btn.innerText = "Disponível";
-          btn.className = "btn-status disponivel";
-          msg.innerHTML = "Iniciar agora<br>😀 🥳";
+          btn.innerText = "Selecionar";
+          btn.className = "sel-btn-status sel-disponivel";
         }
+
+        card.style.pointerEvents = "auto";
+        card.style.opacity = "1";
       }
     });
 
-    // Esconde loader e mostra cards
     document.getElementById("loader").style.display = "none";
-    document.querySelectorAll(".maquinas .card").forEach(card => card.style.display = "flex");
+    document.querySelectorAll(".sel-maquinas .sel-card")
+      .forEach(c => c.style.display = "block");
   });
 }
 
+</script>
 
 </script>
 
