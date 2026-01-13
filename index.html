@@ -378,41 +378,67 @@ body{
     color:#fff;
 }
 
-/* SELECIONAR JOGADAS */
-/* SELECIONAR JOGADAS */
+/* BLOCO */
 .sel-jogadas{
-    margin:15px 20px;
-    background:#ffffff;
-    border-radius:18px;
-    padding:10px 14px;
+  margin:15px 20px;
+  background:#fff;
+  border-radius:18px;
+  padding:10px 14px;
 
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 /* TEXTO */
 .sel-jogadas-texto{
-    font-size:15px;
-    font-weight:bold;
-    color:#4fc3ff;
-    white-space:nowrap;
+  font-size:15px;
+  font-weight:bold;
+  color:#4fc3ff;
 }
 
-/* SELECT COM SCROLL */
-.sel-jogadas select{
-    border:none;
-    background:#f3eadf;
-    padding:6px 10px;
-    font-size:15px;
-    border-radius:12px;
-    outline:none;
-
-    width:80px;
-    max-height:140px;     /* mostra 5 opções */
-    overflow-y:auto;      /* rolagem */
+/* DROPDOWN FECHADO */
+.sel-dropdown{
+  background:#f3eadf;
+  padding:8px 12px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  min-width:70px;
+  justify-content:space-between;
 }
+
+/* LISTA */
+.sel-lista{
+  position:absolute;
+  right:35px;
+  margin-top:5px;
+
+  background:#fff;
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+
+  max-height:150px; /* mostra ~5 */
+  overflow-y:auto;
+
+  display:none;
+  z-index:1000;
+}
+
+/* ITEM */
+.sel-lista div{
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.sel-lista div:hover{
+  background:#4fc3ff;
+  color:#fff;
+}
+
 
 
 /* TÍTULO */
@@ -1491,42 +1517,25 @@ document.addEventListener("DOMContentLoaded", () => {
 <div class="sel-jogadas">
   <div class="sel-jogadas-texto">😊 Selecionar jogadas</div>
 
-  <select onchange="jogadas=parseInt(this.value)">
-    <option value="0" selected>00</option>
+  <div class="sel-dropdown" onclick="toggleJogadas()">
+    <span id="valorJogadas">00</span>
+    <div class="sel-seta">▼</div>
+  </div>
+</div>
 
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-
-    <option value="11">11</option>
-    <option value="12">12</option>
-    <option value="13">13</option>
-    <option value="14">14</option>
-    <option value="15">15</option>
-    <option value="16">16</option>
-    <option value="17">17</option>
-    <option value="18">18</option>
-    <option value="19">19</option>
-    <option value="20">20</option>
-
-    <option value="21">21</option>
-    <option value="22">22</option>
-    <option value="23">23</option>
-    <option value="24">24</option>
-    <option value="25">25</option>
-    <option value="26">26</option>
-    <option value="27">27</option>
-    <option value="28">28</option>
-    <option value="29">29</option>
-    <option value="30">30</option>
-  </select>
+<div class="sel-lista" id="listaJogadas">
+  <!-- 1 até 30 -->
+  <div onclick="selecionarJogada(1)">1</div>
+  <div onclick="selecionarJogada(2)">2</div>
+  <div onclick="selecionarJogada(3)">3</div>
+  <div onclick="selecionarJogada(4)">4</div>
+  <div onclick="selecionarJogada(5)">5</div>
+  <div onclick="selecionarJogada(6)">6</div>
+  <div onclick="selecionarJogada(7)">7</div>
+  <div onclick="selecionarJogada(8)">8</div>
+  <div onclick="selecionarJogada(9)">9</div>
+  <div onclick="selecionarJogada(10)">10</div>
+  <!-- … até 30 -->
 </div>
 
 
@@ -1555,9 +1564,9 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 
   <div class="sel-saldo">
-    💰 Saldo na carteira
-    <div id="saldoUsuario">R$ 0,00</div>
-  </div>
+  <span id="saldoUsuario">R$ 0,00</span>
+</div>
+
 
   <div class="sel-btn-iniciar" onclick="iniciarJogo()">
     Entrar na fila
@@ -1651,8 +1660,13 @@ function iniciarJogo() {
 
       userRef.update({ saldo }).then(() => {
         notificar("Máquina iniciada! Boa sorte 🧸");
-        document.getElementById("saldoUsuario").innerText =
-          "R$ " + saldo.toFixed(2).replace(".", ",");
+        function atualizarSaldoTelaSelecionar(saldo){
+  const el = document.getElementById("saldoUsuario");
+  if(!el) return;
+
+  el.innerText = "R$ " + saldo.toFixed(2).replace(".", ",");
+}
+
       });
     });
   });
@@ -1708,6 +1722,28 @@ function abrirTelaSelecionar() {
       .forEach(c => c.style.display = "block");
   });
 }
+
+
+function toggleJogadas(){
+  const lista = document.getElementById("listaJogadas");
+  lista.style.display = lista.style.display === "block" ? "none" : "block";
+}
+
+function selecionarJogada(valor){
+  jogadas = valor;
+  document.getElementById("valorJogadas").innerText =
+    String(valor).padStart(2, "0");
+
+  document.getElementById("listaJogadas").style.display = "none";
+}
+
+/* FECHAR AO CLICAR FORA */
+document.addEventListener("click", e => {
+  if (!e.target.closest(".sel-dropdown") &&
+      !e.target.closest(".sel-lista")) {
+    document.getElementById("listaJogadas").style.display = "none";
+  }
+});
 
 </script>
 
