@@ -1158,6 +1158,29 @@ body{
 @keyframes spin{
   to{ transform: rotate(360deg); }
 }
+.tela{
+  position: fixed;
+  inset: 0;
+  transform: translateX(100%);
+  transition: transform .4s ease;
+}
+
+/* tela visível */
+.tela.base{
+  transform: translateX(0);
+  z-index: 2;
+}
+
+/* tela atrás */
+.tela.atras{
+  transform: translateX(0);
+  z-index: 1;
+}
+
+/* sai para esquerda */
+.tela.saindo{
+  transform: translateX(-100%);
+}
 
 
 
@@ -1245,7 +1268,7 @@ document.addEventListener("DOMContentLoaded", () => {
   <span class="btn-text">Continuar</span>
   <span class="btn-loader"></span>
 </button>
-        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
 
@@ -1753,7 +1776,7 @@ document.addEventListener("click", e => {
 <!-- TELA CHAT -->
 <section id="telaChat" class="tela">
   <div class="topo">
-    <div class="voltar" onclick="irPara('telaHome')"><</div>
+    <div class="voltar" onclick="voltarPara('telaHome')"><</div>
     <div class="logo">PlushMaster</div>
     <div class="perfil" id="perfil">U</div>
   </div>
@@ -1836,18 +1859,47 @@ db.collection('chat').orderBy('timestamp')
 
 <!-- LÓGICA -->
 <script>
-let telaAtual=document.querySelector(".tela.base");
 
+let telaAtual = document.querySelector(".tela.base");
+
+/* ===== IR PARA ===== */
 function irPara(id){
-    const nova=document.getElementById(id);
-    nova.classList.add("entrando");
-    setTimeout(()=>{
-        telaAtual.classList.remove("base");
-        nova.classList.remove("entrando");
-        nova.classList.add("base");
-        telaAtual=nova;
-    },400);
+  const nova = document.getElementById(id);
+
+  if(nova === telaAtual) return;
+
+  // tela atual vira fundo
+  telaAtual.classList.add("atras");
+
+  // nova entra da direita (já estava fora)
+  nova.classList.add("base");
+
+  setTimeout(() => {
+    telaAtual.classList.remove("base","atras");
+    telaAtual.style.transform = "translateX(100%)";
+    telaAtual = nova;
+  }, 400);
 }
+
+/* ===== VOLTAR ===== */
+function voltarPara(id){
+  const destino = document.getElementById(id);
+
+  if(destino === telaAtual) return;
+
+  // destino já visível atrás
+  destino.classList.add("base");
+
+  // tela atual sai para esquerda
+  telaAtual.classList.add("saindo");
+
+  setTimeout(() => {
+    telaAtual.classList.remove("base","saindo");
+    telaAtual.style.transform = "translateX(100%)";
+    telaAtual = destino;
+  }, 400);
+}
+
 
 function verificarEmail(btn){
   const email = document.getElementById("emailLogin").value.trim();
@@ -2325,3 +2377,5 @@ function setBtnLoading(btn, loading){
 </script>
 </body>
 </html>
+
+
