@@ -1158,29 +1158,6 @@ body{
 @keyframes spin{
   to{ transform: rotate(360deg); }
 }
-.tela{
-  position: fixed;
-  inset: 0;
-  transform: translateX(100%);
-  transition: transform .4s ease;
-}
-
-/* tela visível */
-.tela.base{
-  transform: translateX(0);
-  z-index: 2;
-}
-
-/* tela atrás */
-.tela.atras{
-  transform: translateX(0);
-  z-index: 1;
-}
-
-/* sai para esquerda */
-.tela.saindo{
-  transform: translateX(-100%);
-}
 
 
 
@@ -1248,27 +1225,20 @@ document.addEventListener("DOMContentLoaded", () => {
     <footer>© 2026 PlushMaster</footer>
 </section>
 
-<!-- TELA 2 -->
+
+
+<!-- LOGIN ou cadastro EMAIL -->
 <section id="telacadastro/login" class="tela">
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
     <div class="card">
-        <h2>Entre ou cadastre-se</h2>
-        <button class="btn" onclick="irPara('telaLogin')">Login</button>
-        <button class="btn" onclick="irPara('telaCadastroEmail')">Cadastro</button>
-    </div>
-</section>
-
-<!-- LOGIN EMAIL -->
-<section id="telaLogin" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-    <div class="card">
-        <h2>Login</h2>
+        <h2>entre ou cadastre-se</h2>
         <input id="emailLogin" type="email" placeholder="email@email.com">
-        <button id="btnContinuar" class="btn" onclick="verificarEmail(this)">
+        <button id="btnContinuar" class="btn" onclick="irParaUsuario(this)">
   <span class="btn-text">Continuar</span>
   <span class="btn-loader"></span>
 </button>
-        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
+
+        
     </div>
 </section>
 
@@ -1285,29 +1255,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </button>
 
        </button>
-        <button class="btn" onclick="irPara('telaLogin')">Voltar</button>
-    </div>
-</section>
-<!-- TELA EMAIL -->
-<section id="telaCadastroEmail" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-
-    <div class="card">
-        <h2>Criar conta</h2>
-
-        <input
-          type="email"
-          id="emailCadastro"
-          placeholder="Digite seu email"
-        >
-
-        <button class="btn" onclick="irParaUsuario(this)">
-  <span class="btn-text">Continuar</span>
-  <span class="btn-loader"></span>
-</button>
-
-
-
         <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
@@ -1333,7 +1280,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        <button class="btn" onclick="irPara('telaCadastroEmail')">Voltar</button>
+        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
 
@@ -1362,7 +1309,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="btn-loader"></span>
     </button>
 
-        <button class="btn" onclick="irPara('telaCadastroUsuario')">Voltar</button>
+        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
 <section id="telaConta" class="tela">
@@ -1776,7 +1723,7 @@ document.addEventListener("click", e => {
 <!-- TELA CHAT -->
 <section id="telaChat" class="tela">
   <div class="topo">
-    <div class="voltar" onclick="voltarPara('telaHome')"><</div>
+    <div class="voltar" onclick="irPara('telaHome')"><</div>
     <div class="logo">PlushMaster</div>
     <div class="perfil" id="perfil">U</div>
   </div>
@@ -1859,47 +1806,18 @@ db.collection('chat').orderBy('timestamp')
 
 <!-- LÓGICA -->
 <script>
+let telaAtual=document.querySelector(".tela.base");
 
-let telaAtual = document.querySelector(".tela.base");
-
-/* ===== IR PARA ===== */
 function irPara(id){
-  const nova = document.getElementById(id);
-
-  if(nova === telaAtual) return;
-
-  // tela atual vira fundo
-  telaAtual.classList.add("atras");
-
-  // nova entra da direita (já estava fora)
-  nova.classList.add("base");
-
-  setTimeout(() => {
-    telaAtual.classList.remove("base","atras");
-    telaAtual.style.transform = "translateX(100%)";
-    telaAtual = nova;
-  }, 400);
+    const nova=document.getElementById(id);
+    nova.classList.add("entrando");
+    setTimeout(()=>{
+        telaAtual.classList.remove("base");
+        nova.classList.remove("entrando");
+        nova.classList.add("base");
+        telaAtual=nova;
+    },400);
 }
-
-/* ===== VOLTAR ===== */
-function voltarPara(id){
-  const destino = document.getElementById(id);
-
-  if(destino === telaAtual) return;
-
-  // destino já visível atrás
-  destino.classList.add("base");
-
-  // tela atual sai para esquerda
-  telaAtual.classList.add("saindo");
-
-  setTimeout(() => {
-    telaAtual.classList.remove("base","saindo");
-    telaAtual.style.transform = "translateX(100%)";
-    telaAtual = destino;
-  }, 400);
-}
-
 
 function verificarEmail(btn){
   const email = document.getElementById("emailLogin").value.trim();
@@ -1958,25 +1876,51 @@ function mostrarTela(id){
   document.getElementById(id).classList.add('ativa');
 }
 
-function irParaUsuario(btn){
-  const email = document.getElementById('emailCadastro').value.trim();
+async function irParaUsuario(btn){
+  const emailInput = document.getElementById('emailLogin');
+  const email = emailInput.value.trim();
+
   if(!email){
-    notificar("Digite o email");
+    notificar("Digite um email válido");
     return;
   }
 
-  // 🔥 ativa loader no botão
-  setBtnLoading(btn, true);
+  // Ativa loader
+  btn.classList.add("loading");
 
-  setTimeout(() => {
+  try {
+    // Tenta criar um usuário temporário só para testar
+    await auth.createUserWithEmailAndPassword(email, "teste123");
+    // Se deu certo, email não existe → vai para cadastro
+    console.log("EMAIL NÃO CADASTRADO");
+
+    // Remove usuário de teste criado
+    const user = auth.currentUser;
+    await user.delete();
+
+    // Passa email para cadastro
     emailCadastro = email;
 
-    // ❌ desativa loader antes de trocar a tela
-    setBtnLoading(btn, false);
-
     irPara('telaCadastroUsuario');
-  }, 500);
+
+  } catch(err) {
+    if(err.code === "auth/email-already-in-use"){
+      console.log("EMAIL EM USO");
+      emailCadastro = email; // passa para login
+      document.getElementById("emailExibido").innerText = email;
+      irPara("telaSenha"); // vai direto para login
+    } else if(err.code === "auth/invalid-email"){
+      notificar("Email inválido");
+    } else {
+      notificar("Erro: " + err.message);
+      console.error(err);
+    }
+  } finally {
+    // Desativa loader
+    btn.classList.remove("loading");
+  }
 }
+
 
 
 async function irParaSenha(btn){
@@ -2184,7 +2128,7 @@ auth.onAuthStateChanged(async (user) => {
 <script>
 function sairConta(){
     auth.signOut().then(() => {
-        abrirTela("tela1");
+        irPara("telacadastro/login");
     });
 }
 </script>
@@ -2275,7 +2219,7 @@ async function confirmarExclusao(){
         await user.delete();
 
         notificar("Conta excluída com sucesso.");
-        irPara("tela1");
+        irPara("telacadastro/login");
 
     } catch (e) {
         notificar("Erro: " + e.message);
@@ -2377,5 +2321,3 @@ function setBtnLoading(btn, loading){
 </script>
 </body>
 </html>
-
-
