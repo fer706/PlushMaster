@@ -12,30 +12,36 @@ body{
   overflow-x: hidden; /* bloqueia rolagem lateral */
 }
 
-/* TELAS */
+/* estado padrão: fora da tela */
 .tela{
-    position:fixed;
-    inset:0;
-    background:#3dc8ff;
-    transform:translateX(100%);
-    transition:.4s ease;
-    pointer-events:none;
-}
-.tela{
-  overflow-y: auto;                 /* 🔥 rolagem interna */
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* iOS suave */
+    position: fixed;
+    inset: 0;
+    background: #3dc8ff;
+
+    transform: translateX(100%);
+    transition: none;
+
+    pointer-events: none;
 }
 
+/* tela visível */
 .tela.base{
-    transform:translateX(0);
-    pointer-events:auto;
-    z-index:1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
 }
-.tela.entrando{
-    transform:translateX(0);
-    z-index:2;
+
+/* habilita animação */
+.tela.animando{
+    transition: transform .4s ease;
 }
+
+/* tela saindo */
+.tela.saindo{
+    transform: translateX(-100%);
+    z-index: 1;
+}
+
 
 /* GERAL */
 .logo{width:240px;margin:25px auto;display:block}
@@ -1255,7 +1261,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </button>
 
        </button>
-        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
 
@@ -1280,7 +1286,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
     </div>
 </section>
 
@@ -1309,13 +1315,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="btn-loader"></span>
     </button>
 
-        <button class="btn" onclick="irPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telaCadastroUsuario')">Voltar</button>
     </div>
 </section>
 <section id="telaConta" class="tela">
 
     <div class="topo">
-        <div class="botao-voltar" onclick="irPara('telaHome')"><</div>
+        <div class="botao-voltar" onclick="irSemAnimacao('telaHome')"><</div>
         <div class="logo">PlushMaster</div>
     </div>
 
@@ -1348,7 +1354,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- TOPO -->
     <div class="topo">
-        <div class="voltar" onclick="irPara('telaConta')"><</div>
+        <div class="voltar" onclick="voltarPara('telaConta')"><</div>
         <div class="logo">PlushMaster</div>
     </div>
 
@@ -1405,7 +1411,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="telaHome" class="tela">
     <!-- TOPO -->
     <div class="top-bar">
-        <div class="btn-chat" onclick="irPara('telaChat')">💬</div>
+        <div class="btn-chat" onclick="irDeBaixo('telaChat')">💬</div>
         <div>PlushMaster</div>
         <div style="width:45px;"></div> <!-- espaço à direita para equilibrar -->
     </div>
@@ -1428,15 +1434,17 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="nav-circle">🏠</div>
             Home
         </div>
-        <div class="nav-item" onclick="irPara('telaCarteira')">
-            <div class="nav-circle">💰</div>
-            Carteira
-        </div>
-        <div class="nav-item" onclick="irPara('telaConta')">
+        <div class="nav-item" onclick="irSemAnimacao('telaCarteira')">
+    <div class="nav-circle">💰</div>
+    Carteira
+</div>
+
+
+        <div class="nav-item" onclick="irSemAnimacao('telaConta')">
             <div class="nav-circle">👤</div>
             Conta
         </div>
-        <div class="nav-item" onclick="irPara('telaPelucias')">
+        <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
             <div class="nav-circle">🧸</div>
             Pelúcias
         </div>
@@ -1447,7 +1455,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="carteira-topo">
     <div class="carteira-linha">
-      <div class="carteira-voltar" onclick="irPara('telaHome')"><</div>
+      <div class="carteira-voltar" onclick="irSemAnimacao('telaHome')"><</div>
       <div class="carteira-logo">PlushMaster</div>
       <div class="carteira-perfil" id="letraPerfil">U</div>
     </div>
@@ -1480,7 +1488,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="telaSelecionar" class="tela">
 
   <div class="sel-topo">
-    <div class="sel-voltar" onclick="irPara('telaHome')"><</div>
+    <div class="sel-voltar" onclick="voltarPara('telaHome')"><</div>
     <div class="sel-logo">PlushMaster</div>
   </div>
 
@@ -1723,7 +1731,7 @@ document.addEventListener("click", e => {
 <!-- TELA CHAT -->
 <section id="telaChat" class="tela">
   <div class="topo">
-    <div class="voltar" onclick="irPara('telaHome')"><</div>
+    <div class="voltar" onclick="fecharParaBaixo('telaHome')"><</div>
     <div class="logo">PlushMaster</div>
     <div class="perfil" id="perfil">U</div>
   </div>
@@ -1806,18 +1814,133 @@ db.collection('chat').orderBy('timestamp')
 
 <!-- LÓGICA -->
 <script>
-let telaAtual=document.querySelector(".tela.base");
+let telaAtual = document.querySelector(".tela.base");
+let historicoTelas = [];
 
 function irPara(id){
-    const nova=document.getElementById(id);
-    nova.classList.add("entrando");
+    const nova = document.getElementById(id);
+    if(!nova || nova === telaAtual) return;
+
+    historicoTelas.push(telaAtual.id);
+
+    // nova começa fora da tela (direita)
+    nova.style.transition = "none";
+    nova.style.transform = "translateX(100%)";
+    nova.classList.add("base");
+
+    nova.offsetWidth;
+
+    // anima nova entrando
+    nova.style.transition = "transform .35s ease";
+    nova.style.transform = "translateX(0)";
+
+    // anima atual só um pouco para esquerda
+    telaAtual.style.transition = "transform .35s ease";
+    telaAtual.style.transform = "translateX(-30%)";
+
+    setTimeout(()=>{
+        telaAtual.style.transition = "";
+        telaAtual.style.transform = "";
+        telaAtual.classList.remove("base");
+
+        telaAtual = nova;
+    }, 350);
+}
+
+function voltarPara(){
+    if(historicoTelas.length === 0) return;
+
+    const idAnterior = historicoTelas.pop();
+    const anterior = document.getElementById(idAnterior);
+    if(!anterior) return;
+
+    // tela anterior estava recuada → começa em -30%
+    anterior.style.transition = "none";
+    anterior.style.transform = "translateX(-30%)";
+    anterior.classList.add("base");
+
+    anterior.offsetWidth;
+
+    // anterior volta para o centro
+    anterior.style.transition = "transform .35s ease";
+    anterior.style.transform = "translateX(0)";
+
+    // tela atual sai para a direita
+    telaAtual.style.transition = "transform .35s ease";
+    telaAtual.style.transform = "translateX(100%)";
+
     setTimeout(()=>{
         telaAtual.classList.remove("base");
-        nova.classList.remove("entrando");
-        nova.classList.add("base");
-        telaAtual=nova;
-    },400);
+        telaAtual.style.transition = "";
+        telaAtual.style.transform = "";
+
+        telaAtual = anterior;
+    }, 350);
 }
+
+
+function irSemAnimacao(id){
+    const nova = document.getElementById(id);
+    if(!nova || nova === telaAtual) return;
+
+    // remove a tela atual
+    telaAtual.classList.remove("base");
+
+    // limpa qualquer resíduo de animação
+    telaAtual.style.transition = "";
+    telaAtual.style.transform = "";
+    nova.style.transition = "";
+    nova.style.transform = "";
+
+    // mostra a nova tela instantaneamente
+    nova.classList.add("base");
+
+    telaAtual = nova;
+}
+function irDeBaixo(id){
+    const nova = document.getElementById(id);
+    if(!nova || nova === telaAtual) return;
+
+    // estado inicial
+    nova.style.transition = "none";
+    nova.style.transform = "translateY(100%)";
+    nova.classList.add("base");
+
+    nova.offsetWidth;
+
+    // anima subida
+    nova.style.transition = "transform .5s ease";
+    nova.style.transform = "translateY(0)";
+
+    setTimeout(()=>{
+        nova.style.transition = "";
+        telaAtual = nova;
+    }, 350);
+}
+
+function fecharParaBaixo(idAnterior){
+    const atual = telaAtual;
+    const anterior = document.getElementById(idAnterior);
+    if(!anterior) return;
+
+    // garante que a tela de trás esteja visível
+    anterior.classList.add("base");
+
+    atual.style.transition = "transform .5s ease";
+    atual.style.transform = "translateY(100%)";
+
+    setTimeout(()=>{
+        atual.classList.remove("base");
+        atual.style.transition = "";
+        atual.style.transform = "";
+
+        telaAtual = anterior;
+    }, 350);
+}
+
+</script>
+<script>
+
 
 function verificarEmail(btn){
   const email = document.getElementById("emailLogin").value.trim();
