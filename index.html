@@ -1165,6 +1165,18 @@ body{
   to{ transform: rotate(360deg); }
 }
 
+.esqueceu-senha{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #1e90ff; /* azul */
+  cursor: pointer;
+  text-align: center;
+}
+
+.esqueceu-senha:hover{
+  text-decoration: underline;
+}
+
 
 
 </style>
@@ -1226,24 +1238,23 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="tela1" class="tela base">
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
     <div class="card">
-        <button class="btn" onclick="irPara('telacadastro/login')">Vamos começar</button>
+        <button class="btn" onclick="irPara('telacadastro/Login')">Vamos começar</button>
     </div>
     <footer>© 2026 PlushMaster</footer>
 </section>
 
 
 
-<!-- LOGIN ou cadastro EMAIL -->
-<section id="telacadastro/login" class="tela">
+<!-- LOGIN EMAIL -->
+<section id="telacadastro/Login" class="tela">
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
     <div class="card">
-        <h2>entre ou cadastre-se</h2>
+        <h2>Entre ou Cadastre-se</h2>
         <input id="emailLogin" type="email" placeholder="email@email.com">
         <button id="btnContinuar" class="btn" onclick="irParaUsuario(this)">
   <span class="btn-text">Continuar</span>
   <span class="btn-loader"></span>
 </button>
-
         
     </div>
 </section>
@@ -1255,15 +1266,19 @@ document.addEventListener("DOMContentLoaded", () => {
         <h2>Senha</h2>
         <p id="emailExibido"></p>
         <input id="senha" type="password" placeholder="Senha">
+        <div class="esqueceu-senha" onclick="redefinirSenha()">
+  Esqueceu sua senha?
+</div>
         <button id="btnEntrar" class="btn" onclick="entrar()">
   <span class="btn-text">Entrar</span>
   <span class="btn-loader"></span>
 </button>
 
        </button>
-        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telacadastro/Login')">Voltar</button>
     </div>
 </section>
+
 
 
 <!-- TELA USUÁRIO -->
@@ -1271,7 +1286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
     <div class="card">
-        <h2>Nome de usuário</h2>
+        <h2>Crie Um Nome de Usuário Para Sua conta</h2>
 
         <input
           type="text"
@@ -1286,7 +1301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        <button class="btn" onclick="voltarPara('telacadastro/login')">Voltar</button>
+        <button class="btn" onclick="voltarPara('telaCadastroEmail')">Voltar</button>
     </div>
 </section>
 
@@ -1296,7 +1311,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
     <div class="card">
-        <h2>Criar senha</h2>
+        <h2>Crie uma senha para acessar seu conta</h2>
 
         <input
           type="password"
@@ -1430,16 +1445,14 @@ document.addEventListener("DOMContentLoaded", () => {
   
     <!-- MENU INFERIOR -->
     <div class="bottom-bar">
-        <div class="nav-item" onclick="irPara('telaHome')">
+        <div class="nav-item" onclick="irSemAnimacao('telaHome')">
             <div class="nav-circle">🏠</div>
             Home
         </div>
         <div class="nav-item" onclick="irSemAnimacao('telaCarteira')">
-    <div class="nav-circle">💰</div>
-    Carteira
-</div>
-
-
+            <div class="nav-circle">💰</div>
+            Carteira
+        </div>
         <div class="nav-item" onclick="irSemAnimacao('telaConta')">
             <div class="nav-circle">👤</div>
             Conta
@@ -1754,7 +1767,7 @@ const sendBtn = document.getElementById('send-btn');
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
     // Se não estiver logado, volta para a tela de login
-    irPara('telaLogin');
+    irPara('telacadastro/Login');
     return;
   }
 
@@ -1938,54 +1951,36 @@ function fecharParaBaixo(idAnterior){
     }, 350);
 }
 
-</script>
-<script>
 
 
-function verificarEmail(btn){
-  const email = document.getElementById("emailLogin").value.trim();
 
-  if(!email){
-    notificar("Digite o email");
-    return;
-  }
-
-  setBtnLoading(btn, true);
-
-  setTimeout(() => {
-    localStorage.setItem("emailLogin", email);
-    document.getElementById("emailExibido").innerText = email;
-
-    setBtnLoading(btn, false);
-    irPara("telaSenha");
-  }, 600);
-}
 
 function entrar(){
-  const email = localStorage.getItem("emailLogin");
+  // 🔥 pega o email exibido na tela
+  const email = document.getElementById("emailExibido").innerText.trim();
   const senha = document.getElementById("senha").value.trim();
 
-  if(!senha){
+  if(!email || !senha){
     notificar("Digite a senha");
     return;
   }
 
-  // ativa loader
   setBtnLoading("btnEntrar", true);
 
   auth.signInWithEmailAndPassword(email, senha)
     .then(() => {
       localStorage.setItem("loginAutomatico", "true");
 
-      // 🔥 DESLIGA O LOADER ANTES DE TROCAR DE TELA
       setBtnLoading("btnEntrar", false);
-
       irPara("telaHome");
     })
-    .catch(() => {
-      notificar("Email ou senha incorreto");
+    .catch((err) => {
+      if(err.code === "auth/wrong-password"){
+        notificar("Senha incorreta");
+      }else{
+        notificar("Email ou senha incorreto");
+      }
 
-      // erro → remove loader
       setBtnLoading("btnEntrar", false);
     });
 }
@@ -1999,6 +1994,8 @@ function mostrarTela(id){
   document.getElementById(id).classList.add('ativa');
 }
 
+let verificandoEmail = false;
+
 async function irParaUsuario(btn){
   const emailInput = document.getElementById('emailLogin');
   const email = emailInput.value.trim();
@@ -2008,42 +2005,44 @@ async function irParaUsuario(btn){
     return;
   }
 
-  // Ativa loader
   btn.classList.add("loading");
+  verificandoEmail = true;
 
   try {
-    // Tenta criar um usuário temporário só para testar
+    // 🔥 método que você já usa
     await auth.createUserWithEmailAndPassword(email, "teste123");
-    // Se deu certo, email não existe → vai para cadastro
+
     console.log("EMAIL NÃO CADASTRADO");
 
-    // Remove usuário de teste criado
+    // remove usuário de teste
     const user = auth.currentUser;
     await user.delete();
+    await auth.signOut(); // 🔥 limpa sessão
 
-    // Passa email para cadastro
     emailCadastro = email;
-
     irPara('telaCadastroUsuario');
 
   } catch(err) {
+
     if(err.code === "auth/email-already-in-use"){
       console.log("EMAIL EM USO");
-      emailCadastro = email; // passa para login
+
+      emailCadastro = email;
       document.getElementById("emailExibido").innerText = email;
-      irPara("telaSenha"); // vai direto para login
+      irPara("telaSenha");
+
     } else if(err.code === "auth/invalid-email"){
       notificar("Email inválido");
     } else {
       notificar("Erro: " + err.message);
       console.error(err);
     }
+
   } finally {
-    // Desativa loader
+    verificandoEmail = false;
     btn.classList.remove("loading");
   }
 }
-
 
 
 async function irParaSenha(btn){
@@ -2223,6 +2222,10 @@ if(letraPerfil && dados.username){
 <script>
 
 auth.onAuthStateChanged(async (user) => {
+
+  // 🔥 ignora enquanto estiver só verificando email
+  if (verificandoEmail) return;
+
   if (!user) return;
 
   const textoOla = document.getElementById("textoOla");
@@ -2240,18 +2243,19 @@ auth.onAuthStateChanged(async (user) => {
     }
 
     textoOla.innerText = "Olá, " + username;
-    avatar.innerText   = username.charAt(0).toUpperCase();
+    avatar.innerText  = username.charAt(0).toUpperCase();
 
   } catch (e) {
     console.error("Erro ao carregar nome:", e);
   }
 });
+
 </script>
 
 <script>
 function sairConta(){
     auth.signOut().then(() => {
-        irPara("telacadastro/login");
+        irPara("telacadastro/Login");
     });
 }
 </script>
@@ -2342,7 +2346,7 @@ async function confirmarExclusao(){
         await user.delete();
 
         notificar("Conta excluída com sucesso.");
-        irPara("telacadastro/login");
+        irPara("telacadastro/Login");
 
     } catch (e) {
         notificar("Erro: " + e.message);
@@ -2437,6 +2441,30 @@ function setBtnLoading(btn, loading){
     btn.classList.remove("loading");
     btn.disabled = false;
   }
+}
+function redefinirSenha(){
+  // pega o email da tela de senha
+  const email = document.getElementById("emailExibido").innerText.trim();
+
+  if(!email){
+    notificar("Email não encontrado");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      notificar("Enviamos um email para redefinir sua senha");
+    })
+    .catch(err => {
+      if(err.code === "auth/invalid-email"){
+        notificar("Email inválido");
+      }else if(err.code === "auth/user-not-found"){
+        notificar("Usuário não encontrado");
+      }else{
+        notificar("Erro ao enviar email");
+        console.error(err);
+      }
+    });
 }
 
 
