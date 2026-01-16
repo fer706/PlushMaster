@@ -174,8 +174,11 @@ footer{text-align:center;margin-top:15px}
     display:flex;
     justify-content:center;
     align-items:center;
+
+    font-family: 'Fredoka', sans-serif; /* 🔥 SÓ ISSO MUDOU */
     font-size:30px;
-    font-weight:bold;
+    font-weight:600;
+
     color:white;
     text-decoration:none;
     box-shadow:0 10px 20px rgba(0,0,0,0.3);
@@ -184,23 +187,61 @@ footer{text-align:center;margin-top:15px}
 }
 
 .btn-chat {
-    position: fixed;      /* fica sempre fixo na tela */
-    top: 10px;            /* distância do topo */
-    right: 10px;          /* distância da borda direita */
-    background: linear-gradient(#24c6ff, #009ef7);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    font-weight: bold;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+
+    width: 52px;
+    height: 52px;
+
+    background: linear-gradient(
+        180deg,
+        #6fe9ff 0%,
+        #1bb6ff 55%,
+        #3f7bff 100%
+    );
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    z-index: 10000;       /* sempre acima de tudo */
+    z-index: 10000;
+
+    box-shadow:
+        inset 0 5px 8px rgba(255,255,255,0.35),
+        inset 0 -5px 8px rgba(0,0,0,0.25),
+        0 8px 16px rgba(0,0,0,0.35);
+
     transition: transform 0.2s;
 }
 
 .btn-chat:hover {
     transform: scale(1.05);
 }
+
+.chat-icon{
+    width: 28px;
+    height: 22px;
+    background: white;
+    border-radius: 6px;
+    position: relative;
+}
+
+.chat-icon::after{
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 6px;
+    width: 0;
+    height: 0;
+    border-top: 6px solid white;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+}
+
 /* ================= CHAT ================= */
 #telaChat{
   background:#f3f3f3;
@@ -1426,7 +1467,9 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="telaHome" class="tela">
     <!-- TOPO -->
     <div class="top-bar">
-        <div class="btn-chat" onclick="irDeBaixo('telaChat')">💬</div>
+        <div class="btn-chat" onclick="irDeBaixo('telaChat')">
+  <span class="chat-icon"></span>
+</div>
         <div>PlushMaster</div>
         <div style="width:45px;"></div> <!-- espaço à direita para equilibrar -->
     </div>
