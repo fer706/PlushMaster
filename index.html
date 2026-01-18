@@ -1217,6 +1217,59 @@ body{
 .esqueceu-senha:hover{
   text-decoration: underline;
 }
+.label-email{
+  font-size:16px;
+  color:#0066cc;   /* azul */
+  display:block;
+  margin-bottom:0px;
+  text-align:left;
+}
+.card h2{
+  color:#061e63;   /* azul normal */
+}
+.subtitulo-email{
+  font-size:13px;
+  color:#585858;          /* cinza discreto */
+  margin-top:4px;
+  margin-bottom:10px; /* espaço antes do campo */
+}
+.campo-form{
+  margin-top:14px;   /* espaço entre blocos */
+}
+.email-exibido{
+  font-size:20px;
+  color:#061e63;
+  margin-top:10px;     /* AFASTA do título */
+  margin-bottom:14px; /* espaço antes da senha */
+}
+.btn-voltar{
+  position: fixed;
+  top: 12px;
+  left: 12px;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.35);
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+  cursor: pointer;
+  user-select: none;
+
+  backdrop-filter: blur(4px);
+  z-index: 9999; /* 🔥 ESSENCIAL */
+}
+
+.btn-voltar:hover{
+  background: rgba(255,255,255,0.45);
+}
+
 
 
 
@@ -1288,98 +1341,154 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- LOGIN EMAIL -->
 <section id="telacadastro/Login" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-    <div class="card">
-        <h2>Entre ou Cadastre-se</h2>
-        <input id="emailLogin" type="email" placeholder="email@email.com">
-        <button id="btnContinuar" class="btn" onclick="irParaUsuario(this)">
-  <span class="btn-text">Continuar</span>
-  <span class="btn-loader"></span>
-</button>
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+  <div class="card">
+    <h2>Entre ou Cadastre-se</h2>
+
+    <p class="subtitulo-email">Informe seu email para continuar</p>
+
+    <div class="campo-form">
+      <span class="label-email">E-mail</span>
+      <input id="emailLogin" type="email" placeholder="email@email.com">
+    </div>
+
+    <button id="btnContinuar" class="btn" onclick="irParaUsuario(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
         
     </div>
 </section>
 
 <!-- SENHA -->
 <section id="telaSenha" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-    <div class="card">
-        <h2>Digite sua senha</h2>
-        <p id="emailExibido"></p>
-        <input id="senha" type="password" placeholder="Senha">
-        <div class="esqueceu-senha" onclick="redefinirSenha()">
-  Esqueceu sua senha?
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  &lt;
 </div>
-        <button id="btnEntrar" class="btn" onclick="entrar()">
-  <span class="btn-text">Entrar</span>
-  <span class="btn-loader"></span>
-</button>
 
-       </button>
-        <button class="btn" onclick="voltarPara('telacadastro/Login')">Voltar</button>
+  <div class="card">
+    <h2>É bom te ver novamente</h2>
+
+    <p id="emailExibido" class="email-exibido"></p>
+
+    <div class="campo-form">
+      <span class="label-email">Informe sua senha</span>
+      <input id="senha" type="password" placeholder="Senha">
     </div>
+
+    <div class="esqueceu-senha" onclick="redefinirSenha()">
+      Esqueceu sua senha?
+    </div>
+
+    <button id="btnEntrar" class="btn" onclick="entrar()">
+      <span class="btn-text">Entrar</span>
+      <span class="btn-loader"></span>
+    </button>
+
+    
+  </div>
 </section>
+
 
 
 
 <!-- TELA USUÁRIO -->
 <section id="telaCadastroUsuario" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
-    <div class="card">
-        <h2>Crie Um Nome de Usuário</h2>
+  <!-- BOTÃO VOLTAR -->
+  <div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+    &lt;
+  </div>
 
-        <input
-          type="text"
-          id="usernameCadastro"
-          placeholder="Crie um nome de usuário"
-        >
+  <div class="card">
+    <h2>Nome de Usuário</h2>
 
-        <button class="btn" onclick="irParaSenha(this)">
-  <span class="btn-text">Continuar</span>
-  <span class="btn-loader"></span>
-</button>
+    <p class="subtitulo-email">escolha um nome de usuário</p>
+
+    <!-- AQUI usa o mesmo espaçamento -->
+    <div class="campo-form">
+      <span class="label-email">Crie um nome de usuário</span>
+      <input
+        type="text"
+        id="usernameCadastro"
+        placeholder="Crie um nome de usuário"
+      >
+    </div>
+
+    <button class="btn" onclick="irParaSenha(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
 
 
 
-        <button class="btn" onclick="voltarPara('telaCadastroEmail')">Voltar</button>
+        
     </div>
 </section>
 
 
 <!-- TELA SENHA -->
 <section id="telaCadastroSenha" class="tela">
-    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
-    <div class="card">
-        <h2>Crie Uma Senha </h2>
+  <!-- BOTÃO VOLTAR -->
+  <div class="btn-voltar" onclick="voltarPara('telaCadastroUsuario')">
+    &lt;
+  </div>
 
-        <input
-          type="password"
-          id="senha1"
-          placeholder="Digite a senha"
-        >
+  <!-- CARD -->
+  <div class="card">
+    <h2>Crie uma senha</h2>
 
-        <input
-          type="password"
-          id="senha2"
-          placeholder="Digite novamente"
-        >
+    <p class="subtitulo-email">Crie uma senha para sua conta</p>
 
-        <button class="btn" onclick="finalizarCadastro(this)">
+    <!-- CAMPO SENHA -->
+    <div class="campo-form">
+      <span class="label-email">Digite uma senha</span>
+      <input
+        type="password"
+        id="senha1"
+        placeholder="Digite a senha"
+      >
+    </div>
+
+    <!-- CAMPO CONFIRMAR SENHA -->
+    <div class="campo-form">
+      <span class="label-email">Confirme a senha</span>
+      <input
+        type="password"
+        id="senha2"
+        placeholder="Digite novamente"
+      >
+    </div>
+
+    <button class="btn" onclick="finalizarCadastro(this)">
       <span class="btn-text">Criar conta</span>
       <span class="btn-loader"></span>
     </button>
+  </div>
+</section>
 
-        <button class="btn" onclick="voltarPara('telaCadastroUsuario')">Voltar</button>
+        
     </div>
 </section>
 <section id="telaConta" class="tela">
 
-    <div class="topo">
-        <div class="botao-voltar" onclick="irSemAnimacao('telaHome')"><</div>
-        <div class="logo">PlushMaster</div>
+  <div class="topo">
+    <div class="botao-voltar" onclick="irSemAnimacao('telaHome')">
+      &lt;
     </div>
+
+    <div class="logo">PlushMaster</div>
+  </div>
 
     <div class="info-area">
         <div>
@@ -1410,11 +1519,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- TOPO -->
     <div class="topo">
-        <div class="voltar" onclick="voltarPara('telaConta')"><</div>
-        <div class="logo">PlushMaster</div>
-    </div>
+  <div class="voltar" onclick="voltarPara('telaConta')">
+    &lt;
+  </div>
 
-    <div class="titulo">Minhas informações</div>
+  <div class="logo">PlushMaster</div>
+</div>
+
+<div class="titulo">Minhas informações</div>
 
     <div class="box">
         <p><span class="label">Apelido:</span>
@@ -1511,7 +1623,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="carteira-topo">
     <div class="carteira-linha">
-      <div class="carteira-voltar" onclick="irSemAnimacao('telaHome')"><</div>
+      <div class="carteira-voltar" onclick="irSemAnimacao('telaConta')">
+        &lt;
+      </div>
+
       <div class="carteira-logo">PlushMaster</div>
       <div class="carteira-perfil" id="letraPerfil">U</div>
     </div>
@@ -1544,7 +1659,9 @@ document.addEventListener("DOMContentLoaded", () => {
 <section id="telaSelecionar" class="tela">
 
   <div class="sel-topo">
-    <div class="sel-voltar" onclick="voltarPara('telaHome')"><</div>
+    <div class="sel-voltar" onclick="voltarPara('telaHome')">
+      &lt;
+    </div>
     <div class="sel-logo">PlushMaster</div>
   </div>
 
@@ -1786,8 +1903,12 @@ document.addEventListener("click", e => {
 
 <!-- TELA CHAT -->
 <section id="telaChat" class="tela">
+
   <div class="topo">
-    <div class="voltar" onclick="fecharParaBaixo('telaHome')"><</div>
+    <div class="voltar" onclick="fecharParaBaixo('telaHome')">
+      &lt;
+    </div>
+
     <div class="logo">PlushMaster</div>
     <div class="perfil" id="perfil">U</div>
   </div>
