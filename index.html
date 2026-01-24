@@ -1394,7 +1394,55 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
+<!-- TELA CPF -->
+<section id="telaCPF" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+  <div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  &lt;
+  </div>
 
+  <div class="card">
+    <h2 class="titulo-principal">Informe seu CPF</h2>
+    <p class="subtitulo-email">Precisamos confirmar sua identidade</p>
+
+    <span class="label-email">CPF</span>
+    <input
+      type="text"
+      id="cpf"
+      placeholder="000.000.000-00"
+      maxlength="14"
+      oninput="mascaraCPF(this)"
+    >
+
+    <button class="btn" onclick="continuarCPF(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+<!-- TELA NASCIMENTO -->
+<section id="telaNascimento" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<div class="btn-voltar" onclick="voltarPara('telaCPF')">
+  &lt;
+</div>
+  <div class="card">
+    <h2 class="titulo-principal">Data de nascimento</h2>
+    <p class="subtitulo-email">Confirme que você é maior de 18 anos</p>
+
+    <span class="label-email">Data de nascimento</span>
+    <input
+      type="date"
+      id="dataNascimento"
+    >
+
+    <button class="btn" onclick="continuarNascimento(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
 
 
 <!-- TELA USUÁRIO -->
@@ -1402,7 +1450,7 @@ document.addEventListener("DOMContentLoaded", () => {
   <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 
   <!-- BOTÃO VOLTAR -->
-  <div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  <div class="btn-voltar" onclick="voltarPara('telaNascimento')">
     &lt;
   </div>
 
@@ -2184,7 +2232,7 @@ async function irParaUsuario(btn){
     await auth.signOut(); // 🔥 limpa sessão
 
     emailCadastro = email;
-    irPara('telaCadastroUsuario');
+    irPara('telaCPF');
 
   } catch(err) {
 
@@ -2240,9 +2288,15 @@ async function irParaSenha(btn){
     setBtnLoading(btn, false); // ❌ erro → remove loader
   }
 }
+async function cpfJaCadastrado(cpf){
+  const snap = await db
+    .collection("users")
+    .where("cpf", "==", cpf)
+    .limit(1)
+    .get();
 
-
-
+  return !snap.empty;
+}
 async function finalizarCadastro(btn){
   const senha1 = document.getElementById('senha1').value;
   const senha2 = document.getElementById('senha2').value;
@@ -2260,18 +2314,23 @@ async function finalizarCadastro(btn){
   // 🔥 ATIVA LOADER NO BOTÃO
   setBtnLoading(btn, true);
 
-  try{
-    const cred = await auth.createUserWithEmailAndPassword(emailCadastro, senha1);
+  try {
+  const cred = await auth.createUserWithEmailAndPassword(
+    emailCadastro,
+    senha1
+  );
 
-    await db.collection("users").doc(cred.user.uid).set({
-      email: emailCadastro,
-      username: usernameCadastro,
-      saldo: 0,
-      pelucias: 0,
-      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-    });
+  await db.collection("users").doc(cred.user.uid).set({
+    email: emailCadastro,
+    username: usernameCadastro,
+    cpf: localStorage.getItem("cpfUsuario"),
+    dataNascimento: localStorage.getItem("dataNascimento"),
+    saldo: 0,
+    pelucias: 0,
+    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+  });
 
-    notificar("Conta criada com sucesso!");
+  notificar("Conta criada com sucesso!");
 
     // ✅ DESLIGA O LOADER ANTES DA TROCA
     setBtnLoading(btn, false);
@@ -2286,7 +2345,6 @@ async function finalizarCadastro(btn){
     setBtnLoading(btn, false);
   }
 }
-
 
 
 function notificar(msg) {
@@ -2628,6 +2686,143 @@ function redefinirSenha(){
         console.error(err);
       }
     });
+}
+function continuarCPF(){
+  let cpf = document.getElementById("cpf").value;
+
+  if(cpf.trim() === ""){
+    notificar("Digite seu CPF", "erro");
+    return;
+  }
+
+  cpf = cpf.replace(/\D/g, "");
+
+  if(!validarCPF(cpf)){
+    notificar("CPF inválido", "erro");
+    return;
+  }
+
+  // USA O MESMO LOADER DAS OUTRAS TELAS
+  const loader = document.getElementById("loader");
+  if(loader) loader.style.display = "flex";
+
+  setTimeout(() => {
+    localStorage.setItem("cpfUsuario", cpf);
+
+    if(loader) loader.style.display = "none";
+
+    irPara("telaNascimento");
+  }, 1200);
+}
+
+async function continuarCPF(btn){
+  let cpf = document.getElementById("cpf").value;
+
+  if(cpf.trim() === ""){
+    notificar("Digite seu CPF", "erro");
+    return;
+  }
+
+  cpf = cpf.replace(/\D/g, "");
+
+  if(!validarCPF(cpf)){
+    notificar("CPF inválido", "erro");
+    return;
+  }
+
+  // 🔥 LOADING NO BOTÃO
+  setBtnLoading(btn, true);
+
+  try{
+    // 🔍 VERIFICA NO FIRESTORE
+    const existe = await cpfJaCadastrado(cpf);
+
+    if(existe){
+      setBtnLoading(btn, false);
+      notificar("Este CPF já está cadastrado em outra conta", "erro");
+      return;
+    }
+
+    // 💾 SALVA TEMPORARIAMENTE
+    localStorage.setItem("cpfUsuario", cpf);
+
+    setBtnLoading(btn, false);
+
+    // ➡️ PRÓXIMA TELA
+    irPara("telaNascimento");
+
+  }catch(e){
+    setBtnLoading(btn, false);
+    notificar("Erro ao verificar CPF. Tente novamente.", "erro");
+  }
+}
+
+
+function continuarNascimento(btn){
+  const data = document.getElementById("dataNascimento").value;
+
+  if(!data){
+    notificar("Informe sua data de nascimento", "erro");
+    return;
+  }
+
+  setBtnLoading(btn, true);
+
+  setTimeout(() => {
+    if(!maiorDe18(data)){
+      setBtnLoading(btn, false);
+      notificar("Você precisa ter 18 anos ou mais", "erro");
+      return;
+    }
+
+    localStorage.setItem("dataNascimento", data);
+
+    setBtnLoading(btn, false);
+    notificar("Idade confirmada", "sucesso");
+    irPara("telaCadastroUsuario");
+  }, 1200);
+}
+
+
+
+function maiorDe18(data){
+  const hoje = new Date();
+  const nasc = new Date(data);
+
+  let idade = hoje.getFullYear() - nasc.getFullYear();
+  const m = hoje.getMonth() - nasc.getMonth();
+
+  if(m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())){
+    idade--;
+  }
+
+  return idade >= 18;
+}
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g,'');
+
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1+$/.test(cpf)) return false;
+
+  let soma = 0;
+  let resto;
+
+  for (let i = 1; i <= 9; i++)
+    soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+
+  resto = (soma * 10) % 11;
+  if ((resto == 10) || (resto == 11)) resto = 0;
+  if (resto != parseInt(cpf.substring(9, 10))) return false;
+
+  soma = 0;
+  for (let i = 1; i <= 10; i++)
+    soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+
+  resto = (soma * 10) % 11;
+  if ((resto == 10) || (resto == 11)) resto = 0;
+  if (resto != parseInt(cpf.substring(10, 11))) return false;
+
+  return true;
 }
 
 
