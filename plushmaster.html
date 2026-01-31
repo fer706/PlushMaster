@@ -1,448 +1,575 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlushMaster</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-
-
-
-<!-- ================= TELAS ================= -->
-
-<!-- TELA 1 -->
-<div id="tela1" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 1 -->
-   <style>
-#tela1{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
-  height:100vh;
-  background:#f7eadf;
-}
-
-#tela1 .logo img{
-  width:250px;
-  margin-top:30px;
-}
-
-#tela1 .start-btn{
-  background:linear-gradient(#0dd0ff, #0074d9);
-  color:#fff;
-  border:none;
-  padding:18px 40px;
-  font-size:20px;
-  border-radius:12px;
-  cursor:pointer;
-  margin-bottom:50px;
-  width:80%;
-  max-width:330px;
-}
-
-#tela1 .footer{
-  margin-bottom:20px;
-  color:#333;
-}
-</style>
-
-    </style>
+<meta charset="UTF-8">
+<meta 
+  name="viewport" 
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PlushMaster</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<link rel="stylesheet" href="plushmaster.css">
 </head>
-
 <body>
-
-       <!-- TELA 1 -->
-<div id="tela1" class="tela">
-
-  <div class="logo">
-    <img src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-  </div>
-
-  <button class="start-btn" onclick="abrirTela('cadastrologin')">
-    Vamos começar
-  </button>
-
-  <div class="footer">© 2025 PlushMaster</div>
-
-</div>
-
-
-
-    <!-- SCRIPT DA ANIMAÇÃO -->
-    <script>
-        function animarTroca(pagina) {
-            document.body.classList.add("fadeOut");
-
-            setTimeout(() => {
-                window.location.href = pagina;
-            }, 400); // mesmo tempo da animação
-        }
-    </script>
-
-</body>
-</html>
-
-</div>
-
- 
-  
-<style>
-/* ===== TELA 2 ===== */
-#cadastrologin{
-  background:#3dc8ff;
-  min-height:100vh;
-  text-align:center;
-}
-
-#cadastrologin .logo{
-  width:250px;
-  margin-top:30px;
-}
-
-#cadastrologin .card{
-  background:#f7e9dd;
-  width:80%;
-  max-width:350px;
-  margin:30px auto;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-}
-
-#cadastrologin h2{
-  margin-bottom:10px;
-  font-size:24px;
-  color:#000;
-}
-
-#cadastrologin p{
-  margin-top:0;
-  margin-bottom:25px;
-  color:#555;
-  font-size:15px;
-}
-
-#cadastrologin .btn{
-  width:100%;
-  padding:14px;
-  margin-top:15px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(180deg, #4db8ff, #0077e6);
-  color:#fff;
-  font-size:18px;
-  cursor:pointer;
-}
-
-#cadastrologin .btn:hover{
-  opacity:.9;
-}
-
-#cadastrologin footer{
-  margin-top:30px;
-  font-size:14px;
-  color:#004c73;
-}
-</style>
-  
-  <!-- TELA 2 -->
-<div id="cadastrologin" class="tela">
-
-  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-
-  <div class="card">
-    <h2>Entre ou cadastre-se</h2>
-    <p>Escolha uma opção para continuar</p>
-
-    <button class="btn" onclick="animarTroca('telaLogin')">
-      Login
-    </button>
-
-    <button class="btn" onclick="animarTroca('telaCadastro')">
-      Cadastro
-    </button>
-  </div>
-
-  <footer>© 2025 PlushMaster</footer>
-
-</div>
-
-
-<!-- TELA 3 -->
-<div id="tela3" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 3 -->
-   <style>
-    * { box-sizing: border-box; }
-
-    /* === ANIMAÇÃO DE TRANSIÇÃO === */
-    .tela {
-        animation: aparecerTela .4s ease;
-    }
-
-    @keyframes aparecerTela {
-        from { opacity: 0; transform: translateX(40px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-
-    .saindo {
-        animation: sairTela .35s ease forwards;
-    }
-
-    @keyframes sairTela {
-        from { opacity: 1; transform: translateX(0); }
-        to { opacity: 0; transform: translateX(-40px); }
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        background: #3dc8ff;
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
-
-    .logo {
-        width: 250px;
-        margin-top: 30px;
-      }
-
-
-    .card {
-        background: #f7e9dd;
-        width: 90%;
-        max-width: 400px;
-        margin: 30px auto;
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-
-    h2 {
-        margin-bottom: 10px;
-        font-size: 24px;
-        color: #000;
-    }
-
-    p {
-        margin-top: 0;
-        margin-bottom: 20px;
-        color: #555;
-        font-size: 15px;
-    }
-
-    label {
-        display: block;
-        text-align: left;
-        width: 85%;
-        margin: 0 auto 5px auto;
-        color: #000;
-        font-weight: bold;
-    }
-
-    input {
-        width: 75%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 2px solid #000;
-        font-size: 16px;
-        outline: none;
-        margin-bottom: 25px;
-    }
-
-    .btn {
-        width: 85%;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        background: linear-gradient(180deg, #4db8ff, #0077e6);
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .btn:hover { opacity: 0.9; }
-
-    footer {
-        margin-top: 25px;
-        font-size: 14px;
-        color: #004c73;
-    }
-
-    #notificacoes {
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        width: 260px;
-        z-index: 999999;
-    }
-
-    .notif {
-        background: rgba(0,0,0,0.7);
-        border-left: 4px solid #00eaff;
-        padding: 12px;
-        color: #fff;
-        font-size: 15px;
-        margin-top: 10px;
-        border-radius: 8px;
-        animation: aparecer .4s ease;
-    }
-
-    @keyframes aparecer {
-        from { opacity: 0; transform: translateX(20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-</style>
-</head>
-
-<body>
-
-<div class="tela" id="conteudo">
 
 <div id="notificacoes"></div>
 
-<img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
-
-<div class="card">
-    <h2>Login</h2>
-    <p>Informe seu e-mail para continuar</p>
-
-    <label>E-mail</label>
-    <input type="email" id="email" placeholder="exemplo@email.com">
-
-    <button class="btn" onclick="verificarEmail()">Continuar</button>
-</div>
-
-<footer>© 2025 PlushMaster</footer>
-
-</div>
-
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
-  authDomain: "plush-master.firebaseapp.com",
-  projectId: "plush-master",
-  storageBucket: "plush-master.firebasestorage.app",
-  messagingSenderId: "822751531077",
-  appId: "1:822751531077:web:ffba31a45d08c22a7e132c",
-  measurementId: "G-JYRNTNQKEB"
-};
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyApQ9KvXtv4_negpU9wHlajGeOuZ1FSKBA",
+    authDomain: "plush-master.firebaseapp.com",
+    projectId: "plush-master"
+  });
+}
 
-firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-
-
-    function irPara(telaDestino) {
-  const telaAtual = document.querySelector('.tela:not([style*="display: none"])');
-
-  if (telaAtual) {
-    telaAtual.classList.add("saindo");
-  }
-
-  setTimeout(() => {
-    if (telaAtual) telaAtual.classList.remove("saindo");
-    abrirTela(telaDestino);
-  }, 300);
-}
-
-
-    function notificar(msg) {
-        const div = document.createElement("div");
-        div.className = "notif";
-        div.innerText = msg;
-        document.getElementById("notificacoes").appendChild(div);
-
-        setTimeout(() => {
-            div.style.opacity = "0";
-            div.style.transform = "translateX(20px)";
-            setTimeout(() => div.remove(), 300);
-        }, 3500);
-    }
-
-    function verificarEmail() {
-    const email = document.getElementById("email").value.trim();
-
-    if (!email) {
-        notificar("Digite um e-mail!");
-        return;
-    }
-
-    // Passa o email na URL
-    irPara(`senha.html?email=${encodeURIComponent(email)}`);
-}
-
-
+const db = firebase.firestore();
 </script>
-
-</body>
-</html>
+<!-- INTRO -->
+<div id="intro">
+  <div class="ball"></div>
+  <img class="intro-logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 </div>
-
-<!-- TELA 4 -->
-<div id="tela4" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 4 -->
-</div>
-
-<!-- TELA 5 -->
-<div id="tela5" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 5 -->
-</div>
-
-<!-- TELA 6 -->
-<div id="tela6" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUI 6 -->
-</div>
-
-<!-- TELA 7 -->
-<div id="tela7" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 7 -->
-</div>
-
-<!-- TELA 8 -->
-<div id="tela8" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 8 -->
-</div>
-
-<!-- TELA 9 -->
-<div id="tela9" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 9 -->
-</div>
-
-<!-- TELA 10 -->
-<div id="tela10" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 10 -->
-</div>
-
-<!-- TELA 11 -->
-<div id="tela11" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 11 -->
-</div>
-
-<!-- TELA 12 -->
-<div id="tela12" class="tela">
-  <!-- COLE AQUI O CONTEÚDO DO ARQUIVO 12 -->
-</div>
-
-<!-- ================= SCRIPT ================= -->
 
 <script>
-function abrirTela(id){
-  document.querySelectorAll('.tela').forEach(t => t.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-/* TELA INICIAL */
-abrirTela('tela1');
+  const logo  = document.querySelector(".intro-logo");
+  const intro = document.getElementById("intro");
+  const tela1 = document.getElementById("tela1");
+
+  if (!logo || !intro || !tela1) return;
+
+  logo.addEventListener("animationend", () => {
+
+    setTimeout(() => {
+
+      // remove a intro
+      intro.remove();
+
+      // ativa a Tela 1
+      tela1.classList.add("base");
+      tela1.style.pointerEvents = "auto";
+
+      // ================= LOGIN AUTOMÁTICO VIA CONSOLE =================
+      const emailSalvo = localStorage.getItem("loginEmail");
+      const senhaSalva = localStorage.getItem("loginSenha");
+      const usuarioSaiuSalvo = localStorage.getItem("usuarioSaiu");
+
+      console.log("=== LOGIN AUTOMÁTICO ===");
+
+      if (emailSalvo && senhaSalva && usuarioSaiuSalvo) {
+        console.log("loginEmail:", emailSalvo);
+        console.log("loginSenha:", senhaSalva);
+        console.log("usuarioSaiu:", usuarioSaiuSalvo);
+      } else {
+        console.log("Digite os dados no console:");
+        console.log("loginEmail = 'seu_email'");
+        console.log("loginSenha = 'sua_senha'");
+        console.log("usuarioSaiu = 'false'");
+      }
+
+      const loginCheck = setInterval(() => {
+        if (
+          (window.loginEmail && window.loginSenha && window.usuarioSaiu !== undefined) ||
+          (emailSalvo && senhaSalva && usuarioSaiuSalvo)
+        ) {
+          clearInterval(loginCheck);
+
+          const email = window.loginEmail || emailSalvo;
+          const senha = window.loginSenha || senhaSalva;
+          const usuarioSaiu = window.usuarioSaiu || usuarioSaiuSalvo;
+
+          if (usuarioSaiu === "false") {
+            auth.signInWithEmailAndPassword(email, senha)
+              .then(() => {
+                console.log("Login automático OK!");
+                irPara("telaHome");
+              })
+              .catch(err => console.error("Erro login automático:", err));
+          } else {
+            console.log("Usuário saiu da conta, não logando automaticamente.");
+          }
+        }
+      }, 500);
+
+      // ===============================================================
+
+    }, 2000); // ⏱ 2 segundos
+
+  }, { once: true });
+
+});
 </script>
 
+<!-- TELA 1 -->
+<section id="tela1" class="tela base">
+    <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+    <div class="card">
+        <button class="btn" onclick="irPara('telacadastro/Login')">Vamos começar</button>
+    </div>
+    <footer>© 2026 PlushMaster</footer>
+</section>
+
+
+
+<!-- LOGIN EMAIL -->
+<section id="telacadastro/Login" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+  <div class="card">
+    <h2>Entre ou Cadastre-se</h2>
+
+    <p class="subtitulo-email">Informe seu email para continuar</p>
+
+    <div class="campo-form">
+      <span class="label-email">E-mail</span>
+      <input id="emailLogin" type="email" placeholder="email@email.com">
+    </div>
+
+    <button id="btnContinuar" class="btn" onclick="irParaUsuario(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+        
+    </div>
+</section>
+
+<!-- SENHA -->
+<section id="telaSenha" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  &lt;
+</div>
+
+  <div class="card">
+    <h2>É bom te ver novamente</h2>
+
+    <p id="emailExibido" class="email-exibido"></p>
+
+    <div class="campo-form">
+      <span class="label-email">Informe sua senha</span>
+      <input id="senha" type="password" placeholder="Senha">
+    </div>
+
+    <div class="esqueceu-senha" onclick="redefinirSenha()">
+      Esqueceu sua senha?
+    </div>
+
+    <button id="btnEntrar" class="btn" onclick="entrar()">
+      <span class="btn-text">Entrar</span>
+      <span class="btn-loader"></span>
+    </button>
+
+    
+  </div>
+</section>
+
+<!-- TELA CPF -->
+<section id="telaCPF" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+  <div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  &lt;
+  </div>
+
+  <div class="card">
+    <h2 class="titulo-principal">Informe seu CPF</h2>
+    <p class="subtitulo-email">Precisamos confirmar sua identidade</p>
+
+    <span class="label-email">CPF</span>
+    <input
+      type="text"
+      id="cpf"
+      placeholder="000.000.000-00"
+      maxlength="14"
+      oninput="mascaraCPF(this)"
+    >
+
+    <button class="btn" onclick="continuarCPF(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+<!-- TELA NASCIMENTO -->
+<section id="telaNascimento" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+<div class="btn-voltar" onclick="voltarPara('telaCPF')">
+  &lt;
+</div>
+  <div class="card">
+    <h2 class="titulo-principal">Data de nascimento</h2>
+    <p class="subtitulo-email">Confirme que você é maior de 18 anos</p>
+
+    <span class="label-email">Data de nascimento</span>
+    <input
+      type="date"
+      id="dataNascimento"
+    >
+
+    <button class="btn" onclick="continuarNascimento(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+
+<!-- TELA USUÁRIO -->
+<section id="telaCadastroUsuario" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+  <!-- BOTÃO VOLTAR -->
+  <div class="btn-voltar" onclick="voltarPara('telaNascimento')">
+    &lt;
+  </div>
+
+  <div class="card">
+    <h2>Nome de Usuário</h2>
+
+    <p class="subtitulo-email">escolha um nome de usuário</p>
+
+    <!-- AQUI usa o mesmo espaçamento -->
+    <div class="campo-form">
+      <span class="label-email">Crie um nome de usuário</span>
+      <input
+        type="text"
+        id="usernameCadastro"
+        placeholder="Crie um nome de usuário"
+      >
+    </div>
+
+    <button class="btn" onclick="irParaSenha(this)">
+      <span class="btn-text">Continuar</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+
+
+        
+    </div>
+</section>
+
+
+<!-- TELA SENHA -->
+<section id="telaCadastroSenha" class="tela">
+  <img class="logo" src="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
+
+  <!-- BOTÃO VOLTAR -->
+  <div class="btn-voltar" onclick="voltarPara('telaCadastroUsuario')">
+    &lt;
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <h2>Crie uma senha</h2>
+
+    <p class="subtitulo-email">Crie uma senha para sua conta</p>
+
+    <!-- CAMPO SENHA -->
+    <div class="campo-form">
+      <span class="label-email">Digite uma senha</span>
+      <input
+        type="password"
+        id="senha1"
+        placeholder="Digite a senha"
+      >
+    </div>
+
+    <!-- CAMPO CONFIRMAR SENHA -->
+    <div class="campo-form">
+      <span class="label-email">Confirme a senha</span>
+      <input
+        type="password"
+        id="senha2"
+        placeholder="Digite novamente"
+      >
+    </div>
+
+    <button class="btn" onclick="finalizarCadastro(this)">
+      <span class="btn-text">Criar conta</span>
+      <span class="btn-loader"></span>
+    </button>
+  </div>
+</section>
+
+        
+    </div>
+</section>
+<section id="telaConta" class="tela">
+
+  <div class="topo">
+    <div class="botao-voltar" onclick="irSemAnimacao('telaHome')">
+      &lt;
+    </div>
+
+    <div class="logo">PlushMaster</div>
+  </div>
+
+    <div class="info-area">
+        <div>
+            <div class="titulo">Minha conta</div>
+            <div class="subtitulo" id="textoOla">Olá, ...</div>
+        </div>
+
+        <div class="avatar" id="avatarLetra">U</div>
+    </div>
+
+    <div class="cards">
+        <div class="card" onclick="irPara('telaHistorico')">
+            <h3>📊 Histórico de atividades</h3>
+        </div>
+
+        <div class="card" onclick="irPara('telaInformacoes')">
+    <h3>📘 Minhas informações</h3>
+</div>
+
+    </div>
+
+    <div class="sair" onclick="sairConta()">
+        <span>↺</span> Sair da conta
+    </div>
+
+</section>
+<section id="telaInformacoes" class="tela">
+
+    <!-- TOPO -->
+    <div class="topo">
+  <div class="voltar" onclick="voltarPara('telaConta')">
+    &lt;
+  </div>
+
+  <div class="logo">PlushMaster</div>
+</div>
+
+<div class="titulo">Minhas informações</div>
+
+    <div class="box">
+        <p><span class="label">Apelido:</span>
+            <span class="valor" id="campoNome">Carregando...</span>
+        </p>
+
+        <p><span class="label">E-mail:</span>
+            <span class="valor" id="campoEmail">Carregando...</span>
+        </p>
+
+        <p><span class="label">Senha:</span> ***************</p>
+    </div>
+
+    <div class="link" onclick="alterarNome()">Alterar apelido</div>
+    <div class="link" onclick="alterarSenha()">Alterar senha</div>
+    <div class="excluir" onclick="excluirConta()">Excluir conta</div>
+
+    <!-- POPUP ALTERAR NOME -->
+    <div class="popup-bg" id="popupNome">
+        <div class="popup-box">
+            <h3>Alterar apelido</h3>
+            <input type="text" id="novoNome" class="popup-input" placeholder="Digite o novo nome">
+            <button class="popup-btn" onclick="salvarNovoNome()">Salvar</button>
+            <div class="cancelar" onclick="fecharPopup()">Cancelar</div>
+        </div>
+    </div>
+
+    <!-- POPUP EXCLUIR CONTA -->
+    <div id="popupExcluir" class="popup-fundo" style="display:none;">
+        <div class="popup-caixa">
+            <div class="popup-titulo">Excluir Conta</div>
+            <p class="popup-texto">Digite sua senha para confirmar:</p>
+
+            <input type="password" id="senhaExcluir" class="popup-input" placeholder="Sua senha">
+
+            <div class="popup-botoes">
+                <button class="btn-cancelar" onclick="fecharPopupExcluir()">Cancelar</button>
+                <button class="btn-confirmar" onclick="confirmarExclusao()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
+<!-- ================= HOME ================= -->
+<section id="telaHome" class="tela">
+    <!-- TOPO -->
+    <div class="top-bar">
+        <div class="btn-chat" onclick="irDeBaixo('telaChat')">
+  <span class="chat-icon"></span>
+</div>
+        <div>PlushMaster</div>
+        <div style="width:45px;"></div> <!-- espaço à direita para equilibrar -->
+    </div>
+
+    <!-- CÂMERA -->
+    <div class="camera-box">
+        <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine0"
+        allow="autoplay; fullscreen"></iframe>
+    </div>
+
+    <!-- BOTÃO JOGAR -->
+    <div class="play-area">
+         <button class="play-btn" onclick="abrirTelaSelecionar('telaselecionar')"style="border:none; outline:none;">JOGAR</button>
+    </div>
+
+  
+    <!-- MENU INFERIOR -->
+    <div class="bottom-bar">
+        <div class="nav-item" onclick="irSemAnimacao('telaHome')">
+            <div class="nav-circle">🏠</div>
+            Home
+        </div>
+        <div class="nav-item" onclick="irSemAnimacao('telaCarteira')">
+            <div class="nav-circle">💰</div>
+            Carteira
+        </div>
+        <div class="nav-item" onclick="irSemAnimacao('telaConta')">
+            <div class="nav-circle">👤</div>
+            Conta
+        </div>
+        <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
+            <div class="nav-circle">🧸</div>
+            Pelúcias
+        </div>
+    </div>
+</section>
+<!-- ================= CARTEIRA ================= -->
+<section id="telaCarteira" class="tela">
+
+  <div class="carteira-topo">
+    <div class="carteira-linha">
+      <div class="carteira-voltar" onclick="irSemAnimacao('telaHome')">
+        &lt;
+      </div>
+
+      <div class="carteira-logo">PlushMaster</div>
+      <div class="carteira-perfil" id="letraPerfil">U</div>
+    </div>
+
+    <div class="carteira-titulo">Carteira</div>
+    <div class="carteira-sub" id="nomeUser">Olá, ...</div>
+  </div>
+
+  <div class="carteira-sessao">
+    <div class="saldo-titulo">💲 Saldo na carteira</div>
+
+    <div class="saldo-box">
+      <div class="saldo-valor" id="saldoCarteira">R$ 0,00</div>
+      <div class="pelucias" id="peluciasCarteira">0 pelúcias acumuladas</div>
+    </div>
+  </div>
+
+  <div class="recarga">
+    <h3>💳 Qual valor você quer adicionar?</h3>
+    <div class="valor-box" id="valorSelecionado">R$ 0,00</div>
+    <div class="cupom">Tenho um cupom</div>
+  </div>
+
+  <button class="carteira-btn" onclick="pagar()">Prosseguir para o pagamento</button>
+
+</section>
+
+
+
+<section id="telaSelecionar" class="tela">
+
+  <div class="sel-topo">
+    <div class="sel-voltar" onclick="voltarPara('telaHome')">
+      &lt;
+    </div>
+    <div class="sel-logo">PlushMaster</div>
+  </div>
+
+<div class="sel-jogadas">
+  <div class="sel-jogadas-texto">😊 Selecionar jogadas</div>
+
+  <div class="sel-dropdown" onclick="toggleJogadas()">
+    <span id="valorJogadas">00</span>
+    <div class="sel-seta">▼</div>
+  </div>
+</div>
+
+<div class="sel-lista" id="listaJogadas">
+  <!-- 1 até 30 -->
+  <div onclick="selecionarJogada(1)">1</div>
+  <div onclick="selecionarJogada(2)">2</div>
+  <div onclick="selecionarJogada(3)">3</div>
+  <div onclick="selecionarJogada(4)">4</div>
+  <div onclick="selecionarJogada(5)">5</div>
+  <div onclick="selecionarJogada(6)">6</div>
+  <div onclick="selecionarJogada(7)">7</div>
+  <div onclick="selecionarJogada(8)">8</div>
+  <div onclick="selecionarJogada(9)">9</div>
+  <div onclick="selecionarJogada(10)">10</div>
+  <!-- … até 30 -->
+</div>
+
+
+  <div class="sel-titulo">📱 Selecionar máquina</div>
+
+  <div id="loader" class="loader"></div>
+
+  <div class="sel-maquinas">
+
+    <div class="sel-card" onclick="clicarMaquina('plush')">
+      <img src="https://i.postimg.cc/6345mtXp/maquina-de-2-imagem-removebg-preview.png">
+      <div class="sel-preco">R$ 2,00 a jogada</div>
+      <button class="sel-btn-status sel-disponivel" id="statusPlush">
+        Selecionar
+      </button>
+    </div>
+
+    <div class="sel-card" onclick="clicarMaquina('toy')">
+      <img src="https://i.postimg.cc/59Pn3Jtg/toy-mix-imagem-removebg-preview.png">
+      <div class="sel-preco">R$ 5,00 a jogada</div>
+      <button class="sel-btn-status sel-disponivel" id="statusToy">
+        Selecionar
+      </button>
+    </div>
+
+  </div>
+
+  <div class="sel-saldo">
+  <span id="saldoUsuario">R$ 0,00</span>
+</div>
+
+
+  <div class="sel-btn-iniciar" onclick="iniciarJogo()">
+    Entrar na fila
+  </div>
+
+</section>
+<!-- TELA CHAT -->
+<section id="telaChat" class="tela">
+
+  <div class="topo">
+    <div class="voltar" onclick="fecharParaBaixo('telaHome')">
+      &lt;
+    </div>
+
+    <div class="logo">PlushMaster</div>
+    <div class="perfil" id="perfil">U</div>
+  </div>
+
+  <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto;"></div>
+
+  <div class="chat-input-container" style="display:flex; padding:10px; gap:10px; background:#4fc3ff;">
+    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." style="flex:1; padding:10px 15px; border-radius:50px; border:none; font-size:16px; background:#e0f7ff; color:#000;">
+    <button id="send-btn" style="padding:10px 20px; border:none; border-radius:50px; background: linear-gradient(#24c6ff,#009ef7); color:white; cursor:pointer; font-size:16px;">Enviar</button>
+  </div>
+</section>
+
+<script src="plushmaster.js"></script>
 </body>
 </html>
-
