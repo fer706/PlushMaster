@@ -406,7 +406,7 @@ async function entrar() {
       break;
 
     case "auth/user-disabled":
-      mensagem = "Sua conta foi bloqueada por descumprir regras ou fornecer informações inválidas.";
+      mensagem = "Sua conta foi bloqueada por descumprir regras ou fornecer informações inválidas no cadastro.";
       break;
 
     default:
