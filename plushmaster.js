@@ -1064,3 +1064,71 @@ window.addEventListener("load", () => {
     }
   }, 500);
 });
+let mensagensNaoLidas = 0;
+let chatAberto = false;
+
+const badgeChat = document.getElementById("badgeChat");
+
+// pega ultimo timestamp salvo
+let ultimoLido = localStorage.getItem("ultimoLido") || 0;
+
+
+// ESCUTAR CHAT
+db.collection("chat")
+.orderBy("timestamp")
+.onSnapshot(snapshot => {
+
+    mensagensNaoLidas = 0;
+
+    snapshot.forEach(doc => {
+
+        const msg = doc.data();
+
+        if(msg.timestamp > ultimoLido){
+            mensagensNaoLidas++;
+        }
+
+    });
+
+    atualizarBadge();
+
+});
+function atualizarBadge(){
+
+    if(mensagensNaoLidas > 0){
+
+        badgeChat.style.display = "flex";
+        badgeChat.innerText = mensagensNaoLidas > 99 
+            ? "99+" 
+            : mensagensNaoLidas;
+
+    }else{
+        badgeChat.style.display = "none";
+    }
+
+}
+function abrirChat(){
+
+    chatAberto = true;
+
+    // pega o timestamp MAIS RECENTE
+    db.collection("chat")
+    .orderBy("timestamp", "desc")
+    .limit(1)
+    .get()
+    .then(snapshot => {
+
+        if(!snapshot.empty){
+
+            ultimoLido = snapshot.docs[0].data().timestamp;
+
+            localStorage.setItem("ultimoLido", ultimoLido);
+        }
+
+        mensagensNaoLidas = 0;
+        atualizarBadge();
+
+    });
+
+    irDeBaixo('telaChat');
+}

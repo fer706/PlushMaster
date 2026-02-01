@@ -36,6 +36,12 @@ body{
 
 /* GERAL */
 .logo{width:240px;margin:25px auto;display:block}
+.logo-img{
+    width:240px;
+    margin:25px auto;
+    display:block;
+}
+
 .card{
     background:#f7e9dd;
     width:90%;
@@ -80,15 +86,21 @@ footer{text-align:center;margin-top:15px}
     flex-direction:column;
 }
 .top-bar{
-    height:70px;
+    height:70px;              /* 🔥 mais fino */
     background:#4fc3ff;
+
     display:flex;
     align-items:center;
-    justify-content:center;
+    justify-content:space-between;
+
+    padding:0 12px;           /* menos espaço lateral */
     color:#fff;
-    font-size:20px;
-    font-weight:bold;
+
+    box-shadow:0 2px 6px rgba(0,0,0,0.15); /* opcional, mas fica lindo */
 }
+
+
+
 .camera-box {
     background: black;
     margin: 10px auto;       /* centraliza */
@@ -177,13 +189,11 @@ footer{text-align:center;margin-top:15px}
     transition:0.2s;
 }
 
-.btn-chat {
-    position: fixed;
-    top: 10px;
-    right: 10px;
+.btn-chat{
+    position: relative;
 
-    width: 52px;
-    height: 52px;
+    width:45px;
+    height:45px;
 
     background: linear-gradient(
         180deg,
@@ -194,24 +204,25 @@ footer{text-align:center;margin-top:15px}
 
     border-radius: 14px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    cursor: pointer;
-    z-index: 10000;
+    cursor:pointer;
+    flex-shrink:0;
 
     box-shadow:
         inset 0 5px 8px rgba(255,255,255,0.35),
         inset 0 -5px 8px rgba(0,0,0,0.25),
         0 8px 16px rgba(0,0,0,0.35);
 
-    transition: transform 0.2s;
+    transition:.2s;
 }
 
-.btn-chat:hover {
-    transform: scale(1.05);
+.btn-chat:hover{
+    transform:scale(1.05);
 }
+
 
 .chat-icon{
     width: 28px;
@@ -1259,4 +1270,31 @@ body{
 
 .btn-voltar:hover{
   background: rgba(255,255,255,0.45);
+}
+
+
+
+/* bolinha */
+.badge-chat{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+
+    min-width:18px;
+    height:18px;
+    padding:0 5px;
+
+    background:red;
+    color:white;
+    font-size:11px;
+    font-weight:bold;
+
+    border-radius:20px;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    border:2px solid #4fc3ff; /* combina com seu chat */
 }

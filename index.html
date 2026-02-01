@@ -402,16 +402,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <!-- ================= HOME ================= -->
+
 <section id="telaHome" class="tela">
-    <!-- TOPO -->
-    <div class="top-bar">
-        <div class="btn-chat" onclick="irDeBaixo('telaChat')">
-  <span class="chat-icon"></span>
-</div>
-        <div>PlushMaster</div>
-        <div style="width:45px;"></div> <!-- espaço à direita para equilibrar -->
+  
+<div class="top-bar">
+
+    <div style="width:36px;"></div> <!-- espaço fake só para equilibrar -->
+
+    <div class="logo">PlushMaster</div>
+
+    <div class="btn-chat" onclick="abrirChat()">
+        <span class="chat-icon"></span>
+        <span id="badgeChat" class="badge-chat"></span>
     </div>
 
+</div>
+
+    
     <!-- CÂMERA -->
     <div class="camera-box">
         <iframe src="https://delaysp01.logicahost.com.br:5443/onlinemachine/play.html?id=onlinemachine0"
