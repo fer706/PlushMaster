@@ -380,17 +380,46 @@ async function entrar() {
 
     irPara("telaHome");
   } catch (err) {
-    if (err.code === "auth/wrong-password") {
-      notificar("Senha incorreta");
-    } else {
-      notificar("Email ou senha incorreto");
-    }
-    console.error(err);
-  } finally {
-    setBtnLoading("btnEntrar", false);
-  }
-}
 
+  let mensagem = "";
+
+  switch(err.code){
+
+    case "auth/wrong-password":
+      mensagem = "Senha incorreta";
+      break;
+
+    case "auth/user-not-found":
+      mensagem = "Email não cadastrado";
+      break;
+
+    case "auth/invalid-email":
+      mensagem = "Email inválido";
+      break;
+
+    case "auth/too-many-requests":
+      mensagem = "Muitas tentativas. Aguarde alguns minutos.";
+      break;
+
+    case "auth/network-request-failed":
+      mensagem = "Sem conexão com a internet.";
+      break;
+
+    case "auth/user-disabled":
+      mensagem = "Sua conta foi bloqueada por descumprir regras ou fornecer informações inválidas.";
+      break;
+
+    default:
+      mensagem = "Erro ao entrar. Tente novamente.";
+  }
+
+  notificar(mensagem);
+  console.error(err);
+
+} finally {
+  setBtnLoading("btnEntrar", false);
+}
+}
 let emailCadastro = "";
 let usernameCadastro = "";
 
@@ -429,7 +458,7 @@ async function irParaUsuario(btn){
 
   } catch(err) {
 
-    if(err.code === "auth/email-already-in-use"){
+  if(err.code === "auth/email-already-in-use"){
       console.log("EMAIL EM USO");
 
       emailCadastro = email;
@@ -442,6 +471,7 @@ async function irParaUsuario(btn){
       notificar("Erro: " + err.message);
       console.error(err);
     }
+
 
   } finally {
     verificandoEmail = false;
