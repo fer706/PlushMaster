@@ -98,17 +98,47 @@ function iniciarJogo() {
 /* LISTENER DAS MÁQUINAS */
 let listenerMaquinas = null;
 
-function abrirTelaSelecionar() {
+function abrirTelaSelecionar(){
+
   irPara("telaSelecionar");
 
+  // 🔥 verifica internet imediatamente
+  if(!navigator.onLine){
+
+    notificar(
+      "Você está desconectado. Feche e volte a abrir o site."
+    );
+
+  }
+  window.addEventListener("offline", () => {
+
+  const telaSelecionar = document.getElementById("telaSelecionar");
+
+  // 🔥 verifica se a tela está aberta
+  if(telaSelecionar && telaSelecionar.style.display !== "none"){
+
+    notificar(
+      "Você está desconectado. Feche e volte a abrir o site."
+    );
+
+  }
+
+});
+
+
   document.getElementById("loader").style.display = "block";
+
   document.querySelectorAll(".sel-maquinas .sel-card")
     .forEach(c => c.style.display = "none");
 
+  // mata listener antigo
   if (listenerMaquinas) listenerMaquinas();
 
-  listenerMaquinas = db.collection("maquinas").onSnapshot(snapshot => {
+  listenerMaquinas = db.collection("maquinas")
+  .onSnapshot(snapshot => {
+
     snapshot.forEach(doc => {
+
       const id = doc.id;
       const status = doc.data().status;
       statusMaquinas[id] = status;
@@ -120,6 +150,7 @@ function abrirTelaSelecionar() {
       const card = btn.closest(".sel-card");
 
       if (status !== "disponivel") {
+
         btn.innerText = "Indisponível";
         btn.className = "sel-btn-status sel-indisponivel";
 
@@ -129,7 +160,9 @@ function abrirTelaSelecionar() {
         if (maquinaSelecionada === id) {
           maquinaSelecionada = null;
         }
+
       } else {
+
         if (maquinaSelecionada !== id) {
           btn.innerText = "Selecionar";
           btn.className = "sel-btn-status sel-disponivel";
@@ -141,11 +174,12 @@ function abrirTelaSelecionar() {
     });
 
     document.getElementById("loader").style.display = "none";
+
     document.querySelectorAll(".sel-maquinas .sel-card")
       .forEach(c => c.style.display = "block");
   });
-}
 
+}
 
 function toggleJogadas(){
   const lista = document.getElementById("listaJogadas");
