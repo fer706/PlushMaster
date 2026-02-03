@@ -600,35 +600,49 @@ body{
 
 
 .notificacao{
+
   position: fixed;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%);
-  background: #000;                 /* FUNDO PRETO */
-  color: #fff;                      /* TEXTO BRANCO */
-  padding: 14px 22px;
-  border-radius: 8px;
 
-  border: 2px solid #ff2b2b;        /* BORDA VERMELHA */
+  transform: translate(-50%, -120%);
+  transition: transform .45s ease, opacity .45s ease;
+
+  opacity: 0;
+  z-index: 999999999;
+
+  background: #000;
+  color: #fff;
+
+  padding: 14px 22px;
+  border-radius: 10px;
+
+  border: 2px solid #ff2b2b;
   box-shadow: 
     0 0 10px #ff2b2b,
     0 0 25px rgba(255,43,43,0.6);
 
   font-family: Orbitron, sans-serif;
   font-size: 14px;
-  font-weight: bold;
-  text-align: center;
+  font-weight: 500;
 
-  z-index: 999999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .4s, top .4s;
+  /* 🔥 ISSO FAZ O TAMANHO INTELIGENTE */
+  width: max-content;     /* cresce para o lado */
+  max-width: 90vw;       /* nunca passa da tela */
+
+  text-align: center;
+  line-height: 1.4;
+  letter-spacing: .4px;
+
+  overflow-wrap: break-word; /* só quebra se PRECISAR */
 }
+
 
 .notificacao.ativa{
+  transform: translate(-50%, 0);
   opacity: 1;
-  top: 40px;
 }
+
 
 
 
