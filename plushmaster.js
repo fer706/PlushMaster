@@ -410,7 +410,7 @@ async function entrar() {
       break;
 
   default:
-      mensagem = "Email ou senha incorretos. Tente novamente.";
+      mensagem = " Senha incorreta.";
   }
 
   notificar(mensagem);
@@ -620,49 +620,144 @@ function pagar(){
 }
 
 /* ================= ATUALIZAÇÃO EM TEMPO REAL ================= */
+let unsubscribeUser = null;
+let userData = null; // 🔥 guarda os dados em memória
+let conectadoAoServidor = false;
+
+
+
 firebase.auth().onAuthStateChanged((user) => {
+
+  // mata listener antigo
+  if(unsubscribeUser){
+    unsubscribeUser();
+    unsubscribeUser = null;
+  }
+
   if(!user) return;
 
-  db.collection("users").doc(user.uid)
-    .onSnapshot((doc) => {
-      if(!doc.exists) return;
+  unsubscribeUser = db.collection("users")
+.doc(user.uid)
+.onSnapshot({
 
-      const dados = doc.data();
-      const saldo = dados.saldo || 0;
-      const pelucias = dados.pelucias || 0;
-const nomeUser = document.getElementById("nomeUser");
-const letraPerfil = document.getElementById("letraPerfil");
+    includeMetadataChanges: true
 
-if(nomeUser){
-  nomeUser.innerText = "Olá, " + (dados.username || "Usuário");
-}
+}, (doc) => {
 
-if(letraPerfil && dados.username){
-  letraPerfil.innerText = dados.username.charAt(0).toUpperCase();
-}
+    // 🔥 só aceita dado do servidor
+    if(doc.metadata.fromCache){
+        mostrarSemInternet();
+        return;
+    }
 
-      /* ===== TELA SELECIONAR ===== */
-      const saldoSel = document.getElementById("saldoUsuario");
-      if(saldoSel){
-        saldoSel.innerText =
-          "Saldo: R$ " + saldo.toFixed(2).replace(".", ",");
-      }
+    userData = doc.data();
 
-      /* ===== TELA CARTEIRA ===== */
-      const saldoCart = document.getElementById("saldoCarteira");
-      const pelCart   = document.getElementById("peluciasCarteira");
+    atualizarInterface();
 
-      if(saldoCart){
-        saldoCart.innerText =
-          "R$ " + saldo.toFixed(2).replace(".", ",");
-      }
-
-      if(pelCart){
-        pelCart.innerText =
-          pelucias + " pelúcias acumuladas";
-      }
-    });
 });
+});
+function mostrarSemInternet(){
+
+  const saldoSel  = document.getElementById("saldoUsuario");
+  const saldoCart = document.getElementById("saldoCarteira");
+
+  if(saldoSel){
+    saldoSel.textContent = "undefined";
+  }
+
+  if(saldoCart){
+    saldoCart.textContent = "undefined";
+  }
+
+}
+
+
+function formatarSaldo(valor){
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+
+
+
+function atualizarInterface(){
+
+  if(!navigator.onLine){
+    mostrarSemInternet();
+    return;
+  }
+
+  if(!userData) return;
+
+  if(!userData) return;
+
+  const saldo = userData.saldo || 0;
+  const pelucias = userData.pelucias || 0;
+
+  const nomeUser = document.getElementById("nomeUser");
+  const letraPerfil = document.getElementById("letraPerfil");
+
+  if(nomeUser){
+    nomeUser.innerText = "Olá, " + (userData.username || "Usuário");
+  }
+
+  if(letraPerfil && userData.username){
+    letraPerfil.innerText = userData.username.charAt(0).toUpperCase();
+  }
+
+  /* ===== TELA SELECIONAR ===== */
+  const saldoSel = document.getElementById("saldoUsuario");
+
+  if(saldoSel){
+    saldoSel.innerText =
+      "Saldo: " + formatarSaldo(saldo);
+  }
+
+  /* ===== TELA CARTEIRA ===== */
+  const saldoCart = document.getElementById("saldoCarteira");
+  const pelCart   = document.getElementById("peluciasCarteira");
+
+  if(saldoCart){
+    saldoCart.innerText =
+      formatarSaldo(saldo);
+  }
+
+  if(pelCart){
+    pelCart.innerText =
+      pelucias + " pelúcias acumuladas";
+  }
+
+}
+
+
+function abrirCarteira(){
+
+  // 1️⃣ abre a tela (sua animação)
+  irSemAnimacao("telaCarteira");
+
+  // 2️⃣ força zero imediatamente
+  const saldoCart = document.getElementById("saldoCarteira");
+  const pelCart   = document.getElementById("peluciasCarteira");
+
+  if(saldoCart){
+    saldoCart.textContent = "R$ 0,00";
+  }
+
+  if(pelCart){
+    pelCart.textContent = "0 pelúcias acumuladas";
+  }
+
+  // 3️⃣ após a animação / pequeno delay, mostra saldo real
+  setTimeout(() => {
+
+    if(typeof atualizarInterface === "function"){
+      atualizarInterface();
+    }
+
+  }, 250); // ajuste se sua animação for mais longa
+
+}
 
 
 
