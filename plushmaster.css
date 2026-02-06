@@ -35,12 +35,12 @@ body{
 
 
 /* GERAL */
-.logo{width:240px;margin:25px auto;display:block}
-.logo-img{
-    width:240px;
+.logo-login{
+    width:400px;
     margin:25px auto;
     display:block;
 }
+
 
 .card{
     background:#f7e9dd;
@@ -693,12 +693,18 @@ body{
 
 /* LOGO DA INTRO */
 .intro-logo {
-  position: absolute;
-  width: 220px;
-  opacity: 0;
-  animation: logoFade 0.5s ease forwards;
-  animation-delay: 1.6s;
+  position:absolute;
+
+  width:110%;        /* se adapta à tela */
+  max-width:460px;  /* nunca passa disso */
+
+  height:auto;
+
+  opacity:0;
+  animation:logoFade 0.5s ease forwards;
+  animation-delay:1.6s;
 }
+
 
 
 /* PULO BAIXO + CRESCIMENTO */
