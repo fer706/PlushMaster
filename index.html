@@ -30,87 +30,40 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 </script>
 <!-- INTRO -->
+<!-- INTRO -->
 <div id="intro">
   <div class="ball"></div>
   <img class="intro-logo" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
 </div>
 
+<!-- SCRIPT -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const logo  = document.querySelector(".intro-logo");
   const intro = document.getElementById("intro");
   const tela1 = document.getElementById("tela1");
 
-  if (!logo || !intro || !tela1) return;
+  setTimeout(() => {
 
-  logo.addEventListener("animationend", () => {
+    // Remove a tela de introdução
+    intro.remove();
 
-    setTimeout(() => {
+    // Ativa a primeira tela
+    tela1.classList.add("base");
 
-      // remove a intro
-      intro.remove();
+    // Chama função de login automático
+    iniciarLoginAutomatico();
 
-      // ativa a Tela 1
-      tela1.classList.add("base");
-      tela1.style.pointerEvents = "auto";
-
-      // ================= LOGIN AUTOMÁTICO VIA CONSOLE =================
-      const emailSalvo = localStorage.getItem("loginEmail");
-      const senhaSalva = localStorage.getItem("loginSenha");
-      const usuarioSaiuSalvo = localStorage.getItem("usuarioSaiu");
-
-      console.log("=== LOGIN AUTOMÁTICO ===");
-
-      if (emailSalvo && senhaSalva && usuarioSaiuSalvo) {
-        console.log("loginEmail:", emailSalvo);
-        console.log("loginSenha:", senhaSalva);
-        console.log("usuarioSaiu:", usuarioSaiuSalvo);
-      } else {
-        console.log("Digite os dados no console:");
-        console.log("loginEmail = 'seu_email'");
-        console.log("loginSenha = 'sua_senha'");
-        console.log("usuarioSaiu = 'false'");
-      }
-
-      const loginCheck = setInterval(() => {
-        if (
-          (window.loginEmail && window.loginSenha && window.usuarioSaiu !== undefined) ||
-          (emailSalvo && senhaSalva && usuarioSaiuSalvo)
-        ) {
-          clearInterval(loginCheck);
-
-          const email = window.loginEmail || emailSalvo;
-          const senha = window.loginSenha || senhaSalva;
-          const usuarioSaiu = window.usuarioSaiu || usuarioSaiuSalvo;
-
-          if (usuarioSaiu === "false") {
-            auth.signInWithEmailAndPassword(email, senha)
-              .then(() => {
-                console.log("Login automático OK!");
-                irPara("telaHome");
-              })
-              .catch(err => console.error("Erro login automático:", err));
-          } else {
-            console.log("Usuário saiu da conta, não logando automaticamente.");
-          }
-        }
-      }, 500);
-
-      // ===============================================================
-
-    }, 2000); // ⏱ 2 segundos
-
-  }, { once: true });
-
+  }, 3500); // espera 2,5s
 });
 </script>
 
+
 <!-- TELA 1 -->
-<section id="tela1" class="tela base">
+<section id="tela1" class="tela base ">
     <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
     <div class="card">
-        <button class="btn" onclick="irPara('telacadastro/Login')">Vamos começar</button>
+        <button class="btn" onclick="irPara('telacadastroLogin')">Vamos começar</button>
     </div>
     <footer>© 2026 PlushMaster</footer>
 </section>
@@ -118,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <!-- LOGIN EMAIL -->
-<section id="telacadastro/Login" class="tela">
+<section id="telacadastroLogin" class="tela ">
   <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
   <div class="card">
     <h2>Entre ou Cadastre-se</h2>
@@ -144,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- SENHA -->
 <section id="telaSenha" class="tela">
   <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
-<div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+<div class="btn-voltar" onclick="voltarPara('telacadastroLogin')">
   &lt;
 </div>
 
@@ -174,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- TELA CPF -->
 <section id="telaCPF" class="tela">
   <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
-  <div class="btn-voltar" onclick="voltarPara('telacadastro/Login')">
+  <div class="btn-voltar" onclick="voltarPara('telacadastroLogin')">
   &lt;
   </div>
 
@@ -591,5 +544,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 </section>
 
 <script src="plushmaster.js"></script>
+
+
 </body>
 </html>

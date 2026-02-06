@@ -3,6 +3,7 @@ body{
   overflow-x: hidden; /* bloqueia rolagem lateral */
 }
 
+
 /* estado padrão: fora da tela */
 .tela{
     position: fixed;
@@ -21,7 +22,12 @@ body{
     pointer-events: auto;
     z-index: 2;
 }
-
+/* Tela 1 inicial - já visível */
+.tela-inicial {
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+} 
 /* habilita animação */
 .tela.animando{
     transition: transform .4s ease;

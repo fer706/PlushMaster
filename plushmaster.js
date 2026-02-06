@@ -302,34 +302,33 @@ function irPara(id){
     }, 350);
 }
 
-function voltarPara(){
-    if(historicoTelas.length === 0) return;
-
-    const idAnterior = historicoTelas.pop();
-    const anterior = document.getElementById(idAnterior);
-    if(!anterior) return;
-
-    // tela anterior estava recuada → começa em -30%
-    anterior.style.transition = "none";
-    anterior.style.transform = "translateX(-30%)";
-    anterior.classList.add("base");
-
-    anterior.offsetWidth;
-
-    // anterior volta para o centro
-    anterior.style.transition = "transform .35s ease";
-    anterior.style.transform = "translateX(0)";
+function voltarPara(idTela) {
+    const telaDestino = document.getElementById(idTela);
+    if (!telaDestino) return;
 
     // tela atual sai para a direita
     telaAtual.style.transition = "transform .35s ease";
     telaAtual.style.transform = "translateX(100%)";
 
-    setTimeout(()=>{
+    // tela destino começa recuada (-30%) e visível
+    telaDestino.style.transition = "none";
+    telaDestino.style.transform = "translateX(-30%)";
+    telaDestino.classList.add("base");
+
+    telaDestino.offsetWidth; // força reflow
+
+    // anima a tela destino para o centro
+    telaDestino.style.transition = "transform .35s ease";
+    telaDestino.style.transform = "translateX(0)";
+
+    setTimeout(() => {
+        // limpa tela atual
         telaAtual.classList.remove("base");
         telaAtual.style.transition = "";
         telaAtual.style.transform = "";
 
-        telaAtual = anterior;
+        // atualiza referência
+        telaAtual = telaDestino;
     }, 350);
 }
 
@@ -828,7 +827,7 @@ auth.onAuthStateChanged(async (user) => {
 function sairConta() {
   auth.signOut().then(() => {
     localStorage.setItem("usuarioSaiu", "true");
-    irPara("telacadastro/Login");
+    voltarPara("tela1");
   });
 }
 
@@ -920,7 +919,7 @@ async function confirmarExclusao(){
         await user.delete();
 
         notificar("Conta excluída com sucesso.");
-        irPara("telacadastro/Login");
+        voltarPara("telacadastroLogin");
 
     } catch (e) {
         notificar("Erro: " + e.message);
@@ -1176,53 +1175,51 @@ function validarCPF(cpf) {
 
 return true;
 }
-window.addEventListener("load", () => {
-  // Pega os dados salvos
-  const emailSalvo = localStorage.getItem("loginEmail");
-  const senhaSalva = localStorage.getItem("loginSenha");
-  const usuarioSaiuSalvo = localStorage.getItem("usuarioSaiu");
+// ================= LOGIN AUTOMÁTICO VIA CONSOLE =================
 
-  // Pergunta no console
-  console.log("=== LOGIN AUTOMÁTICO ===");
+const emailSalvo = localStorage.getItem("loginEmail");
+const senhaSalva = localStorage.getItem("loginSenha");
+const usuarioSaiuSalvo = localStorage.getItem("usuarioSaiu");
 
-  if (emailSalvo && senhaSalva && usuarioSaiuSalvo) {
-    // Se tem dados salvos, responde automaticamente
+console.log("=== LOGIN AUTOMÁTICO ===");
+
+if (emailSalvo && senhaSalva && usuarioSaiuSalvo) {
     console.log("loginEmail:", emailSalvo);
     console.log("loginSenha:", senhaSalva);
     console.log("usuarioSaiu:", usuarioSaiuSalvo);
-  } else {
-    // Se não tem, pergunta para o usuário digitar no console
+} else {
     console.log("Digite os dados no console:");
     console.log("loginEmail = 'seu_email'");
     console.log("loginSenha = 'sua_senha'");
     console.log("usuarioSaiu = 'false'");
-  }
+}
 
-  // Observa se as variáveis globais foram definidas no console
-  const loginCheck = setInterval(() => {
+const loginCheck = setInterval(() => {
     if (
-      (window.loginEmail && window.loginSenha && window.usuarioSaiu !== undefined) ||
-      (emailSalvo && senhaSalva && usuarioSaiuSalvo)
+        (window.loginEmail && window.loginSenha && window.usuarioSaiu !== undefined) ||
+        (emailSalvo && senhaSalva && usuarioSaiuSalvo)
     ) {
-      clearInterval(loginCheck);
+        clearInterval(loginCheck);
 
-      const email = window.loginEmail || emailSalvo;
-      const senha = window.loginSenha || senhaSalva;
-      const usuarioSaiu = window.usuarioSaiu || usuarioSaiuSalvo;
+        const email = window.loginEmail || emailSalvo;
+        const senha = window.loginSenha || senhaSalva;
+        const usuarioSaiu = window.usuarioSaiu || usuarioSaiuSalvo;
 
-      if (usuarioSaiu === "false") {
-        auth.signInWithEmailAndPassword(email, senha)
-          .then(() => {
-            console.log("Login automático OK!");
-            irPara("telaHome");
-          })
-          .catch(err => console.error("Erro login automático:", err));
-      } else {
-        console.log("Usuário saiu da conta, não logando automaticamente.");
-      }
+        if (usuarioSaiu === "false") {
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(() => {
+                    console.log("Login automático OK!");
+                    irPara("telaHome");
+                })
+                .catch(err => console.error("Erro login automático:", err));
+        } else {
+            console.log("Usuário saiu da conta, não logando automaticamente.");
+        }
     }
-  }, 500);
-});
+}, 500);
+
+
+
 let mensagensNaoLidas = 0;
 let chatAberto = false;
 
@@ -1291,3 +1288,4 @@ function abrirChat(){
 
     irDeBaixo('telaChat');
 }
+
