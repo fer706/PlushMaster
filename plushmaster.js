@@ -439,7 +439,7 @@ async function entrar() {
       break;
 
     case "auth/user-disabled":
-      mensagem = "Sua conta foi bloqueada por descumprir regras ou fornecer informações inválidas no cadastro. entre em contato com o suporte para mais informações.";
+      mensagem = "Sua conta foi bloqueada por descumprir regras. entre em contato com o suporte para mais informações.";
       break;
 
   default:
@@ -1288,4 +1288,3 @@ function abrirChat(){
 
     irDeBaixo('telaChat');
 }
-
