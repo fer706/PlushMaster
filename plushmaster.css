@@ -40,6 +40,11 @@ body{
     margin:25px auto;
     display:block;
 }
+.logo-topo{
+    width:140px;     /* tamanho ideal para topo */
+    height:auto;
+    display:block;
+}
 
 
 .card{
@@ -86,7 +91,7 @@ footer{text-align:center;margin-top:15px}
     flex-direction:column;
 }
 .top-bar{
-    height:70px;              /* 🔥 mais fino */
+    height:80px;              /* 🔥 mais fino */
     background:#4fc3ff;
 
     display:flex;
