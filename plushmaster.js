@@ -998,23 +998,30 @@ async function salvarNovoNome(){
     notificar("Apelido alterado com sucesso!");
 }
 
-
 function setBtnLoading(btn, loading){
-  // aceita ID ou elemento
-  if (typeof btn === "string") {
+
+  // aceita ID OU o próprio botão
+  if(typeof btn === "string"){
     btn = document.getElementById(btn);
   }
 
-  if (!btn) return;
+  if(!btn) return;
 
-  if (loading) {
+  if(loading){
+
+    // evita duplo clique
+    if(btn.classList.contains("loading")) return;
+
     btn.classList.add("loading");
     btn.disabled = true;
-  } else {
+
+  }else{
+
     btn.classList.remove("loading");
     btn.disabled = false;
   }
 }
+
 function redefinirSenha(){
   const email = document.getElementById("emailExibido").innerText.trim();
 

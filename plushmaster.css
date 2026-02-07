@@ -1329,3 +1329,18 @@ body{
 
     border:2px solid #4fc3ff; /* combina com seu chat */
 }
+.btn.loading{
+  pointer-events: none;
+  cursor: default;
+}
+
+/* botão desativado SEM mudar a cor */
+.btn:disabled{
+  opacity: 1;
+  background: linear-gradient(#4db8ff,#0077e6);
+  color: #fff;
+
+  pointer-events: none;   /* 🔥 ISSO BLOQUEIA O CLIQUE DE VERDADE */
+  cursor: default;        /* remove a mãozinha */
+}
+
