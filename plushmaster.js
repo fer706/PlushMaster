@@ -57,74 +57,125 @@ function clicarMaquina(id) {
   });
 }
 
-
 function iniciarJogo() {
-  if (!maquinaSelecionada) return notificar("Selecione uma máquina!");
-  if (jogadas <= 0) return notificar("Selecione o número de jogadas!");
 
-  if (statusMaquinas[maquinaSelecionada] !== "disponivel")
-    return notificar("A máquina selecionada não está disponível!");
+  
+
+  if (!maquinaSelecionada) 
+    return notificar("Selecione uma máquina!");
+
+  if (jogadas <= 0) 
+    return notificar("Selecione o número de jogadas!");
 
   firebase.auth().onAuthStateChanged(user => {
-    if (!user) return;
 
+    if (!user) return notificar("Faça login!");
+
+    const maquinaRef = db.collection("maquinas").doc(maquinaSelecionada);
     const userRef = db.collection("users").doc(user.uid);
-    userRef.get().then(doc => {
-      if (!doc.exists) return;
 
-      let saldo = doc.data().saldo || 0;
+    db.runTransaction(async (transaction) => {
+
+      const agora = Date.now();
+      const maquinaDoc = await transaction.get(maquinaRef);
+      if (!maquinaDoc.exists)
+        throw new Error("Máquina não encontrada.");
+
+      const dados = maquinaDoc.data();
+      if (dados.jogando && dados.fim > agora){
+        const nomeMaquina = maquinaSelecionada.toUpperCase();
+        throw new Error(`${dados.jogador} está jogando na máquina ${nomeMaquina}. Aguarde...`);
+      }
+
+      // 🔹 pegar username e saldo do usuário
+      const userDoc = await transaction.get(userRef);
+      if (!userDoc.exists)
+        throw new Error("Usuário não encontrado.");
+
+      const username = userDoc.data().username; // 🔹 aqui está o username real
+      let saldo = userDoc.data().saldo || 0;
+
       let valorJogada = maquinaSelecionada === "toy" ? 5 : 2;
       let total = jogadas * valorJogada;
 
       if (saldo < total)
-        return notificar("Saldo insuficiente!");
+        throw new Error("Saldo insuficiente!");
 
       saldo -= total;
 
-      userRef.update({ saldo }).then(() => {
-        notificar("Máquina iniciada! Boa sorte 🧸");
-        function atualizarSaldoTelaSelecionar(saldo){
-  const el = document.getElementById("saldoUsuario");
-  if(!el) return;
+      // ⏰ 1 minuto por jogada
+const tempoTotal = jogadas * 1 * 60 * 1000;
 
-  el.innerText = "R$ " + saldo.toFixed(2).replace(".", ",");
-}
 
+      // 🔥 TRAVAR MÁQUINA
+      transaction.update(maquinaRef, {
+        jogando: true,
+        jogador: username,   // ✅ agora funciona
+        uid: user.uid,
+        fim: agora + tempoTotal
       });
+
+      // 🔥 atualizar saldo
+      transaction.update(userRef, { saldo });
+
+      return saldo;
+
+    })
+    .then((saldoAtualizado) => {
+      notificar(`🎮 Máquina ${maquinaSelecionada.toUpperCase()} iniciada!`); 
+    })
+    .catch(err => {
+      notificar(err.message);
     });
+
   });
+
 }
 
-/* LISTENER DAS MÁQUINAS */
+// 🔹 Listener para liberar máquinas automaticamente
+setInterval(async () => {
+  const agora = Date.now();
+  for (const nome of ["plush","toy"]) {
+    const doc = await db.collection("maquinas").doc(nome).get();
+    if (!doc.exists) continue;
+
+    const dados = doc.data();
+    
+    // libera máquina se o tempo acabou
+    if (dados.jogando && dados.fim < agora) {
+      await doc.ref.update({
+        jogando: false,
+        jogador: "",
+        uid: "",
+        fim: 0
+      });
+    }
+
+    // atualiza status visual
+    atualizarStatusMaquina(doc);
+  }
+}, 1000);
+
+
+
+
 let listenerMaquinas = null;
 
-function abrirTelaSelecionar(){
+async function abrirTelaSelecionar(){
 
   irPara("telaSelecionar");
 
   // 🔥 verifica internet imediatamente
   if(!navigator.onLine){
-
-    notificar(
-      "Você está desconectado. Feche e volte a abrir o site."
-    );
-
+    notificar("Você está desconectado. Feche e volte a abrir o site.");
   }
+
   window.addEventListener("offline", () => {
-
-  const telaSelecionar = document.getElementById("telaSelecionar");
-
-  // 🔥 verifica se a tela está aberta
-  if(telaSelecionar && telaSelecionar.style.display !== "none"){
-
-    notificar(
-      "Você está desconectado. Feche e volte a abrir o site."
-    );
-
-  }
-
-});
-
+    const telaSelecionar = document.getElementById("telaSelecionar");
+    if(telaSelecionar && telaSelecionar.style.display !== "none"){
+      notificar("Você está desconectado. Feche e volte a abrir o site.");
+    }
+  });
 
   document.getElementById("loader").style.display = "block";
 
@@ -134,51 +185,70 @@ function abrirTelaSelecionar(){
   // mata listener antigo
   if (listenerMaquinas) listenerMaquinas();
 
-  listenerMaquinas = db.collection("maquinas")
-  .onSnapshot(snapshot => {
-
-    snapshot.forEach(doc => {
-
-      const id = doc.id;
-      const status = doc.data().status;
-      statusMaquinas[id] = status;
-
-      const btn = document.getElementById(
-        id === "plush" ? "statusPlush" : "statusToy"
-      );
-
-      const card = btn.closest(".sel-card");
-
-      if (status !== "disponivel") {
-
-        btn.innerText = "Indisponível";
-        btn.className = "sel-btn-status sel-indisponivel";
-
-        card.style.pointerEvents = "none";
-        card.style.opacity = "0.5";
-
-        if (maquinaSelecionada === id) {
-          maquinaSelecionada = null;
-        }
-
-      } else {
-
-        if (maquinaSelecionada !== id) {
-          btn.innerText = "Selecionar";
-          btn.className = "sel-btn-status sel-disponivel";
-        }
-
-        card.style.pointerEvents = "auto";
-        card.style.opacity = "1";
-      }
-    });
-
-    document.getElementById("loader").style.display = "none";
-
-    document.querySelectorAll(".sel-maquinas .sel-card")
-      .forEach(c => c.style.display = "block");
+  // 🔹 leitura inicial
+  const snapshotInicial = await db.collection("maquinas").get();
+  snapshotInicial.forEach(doc => {
+    atualizarStatusMaquina(doc);
   });
 
+  // 🔹 listener em tempo real
+  listenerMaquinas = db.collection("maquinas")
+    .onSnapshot(snapshot => {
+      snapshot.forEach(doc => {
+        atualizarStatusMaquina(doc);
+      });
+    });
+
+  document.getElementById("loader").style.display = "none";
+  document.querySelectorAll(".sel-maquinas .sel-card")
+    .forEach(c => c.style.display = "block");
+
+}
+
+function atualizarStatusMaquina(doc){
+  const id = doc.id;
+  const dados = doc.data(); // pega todos os dados da máquina
+  const agora = Date.now();
+
+  const btn = document.getElementById(
+    id === "plush" ? "statusPlush" : "statusToy"
+  );
+  const card = btn.closest(".sel-card");
+
+  // checa se a máquina está ocupada por outro jogador
+  const ocupada = dados.jogando && dados.fim > agora;
+
+  if (ocupada) {
+    // máquina ocupada
+    btn.innerText = "Ocupada";          // muda texto
+    btn.className = "sel-btn-status sel-indisponivel"; // mantém visual de indisponível
+    card.style.pointerEvents = "none";   // bloqueia clique
+    card.style.opacity = "0.6";          // visual indica indisponível
+
+    if (maquinaSelecionada === id) maquinaSelecionada = null;
+
+  } else if (dados.status !== "disponivel") {
+    // máquina marcada como indisponível no DB
+    btn.innerText = "Indisponível";
+    btn.className = "sel-btn-status sel-indisponivel";
+    card.style.pointerEvents = "none";
+    card.style.opacity = "0.5";
+
+    if (maquinaSelecionada === id) maquinaSelecionada = null;
+
+  } else {
+    // máquina disponível
+    card.style.pointerEvents = "auto";
+    card.style.opacity = "1";
+
+    if (maquinaSelecionada === id) {
+      btn.innerText = "Selecionada";
+      btn.className = "sel-btn-status sel-selecionada";
+    } else {
+      btn.innerText = "Selecionar";
+      btn.className = "sel-btn-status sel-disponivel";
+    }
+  }
 }
 
 function toggleJogadas(){
@@ -211,7 +281,7 @@ const sendBtn = document.getElementById('send-btn');
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
     // Se não estiver logado, volta para a tela de login
-    irPara('telacadastro/Login');
+    irPara('telacadastroLogin');
     return;
   }
 
