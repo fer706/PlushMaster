@@ -1213,7 +1213,6 @@ function verificarLoginAutomatico(){
 
             console.log("Erro no login automático");
 
-            voltarPara("tela1");
 
         });
 }
