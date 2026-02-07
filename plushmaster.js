@@ -268,7 +268,6 @@ db.collection('chat').orderBy('timestamp')
   });
 });
 
-
 let telaAtual = document.querySelector(".tela.base");
 let historicoTelas = [];
 
@@ -301,6 +300,8 @@ function irPara(id){
         telaAtual = nova;
     }, 350);
 }
+
+
 
 function voltarPara(idTela) {
     const telaDestino = document.getElementById(idTela);
@@ -1182,48 +1183,42 @@ function validarCPF(cpf) {
 
 return true;
 }
-// ================= LOGIN AUTOMÁTICO VIA CONSOLE =================
+function verificarLoginAutomatico(){
 
-const emailSalvo = localStorage.getItem("loginEmail");
-const senhaSalva = localStorage.getItem("loginSenha");
-const usuarioSaiuSalvo = localStorage.getItem("usuarioSaiu");
+    const emailSalvo = localStorage.getItem("loginEmail");
+    const senhaSalva = localStorage.getItem("loginSenha");
+    const usuarioSaiu = localStorage.getItem("usuarioSaiu");
 
-console.log("=== LOGIN AUTOMÁTICO ===");
+    // 👉 se NÃO tiver login
+    if(!emailSalvo || !senhaSalva || usuarioSaiu === "true"){
 
-if (emailSalvo && senhaSalva && usuarioSaiuSalvo) {
-    console.log("loginEmail:", emailSalvo);
-    console.log("loginSenha:", senhaSalva);
-    console.log("usuarioSaiu:", usuarioSaiuSalvo);
-} else {
-    console.log("Digite os dados no console:");
-    console.log("loginEmail = 'seu_email'");
-    console.log("loginSenha = 'sua_senha'");
-    console.log("usuarioSaiu = 'false'");
+        console.log("Sem login salvo");
+
+        voltarPara("tela1");
+        return;
+    }
+
+    // 👉 tenta logar
+    auth.signInWithEmailAndPassword(emailSalvo, senhaSalva)
+
+        .then(() => {
+
+            console.log("Login automático OK");
+
+            voltarPara("telaHome");
+
+        })
+
+        .catch(() => {
+
+            console.log("Erro no login automático");
+
+            voltarPara("tela1");
+
+        });
 }
 
-const loginCheck = setInterval(() => {
-    if (
-        (window.loginEmail && window.loginSenha && window.usuarioSaiu !== undefined) ||
-        (emailSalvo && senhaSalva && usuarioSaiuSalvo)
-    ) {
-        clearInterval(loginCheck);
 
-        const email = window.loginEmail || emailSalvo;
-        const senha = window.loginSenha || senhaSalva;
-        const usuarioSaiu = window.usuarioSaiu || usuarioSaiuSalvo;
-
-        if (usuarioSaiu === "false") {
-            auth.signInWithEmailAndPassword(email, senha)
-                .then(() => {
-                    console.log("Login automático OK!");
-                    irPara("telaHome");
-                })
-                .catch(err => console.error("Erro login automático:", err));
-        } else {
-            console.log("Usuário saiu da conta, não logando automaticamente.");
-        }
-    }
-}, 500);
 
 
 

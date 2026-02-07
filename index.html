@@ -40,27 +40,34 @@ const db = firebase.firestore();
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const intro = document.getElementById("intro");
-  const tela1 = document.getElementById("tela1");
+    const intro = document.getElementById("intro");
 
-  setTimeout(() => {
+    setTimeout(() => {
 
-    // Remove a tela de introdução
-    intro.remove();
+        intro.remove();
 
-    // Ativa a primeira tela
-    tela1.classList.add("base");
+        // 🔥 abre carregando SEM animação
+        irPara("telaCarregando");
 
-    // Chama função de login automático
-    iniciarLoginAutomatico();
+        // 👉 espera 2 segundos
+        setTimeout(() => {
 
-  }, 3500); // espera 2,5s
+            verificarLoginAutomatico();
+
+        }, 2000);
+
+    }, 3500); // tempo da intro
 });
+
+
 </script>
 
+<div id="telaCarregando" class="tela ">
+    <span class="texto-carregando">Carregando...</span>
+</div>
 
 <!-- TELA 1 -->
-<section id="tela1" class="tela base ">
+<section id="tela1" class="tela base   ">
     <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
     <div class="card">
         <button class="btn" onclick="irPara('telacadastroLogin')">Vamos começar</button>

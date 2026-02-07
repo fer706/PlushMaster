@@ -4,7 +4,6 @@ body{
 }
 
 
-/* estado padrão: fora da tela */
 .tela{
     position: fixed;
     inset: 0;
@@ -16,28 +15,13 @@ body{
     pointer-events: none;
 }
 
-/* tela visível */
 .tela.base{
     transform: translateX(0);
     pointer-events: auto;
     z-index: 2;
 }
-/* Tela 1 inicial - já visível */
-.tela-inicial {
-    transform: translateX(0);
-    pointer-events: auto;
-    z-index: 2;
-} 
-/* habilita animação */
-.tela.animando{
-    transition: transform .4s ease;
-}
 
-/* tela saindo */
-.tela.saindo{
-    transform: translateX(-100%);
-    z-index: 1;
-}
+
 
 
 /* GERAL */
@@ -1342,5 +1326,23 @@ body{
 
   pointer-events: none;   /* 🔥 ISSO BLOQUEIA O CLIQUE DE VERDADE */
   cursor: default;        /* remove a mãozinha */
+}
+#telaCarregando{
+    position: fixed;
+    inset: 0;
+    background: #3dc8ff; /* azul PlushMaster */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.texto-carregando{
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
