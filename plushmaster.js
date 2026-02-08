@@ -147,13 +147,18 @@ if(dados.jogando && dados.fim > agora){
 const tempoTotal = jogadas * 1 * 60 * 1000;
 
 
+      
       // 🔥 TRAVAR MÁQUINA
-      transaction.update(maquinaRef, {
-        jogando: true,
-        jogador: username,   // ✅ agora funciona
-        uid: user.uid,
-        fim: agora + tempoTotal
-      });
+transaction.update(maquinaRef, {
+  jogando: true,
+  jogador: username,
+  uid: user.uid,
+
+  inicio: agora,              // ⭐ novo (opcional mas profissional)
+  tempoTotal: tempoTotal,     // ⭐ guarda o tempo comprado
+  fim: agora + tempoTotal     // usado para calcular o restante
+});
+
 
       // 🔥 atualizar saldo
       transaction.update(userRef, { saldo });
@@ -186,14 +191,17 @@ setInterval(async () => {
     const dados = doc.data();
     
     // libera máquina se o tempo acabou
-    if (dados.jogando && dados.fim < agora) {
-      await doc.ref.update({
-        jogando: false,
-        jogador: "",
-        uid: "",
-        fim: 0
-      });
-    }
+if (dados.jogando && dados.fim < agora) {
+  await doc.ref.update({
+    jogando: false,
+    jogador: "",
+    uid: "",
+    inicio: null,
+    tempoTotal: 0,
+    fim: null
+  });
+}
+
 
     // atualiza status visual
     atualizarStatusMaquina(doc);
