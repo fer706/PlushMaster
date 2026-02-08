@@ -371,7 +371,7 @@ const sendBtn = document.getElementById('send-btn');
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
     // Se não estiver logado, volta para a tela de login
-    irPara('telacadastroLogin');
+    irPara('telacadastro/Login');
     return;
   }
 
