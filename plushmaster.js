@@ -2,70 +2,74 @@
 let jogadas = 0;
 let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
+let iniciandoJogo = false;
 
-function clicarMaquina(id) {
-  // se estiver indisponível, bloqueia
-  if (statusMaquinas[id] !== "disponivel") {
-    notificar("Essa máquina não está disponível no momento!");
-    return;
-  }
+function clicarMaquina(id){
 
-  // 🔁 TOGGLE: se clicar na já selecionada, desseleciona
-  if (maquinaSelecionada === id) {
-    maquinaSelecionada = null;
+  if(
+  statusMaquinas[id] !== "disponivel" &&
+  statusMaquinas[id] !== "minha"
+){
+  notificar("Essa máquina não está disponível!");
+  return;
+}
 
-    ["plush","toy"].forEach(m => {
-      const btn = document.getElementById(
-        "status" + m.charAt(0).toUpperCase() + m.slice(1)
-      );
-      if (!btn) return;
 
-      if (statusMaquinas[m] === "disponivel") {
-        btn.innerText = "Selecionar";
-        btn.className = "sel-btn-status sel-disponivel";
-      } else {
-        btn.innerText = "Indisponível";
-        btn.className = "sel-btn-status sel-indisponivel";
-      }
-    });
+  // toggle seleção
+  maquinaSelecionada =
+    maquinaSelecionada === id ? null : id;
 
-    return;
-  }
 
-  // seleção normal
-  maquinaSelecionada = id;
-
+  // redesenha os botões SEM ir no firebase
   ["plush","toy"].forEach(m => {
+
     const btn = document.getElementById(
       "status" + m.charAt(0).toUpperCase() + m.slice(1)
     );
+
     if (!btn) return;
 
-    if (statusMaquinas[m] !== "disponivel") {
-      btn.innerText = "Indisponível";
-      btn.className = "sel-btn-status sel-indisponivel";
-      return;
-    }
+    // ocupada ou indisponível
+    if(
+  statusMaquinas[m] === "ocupada" ||
+  statusMaquinas[m] === "indisponivel"
+){
+  btn.innerText =
+    statusMaquinas[m] === "ocupada"
+      ? "Ocupada"
+      : "Indisponível";
 
-    if (m === id) {
+  btn.className = "sel-btn-status sel-indisponivel";
+  return;
+}
+
+
+    // selecionada
+    if(maquinaSelecionada === m){
       btn.innerText = "Selecionada";
       btn.className = "sel-btn-status sel-selecionada";
-    } else {
+    }
+    else{
       btn.innerText = "Selecionar";
       btn.className = "sel-btn-status sel-disponivel";
     }
+
   });
+
 }
 
+  
 function iniciarJogo() {
 
-  
+  if(iniciandoJogo) return; // 🚨 BLOQUEIA DUPLO CLIQUE
 
   if (!maquinaSelecionada) 
     return notificar("Selecione uma máquina!");
 
   if (jogadas <= 0) 
     return notificar("Selecione o número de jogadas!");
+  iniciandoJogo = true; // 🔒 trava botão
+  setBtnLoading("btnIniciar", true);
 
   firebase.auth().onAuthStateChanged(user => {
 
@@ -81,19 +85,55 @@ function iniciarJogo() {
       if (!maquinaDoc.exists)
         throw new Error("Máquina não encontrada.");
 
-      const dados = maquinaDoc.data();
-      if (dados.jogando && dados.fim > agora){
-        const nomeMaquina = maquinaSelecionada.toUpperCase();
-        throw new Error(`${dados.jogador} está jogando na máquina ${nomeMaquina}. Aguarde...`);
-      }
+      
+const dados = maquinaDoc.data();
 
-      // 🔹 pegar username e saldo do usuário
-      const userDoc = await transaction.get(userRef);
-      if (!userDoc.exists)
-        throw new Error("Usuário não encontrado.");
+// ✅ PEGA O USUÁRIO UMA ÚNICA VEZ
+const userDoc = await transaction.get(userRef);
+if (!userDoc.exists)
+  throw new Error("Usuário não encontrado.");
 
-      const username = userDoc.data().username; // 🔹 aqui está o username real
-      let saldo = userDoc.data().saldo || 0;
+const userData = userDoc.data();
+
+let saldo = userData.saldo || 0;
+const username = userData.username;
+
+
+// 🔥 AGORA pode usar saldo
+if(dados.jogando && dados.uid === user.uid){
+
+  let valorJogada = maquinaSelecionada === "toy" ? 5 : 2;
+  let total = jogadas * valorJogada;
+
+  if (saldo < total)
+    throw new Error("Saldo insuficiente!");
+
+  saldo -= total;
+
+  const tempoExtra = jogadas * 60000;
+
+  transaction.update(maquinaRef, {
+    fim: dados.fim + tempoExtra
+  });
+
+  transaction.update(userRef, { saldo });
+
+  return saldo;
+}
+
+
+
+// 🔴 se for OUTRA pessoa → bloqueia
+if(dados.jogando && dados.fim > agora){
+
+  const jogadorAtual = dados.jogador?.trim()
+    ? dados.jogador
+    : "Outro jogador";
+
+  throw new Error(
+    `${jogadorAtual} foi mais rápido no clique. Aguarde liberar!`
+  );
+}
 
       let valorJogada = maquinaSelecionada === "toy" ? 5 : 2;
       let total = jogadas * valorJogada;
@@ -123,9 +163,13 @@ const tempoTotal = jogadas * 1 * 60 * 1000;
     })
     .then((saldoAtualizado) => {
       notificar(`🎮 Máquina ${maquinaSelecionada.toUpperCase()} iniciada!`); 
+       iniciandoJogo = false;
+  setBtnLoading("btnIniciar", false);
     })
     .catch(err => {
       notificar(err.message);
+      iniciandoJogo = false;
+  setBtnLoading("btnIniciar", false);
     });
 
   });
@@ -206,50 +250,96 @@ async function abrirTelaSelecionar(){
 }
 
 function atualizarStatusMaquina(doc){
+
   const id = doc.id;
-  const dados = doc.data(); // pega todos os dados da máquina
+  const dados = doc.data();
   const agora = Date.now();
 
   const btn = document.getElementById(
-    id === "plush" ? "statusPlush" : "statusToy"
+    "status" + id.charAt(0).toUpperCase() + id.slice(1)
   );
+
+  if(!btn) return;
+
   const card = btn.closest(".sel-card");
 
-  // checa se a máquina está ocupada por outro jogador
   const ocupada = dados.jogando && dados.fim > agora;
+  const uid = auth.currentUser?.uid;
 
-  if (ocupada) {
-    // máquina ocupada
-    btn.innerText = "Ocupada";          // muda texto
-    btn.className = "sel-btn-status sel-indisponivel"; // mantém visual de indisponível
-    card.style.pointerEvents = "none";   // bloqueia clique
-    card.style.opacity = "0.6";          // visual indica indisponível
+  const souEu = ocupada && dados.uid === uid;
 
-    if (maquinaSelecionada === id) maquinaSelecionada = null;
+  let novoEstado = "disponivel";
 
-  } else if (dados.status !== "disponivel") {
-    // máquina marcada como indisponível no DB
+  // 🔥 PRIORIDADE MÁXIMA → sou eu jogando
+  if(souEu){
+    novoEstado = "minha";
+  }
+  else if(ocupada){
+    novoEstado = "ocupada";
+  }
+  else if(dados.status !== "disponivel"){
+    novoEstado = "indisponivel";
+  }
+
+  // evita redesenho desnecessário
+  if(statusMaquinas[id] === novoEstado) return;
+
+  statusMaquinas[id] = novoEstado;
+
+  // só limpa seleção se OUTRO travou
+  if(novoEstado === "ocupada" && maquinaSelecionada === id){
+    maquinaSelecionada = null;
+  }
+
+  // -------- UI ----------
+
+  // 🟢 MINHA máquina (parece disponível)
+if(novoEstado === "minha"){
+
+  card.style.pointerEvents = "auto";
+  card.style.opacity = "1";
+
+  btn.innerText = "Selecionar"; // 🔥 parece livre
+  btn.className = "sel-btn-status sel-disponivel";
+
+  return;
+}
+
+  // 🔴 ocupada por outro
+  if(novoEstado === "ocupada"){
+
+    btn.innerText = "Ocupada";
+    btn.className = "sel-btn-status sel-indisponivel";
+    card.style.pointerEvents = "none";
+    card.style.opacity = "0.6";
+
+    return;
+  }
+
+  // ⚫ manutenção
+  if(novoEstado === "indisponivel"){
+
     btn.innerText = "Indisponível";
     btn.className = "sel-btn-status sel-indisponivel";
     card.style.pointerEvents = "none";
     card.style.opacity = "0.5";
 
-    if (maquinaSelecionada === id) maquinaSelecionada = null;
+    return;
+  }
 
-  } else {
-    // máquina disponível
-    card.style.pointerEvents = "auto";
-    card.style.opacity = "1";
+  // 🟡 disponível
+  card.style.pointerEvents = "auto";
+  card.style.opacity = "1";
 
-    if (maquinaSelecionada === id) {
-      btn.innerText = "Selecionada";
-      btn.className = "sel-btn-status sel-selecionada";
-    } else {
-      btn.innerText = "Selecionar";
-      btn.className = "sel-btn-status sel-disponivel";
-    }
+  if(maquinaSelecionada === id){
+    btn.innerText = "Selecionada";
+    btn.className = "sel-btn-status sel-selecionada";
+  }else{
+    btn.innerText = "Selecionar";
+    btn.className = "sel-btn-status sel-disponivel";
   }
 }
+
 
 function toggleJogadas(){
   const lista = document.getElementById("listaJogadas");
