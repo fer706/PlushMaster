@@ -98,7 +98,7 @@ footer{text-align:center;margin-top:15px}
 
 .camera-box {
     background: black;
-    margin: 10px auto;       /* centraliza */
+    margin: 0px auto;       /* centraliza */
     border-radius: 2px;      /* quase quadrado */
     width: 100%;
     max-width: 600px;
@@ -1345,6 +1345,32 @@ body{
     font-size: 26px;
     font-weight: bold;
     letter-spacing: 1px;
+}
+
+
+#tela1{
+    background:#ffffff; 
+}
+.btn-comecar{
+    width:90%;
+    max-width:320px;
+
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+
+    display:block;
+    box-sizing:border-box;
+}
+
+.footer-plush{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:14px;
+    color:#666;
 }
 
 
