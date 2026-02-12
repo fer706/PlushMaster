@@ -575,12 +575,17 @@ async function entrar() {
   try {
     await auth.signInWithEmailAndPassword(email, senha);
 
-    // SALVA login automático
-    localStorage.setItem("loginEmail", email);
-    localStorage.setItem("loginSenha", senha);
-    localStorage.setItem("usuarioSaiu", "false"); // nunca marcar true aqui
+// salva usuário
+localStorage.setItem("usuarioLogado", email);
 
-    irPara("telaHome");
+// 🔥 MUITO IMPORTANTE:
+localStorage.removeItem("usuarioSaiu"); 
+// ou coloque "false"
+
+irPara("telaHome");
+
+
+
   } catch (err) {
 
   let mensagem = "";
@@ -633,6 +638,7 @@ function mostrarTela(id){
 let verificandoEmail = false;
 
 async function irParaUsuario(btn){
+
   const emailInput = document.getElementById('emailLogin');
   const email = emailInput.value.trim();
 
@@ -645,41 +651,41 @@ async function irParaUsuario(btn){
   verificandoEmail = true;
 
   try {
-    // 🔥 método que você já usa
-    await auth.createUserWithEmailAndPassword(email, "teste123");
 
-    console.log("EMAIL NÃO CADASTRADO");
+    await auth.createUserWithEmailAndPassword(email, "teste123");
 
     // remove usuário de teste
     const user = auth.currentUser;
     await user.delete();
-    await auth.signOut(); // 🔥 limpa sessão
+    await auth.signOut();
 
     emailCadastro = email;
     irPara('telaCPF');
 
   } catch(err) {
 
-  if(err.code === "auth/email-already-in-use"){
-      console.log("EMAIL EM USO");
+    if(err.code === "auth/email-already-in-use"){
 
       emailCadastro = email;
       document.getElementById("emailExibido").innerText = email;
       irPara("telaSenha");
 
-    } else if(err.code === "auth/invalid-email"){
+    } 
+    else if(err.code === "auth/invalid-email"){
       notificar("Email inválido");
-    } else {
-      notificar("Erro: " + err.message);
-      console.error(err);
+    } 
+    else {
+      notificar("Erro ao verificar email");
     }
 
-
   } finally {
+
     verificandoEmail = false;
     btn.classList.remove("loading");
+
   }
 }
+
 
 
 async function irParaSenha(btn){
@@ -994,11 +1000,22 @@ auth.onAuthStateChanged(async (user) => {
 
 // ================= LOGOUT =================
 function sairConta() {
+
   auth.signOut().then(() => {
+
+    // bloqueia login automático
     localStorage.setItem("usuarioSaiu", "true");
+
+    // 🔥 remove dados do login
+    localStorage.removeItem("usuarioLogado");
+    localStorage.removeItem("loginEmail");
+    localStorage.removeItem("loginSenha");
+
     voltarPara("tela1");
   });
+
 }
+
 
 
 
@@ -1353,37 +1370,16 @@ return true;
 }
 function verificarLoginAutomatico(){
 
-    const emailSalvo = localStorage.getItem("loginEmail");
-    const senhaSalva = localStorage.getItem("loginSenha");
-    const usuarioSaiu = localStorage.getItem("usuarioSaiu");
+    const usuario = localStorage.getItem("usuarioLogado");
 
-    // 👉 se NÃO tiver login
-    if(!emailSalvo || !senhaSalva || usuarioSaiu === "true"){
-
-        console.log("Sem login salvo");
-
+    if(usuario){
+        voltarPara("telaHome");
+    }else{
         voltarPara("tela1");
-        return;
     }
 
-    // 👉 tenta logar
-    auth.signInWithEmailAndPassword(emailSalvo, senhaSalva)
-
-        .then(() => {
-
-            console.log("Login automático OK");
-
-            voltarPara("telaHome");
-
-        })
-
-        .catch(() => {
-
-            console.log("Erro no login automático");
-
-
-        });
 }
+
 
 
 
