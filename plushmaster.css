@@ -593,6 +593,16 @@ body{
   display:block;
 }
 
+.notificacao.a{
+
+  border: 2px solid #ffd000;
+
+  box-shadow: 
+    0 0 10px #ffd000,
+    0 0 25px rgba(255,208,0,0.6);
+
+}
+
 
 
 .notificacao{

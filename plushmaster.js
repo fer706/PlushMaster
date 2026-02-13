@@ -219,15 +219,20 @@ async function abrirTelaSelecionar(){
 
   // 🔥 verifica internet imediatamente
   if(!navigator.onLine){
-    notificar("Você está desconectado. Feche e volte a abrir o site.");
+    notificar("Você está desconectado. Feche e volte a abrir o site.","a");
+  }
+window.addEventListener("offline", () => {
+
+  const telaSelecionar = document.getElementById("telaSelecionar");
+
+  // verifica se a tela está visível
+  if(telaSelecionar && telaSelecionar.classList.contains("base")){
+      notificar("Você está desconectado. Feche e volte a abrir o site.","a");
   }
 
-  window.addEventListener("offline", () => {
-    const telaSelecionar = document.getElementById("telaSelecionar");
-    if(telaSelecionar && telaSelecionar.style.display !== "none"){
-      notificar("Você está desconectado. Feche e volte a abrir o site.");
-    }
-  });
+});
+
+  
 
   document.getElementById("loader").style.display = "block";
 
@@ -613,7 +618,7 @@ irPara("telaHome");
       break;
 
     case "auth/user-disabled":
-      mensagem = "Sua conta foi bloqueada por descumprir regras. entre em contato com o suporte para mais informações.";
+      mensagem = "Sua conta foi bloqueada por descumprir regras. entre em contato com o suporte para mais informações.","a";
       break;
 
   default:
@@ -778,27 +783,33 @@ async function finalizarCadastro(btn){
 }
 
 
-function notificar(msg) {
+function notificar(msg, tipo = "v") {
+
   const container = document.getElementById("notificacoes");
   if (!container) return;
 
   const div = document.createElement("div");
-  div.className = "notificacao"; // 🔥 CLASSE CERTA
+
+  if(tipo === "a"){
+    div.className = "notificacao a"; // 👈 ESSA É A CHAVE
+  }else{
+    div.className = "notificacao";
+  }
+
   div.innerText = msg;
 
   container.appendChild(div);
 
-  // força o navegador a reconhecer o elemento antes da animação
   requestAnimationFrame(() => {
     div.classList.add("ativa");
   });
 
-  // remove após 3 segundos
   setTimeout(() => {
     div.classList.remove("ativa");
     setTimeout(() => div.remove(), 400);
   }, 3000);
 }
+
 
 
 
