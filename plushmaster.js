@@ -1,4 +1,3 @@
-
 let jogadas = 0;
 let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
@@ -1463,4 +1462,62 @@ function abrirChat(){
     });
 
     irDeBaixo('telaChat');
+}
+
+async function verificarVersaoSite(){
+
+  try{
+
+    const doc = await db
+      .collection("config")
+      .doc("app")
+      .get();
+
+    if(!doc.exists) return;
+
+    const versaoBanco = doc.data().versao;
+    const versaoAtual = "1.0"; // 🔥 sua versão do site
+
+    if(versaoBanco !== versaoAtual){
+
+      mostrarPopupAtualizacao();
+
+    }
+
+  }catch(e){
+    console.error("Erro ao verificar versão:", e);
+  }
+
+}
+
+function atualizarSite(){
+
+    // limpa cache do navegador
+    if('caches' in window){
+        caches.keys().then(names=>{
+            names.forEach(name => caches.delete(name));
+        });
+    }
+
+    // força reload REAL
+    window.location.reload(true);
+}
+
+function mostrarPopupAtualizacao(){
+
+   document.getElementById("popupAtualizacao")
+           .style.display = "flex";
+
+}
+function mostrarPopupAtualizacao(){
+
+  const popup = document.getElementById("popupUpdate");
+
+  // 🔥 proteção anti-erro
+  if(!popup){
+    console.warn("PopupUpdate não encontrado no HTML");
+    return;
+  }
+
+  popup.style.display = "flex";
 }

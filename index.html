@@ -54,6 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             verificarLoginAutomatico();
 
+            // 🔥 espera MAIS 1 segundo e verifica a versão
+            setTimeout(() => {
+
+                verificarVersaoSite();
+
+            }, 1000);
+
         }, 2000);
 
     }, 3500); // tempo da intro
@@ -580,6 +587,26 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
     <button id="send-btn" style="padding:10px 20px; border:none; border-radius:50px; background: linear-gradient(#24c6ff,#009ef7); color:white; cursor:pointer; font-size:16px;">Enviar</button>
   </div>
 </section>
+
+<div id="popupUpdate" class="popup-update">
+  
+  <div class="popup-box">
+      <h2>Nova versão disponível 🚀</h2>
+
+      <p>
+        Seu PlushMaster está desatualizado.<br>
+        Atualize para continuar jogando.
+      </p>
+
+      <button class="btn-update" onclick="atualizarSite()">
+        Atualizar agora
+      </button>
+  </div>
+
+</div>
+
+
+
 
 <script src="plushmaster.js"></script>
 
