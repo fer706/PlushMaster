@@ -1,3 +1,4 @@
+
 let jogadas = 0;
 let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
@@ -582,9 +583,12 @@ async function entrar() {
 // salva usuário
 localStorage.setItem("usuarioLogado", email);
 
-// 🔥 MUITO IMPORTANTE:
-localStorage.removeItem("usuarioSaiu"); 
-// ou coloque "false"
+// permite login automático
+localStorage.setItem("usuarioSaiu", "false");
+
+// 🔥 salva o horário do login
+localStorage.setItem("loginTimestamp", Date.now());
+
 
 irPara("telaHome");
 
@@ -1381,13 +1385,41 @@ return true;
 function verificarLoginAutomatico(){
 
     const usuario = localStorage.getItem("usuarioLogado");
+    const usuarioSaiu = localStorage.getItem("usuarioSaiu");
+    const loginTimestamp = localStorage.getItem("loginTimestamp");
 
-    if(usuario){
-        voltarPara("telaHome");
-    }else{
+    // 12 horas em ms
+   const LIMITE_LOGIN = 12 * 60 * 60 * 1000; // 12 horas
+
+    // se saiu da conta → não loga
+    if(usuarioSaiu === "true"){
         voltarPara("tela1");
+        return;
     }
 
+    // se não tem usuário ou timestamp
+    if(!usuario || !loginTimestamp){
+        voltarPara("tela1");
+        return;
+    }
+
+    const agora = Date.now();
+    const tempoLogin = agora - Number(loginTimestamp);
+
+    // 🔥 sessão expirada
+    if(tempoLogin > LIMITE_LOGIN){
+
+        localStorage.removeItem("usuarioLogado");
+        localStorage.removeItem("loginTimestamp");
+
+        notificar("Sua sessão expirou. Faça login novamente.");
+
+        voltarPara("tela1");
+        return;
+    }
+
+    // login válido
+    voltarPara("telaHome");
 }
 
 
