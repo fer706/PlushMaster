@@ -1591,7 +1591,7 @@ button[onclick="copiarCodigo()"]{
   transform: translateX(-50%);
 
   width: calc(100% - 40px);
-  max-width: 370px; /* evita ficar gigante em PC */
+  max-width: 380px; /* evita ficar gigante em PC */
 
   height: 60px;
   border-radius: 16px;
