@@ -455,17 +455,12 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
         </div>
     </div>
 </section>
-<!-- ================= CARTEIRA ================= -->
 <section id="telaCarteira" class="tela">
 
   <div class="carteira-topo">
     <div class="carteira-linha">
-      <div class="carteira-voltar" onclick="irSemAnimacao('telaHome')">
-        &lt;
-      </div>
-
-      <img class="logo-topo" 
-src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
+      <div class="carteira-voltar" onclick="irSemAnimacao('telaHome')">&lt;</div>
+      <img class="logo-topo" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
       <div class="carteira-perfil" id="letraPerfil">U</div>
     </div>
 
@@ -475,7 +470,6 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
   <div class="carteira-sessao">
     <div class="saldo-titulo">💲 Saldo na carteira</div>
-
     <div class="saldo-box">
       <div class="saldo-valor" id="saldoCarteira">R$ 0,00</div>
       <div class="pelucias" id="peluciasCarteira">0 pelúcias acumuladas</div>
@@ -483,14 +477,21 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   </div>
 
   <div class="recarga">
-    <h3>💳 Qual valor você quer adicionar?</h3>
-    <div class="valor-box" id="valorSelecionado">R$ 0,00</div>
-    <div class="cupom">Tenho um cupom</div>
-  </div>
+  <h3>💳 Qual valor você quer adicionar?</h3>
 
-  <button class="carteira-btn" onclick="pagar()">Prosseguir para o pagamento</button>
+  <div class="valor-box" id="valorSelecionado" contenteditable="true">
+  R$ 0,00
+</div>
 
-  
+
+  <div class="cupom">Tenho um cupom</div>
+</div>
+
+<button class="carteira-btn" onclick="abrirTelaPagamento()">Prosseguir para o pagamento</button>
+
+
+</section>
+
 
 </section>
 
@@ -604,6 +605,33 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   </div>
 
 </div>
+
+<section id="telaPagamento" class="tela">
+  <h2>Pagamento</h2>
+  
+  <div id="infoPagamento">
+    <p>Valor: <span id="valorPagamento">R$ 0,00</span></p>
+    <p>Beneficiário: fernando henrique - Efi Bank</p>
+  </div>
+
+  <p>Agora basta pagar o PIX em até <span id="contador">20:00</span> minutos para garantir as suas jogadas. Após esse prazo a solicitação será cancelada.</p>
+
+  <div class="passo">
+    <strong>1</strong> Copie o código PIX abaixo
+  </div>
+  <input type="text" id="codigoPIX" readonly>
+  <button onclick="copiarCodigo()">Copiar código</button>
+
+  <div class="passo">
+    <strong>2</strong> Vá até a área Pix do app do seu banco e escolha "Pagar com Pix copia e cola"
+  </div>
+
+  <div class="passo">
+    <strong>3</strong> Cole o código, confira as informações e finalize o pagamento em 20:00 minutos
+  </div>
+
+  <button id="voltarInicioBtn" onclick="voltarInicio()">Voltar ao início</button>
+</section>
 
 
 

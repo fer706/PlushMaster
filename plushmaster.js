@@ -1508,7 +1508,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.0.1"; // 🔥 sua versão do site
+    const versaoAtual = "1.0.2"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
@@ -1552,4 +1552,221 @@ function mostrarPopupAtualizacao(){
   }
 
   popup.style.display = "flex";
+}
+// ======= CARTEIRA =======
+const valorSelecionado = document.getElementById("valorSelecionado");
+let valorNumeros = "";
+
+// evita erro se não existir
+if(valorSelecionado){
+
+  valorSelecionado.addEventListener("input", () => {
+
+    valorNumeros = valorSelecionado.textContent.replace(/\D/g, "");
+    atualizarDisplayValor();
+
+  });
+
+}
+
+function atualizarDisplayValor() {
+
+  let numero = parseInt(valorNumeros || "0");
+
+  let reais = Math.floor(numero / 100);
+  let centavos = numero % 100;
+
+  valorSelecionado.textContent =
+    `R$ ${reais},${centavos.toString().padStart(2,"0")}`;
+
+  placeCaretAtEnd(valorSelecionado);
+}
+
+function placeCaretAtEnd(el){
+
+  el.focus();
+
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  range.collapse(false);
+
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+
+// ======= PAGAMENTO =======
+
+const telaPagamento = document.getElementById("telaPagamento");
+const valorPagamento = document.getElementById("valorPagamento");
+const contador = document.getElementById("contador");
+const codigoPIX = document.getElementById("codigoPIX");
+
+let tempo = 20 * 60;
+let timerInterval;
+
+
+// ⚠️ USE TESTE!!!
+const stripe = Stripe("pk_test_51T1a2PJw3CXWETGRE7obShFqYMxxOgqdZCEYoZ9cwsXz5YQC3pKZ7BFrU5jM6ZCmPZHl5H3ZHVfKWWYhYmtXUEHB00hAjKWlPW");
+
+const pagarBtn = document.getElementById("pagarBtn");
+
+
+// ===== ABRIR TELA =====
+function abrirTelaPagamento(){
+
+  const numero = parseInt(valorNumeros || "0");
+
+  if(numero <= 0){
+    notificar("Digite um valor válido!");
+    return;
+  }
+
+  let reais = Math.floor(numero / 100);
+  let centavos = numero % 100;
+
+  valorPagamento.textContent =
+    `R$ ${reais},${centavos.toString().padStart(2,"0")}`;
+
+  // limpa pix antigo
+  if(codigoPIX) codigoPIX.value = "";
+
+  irPara("telaPagamento");
+
+  tempo = 20 * 60;
+
+  clearInterval(timerInterval);
+  atualizarContador();
+
+  timerInterval = setInterval(atualizarContador,1000);
+}
+
+
+// ===== CONTADOR =====
+function atualizarContador(){
+
+  let minutos = Math.floor(tempo/60);
+  let segundos = tempo%60;
+
+  contador.textContent =
+    `${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+
+  if(tempo <= 0){
+
+    clearInterval(timerInterval);
+    notificar("O tempo para pagamento expirou!");
+    voltarInicio();
+
+  }
+
+  tempo--;
+}
+
+
+// ===== VOLTAR =====
+function voltarInicio(){
+
+  clearInterval(timerInterval);
+  voltarPara('telaHome');
+
+}
+
+
+
+// ===== GERAR PIX =====
+async function pagarStripe(){
+
+  const numero = parseInt(valorNumeros || "0");
+
+  if(numero < 500){
+    notificar("Valor mínimo R$5");
+    return;
+  }
+
+  try{
+
+    pagarBtn.disabled = true;
+    pagarBtn.innerText = "Gerando PIX...";
+
+    const res = await fetch("/criar-pix",{
+
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ valor: numero })
+
+    });
+
+    if(!res.ok){
+      throw new Error("Erro no servidor");
+    }
+
+    const data = await res.json();
+
+    const result = await stripe.confirmPixPayment(
+      data.clientSecret,
+      {
+        payment_method:{
+          billing_details:{
+            name:"Cliente PlushMaster"
+          }
+        }
+      }
+    );
+
+    if(result.error){
+      throw new Error(result.error.message);
+    }
+
+    const pix = result.paymentIntent.next_action.pix_display_qr_code;
+
+    codigoPIX.value = pix.data;
+
+    notificar("✅ PIX gerado! Copie o código.");
+
+  }catch(err){
+
+    console.log(err);
+    notificar("Erro ao gerar PIX");
+
+  }finally{
+
+    pagarBtn.disabled = false;
+    pagarBtn.innerText = "Gerar PIX";
+
+  }
+
+}
+
+
+// evita erro se botão não existir
+if(pagarBtn){
+  pagarBtn.addEventListener("click", pagarStripe);
+}
+
+
+
+// ===== COPIAR PIX =====
+function copiarCodigo(){
+
+  if(!codigoPIX.value){
+    notificar("Código PIX ainda não foi gerado!");
+    return;
+  }
+
+  navigator.clipboard.writeText(codigoPIX.value)
+  .then(()=>{
+
+    notificar("✅ Código PIX copiado!");
+
+  })
+  .catch(()=>{
+
+    codigoPIX.select();
+    document.execCommand("copy");
+
+    notificar("✅ Código PIX copiado!");
+
+  });
+
 }
