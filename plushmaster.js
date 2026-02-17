@@ -1508,7 +1508,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.0.3"; // 🔥 sua versão do site
+    const versaoAtual = "1.0.4"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
