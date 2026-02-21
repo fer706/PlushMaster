@@ -1,4 +1,3 @@
-
 let jogadas = 0;
 let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
