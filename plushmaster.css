@@ -75,168 +75,140 @@ input{
 }
 footer{text-align:center;margin-top:15px}
 
-#telaHome{
-    background: linear-gradient(#4fc3ff,#dff5ff);
-    display:flex;
-    flex-direction:column;
-}
-.top-bar{
-    height:80px;              /* 🔥 mais fino */
-    background:#4fc3ff;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 12px;           /* menos espaço lateral */
-    color:#fff;
-
-    box-shadow:0 2px 6px rgba(0,0,0,0.15); /* opcional, mas fica lindo */
+#telaHome {
+    background: #f8faff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
+/* TOP BAR - MAIOR PARA NÃO CORTAR A LOGO */
+.top-bar {
+    height: 95px; /* Altura aumentada para dar espaço à logo */
+    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px 0 15px; /* Padding superior para empurrar conteúdo se necessário */
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 158, 247, 0.2);
+    z-index: 10;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
 
-
+/* CÂMERA (ESTILO ORIGINAL) */
 .camera-box {
     background: black;
-    margin: 0px auto;       /* centraliza */
-    border-radius: 2px;      /* quase quadrado */
+    margin: 0px auto; 
+    border-radius: 2px;
     width: 100%;
     max-width: 600px;
     aspect-ratio: 16/9;
     overflow: hidden;
 }
+
 .camera-box iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-
-.play-area{
-    flex:1;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-.play-btn{
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    background: radial-gradient(circle at top, #7be5ff, #009dff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:30px;
-    font-weight:bold;
-    color:white;
-    text-decoration:none;
-    box-shadow:0 10px 20px rgba(0,0,0,0.3);
-    cursor:pointer;
-    transition:0.2s;
-}
-.play-btn:active{
-    transform:scale(0.95);
-}
-.bottom-bar{
-    height:90px;
-    background:#4fc3ff;
-    border-top-left-radius:25px;
-    border-top-right-radius:25px;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    box-shadow:0 -3px 10px rgba(0,0,0,0.2);
-}
-.nav-item{
-    text-align:center;
-    font-size:12px;
-    color:#1a6fa3;
-}
-.nav-circle{
-    width:50px;
-    height:50px;
-    margin:0 auto 5px;
-    border-radius:50%;
-    background:linear-gradient(#aaf0ff,#4fc3ff);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    color:white;
-}
-.play-btn{
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    background: radial-gradient(circle at top, #7be5ff, #009dff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-family: 'Fredoka', sans-serif; /* 🔥 SÓ ISSO MUDOU */
-    font-size:30px;
-    font-weight:600;
-
-    color:white;
-    text-decoration:none;
-    box-shadow:0 10px 20px rgba(0,0,0,0.3);
-    cursor:pointer;
-    transition:0.2s;
+/* ÁREA CENTRAL */
+.play-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.btn-chat{
-    position: relative;
+.play-btn {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: radial-gradient(circle at top left, #4fc3ff, #009ef7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+}
 
-    width:45px;
-    height:45px;
+.play-btn:active {
+    transform: scale(0.95);
+}
 
-    background: linear-gradient(
-        180deg,
-        #6fe9ff 0%,
-        #1bb6ff 55%,
-        #3f7bff 100%
-    );
+/* BARRA INFERIOR AZUL ESCURO */
+.bottom-bar {
+    height: 90px;
+    background: #05326b; 
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+}
 
+.nav-item {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-circle {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 5px;
     border-radius: 14px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-    flex-shrink:0;
-
-    box-shadow:
-        inset 0 5px 8px rgba(255,255,255,0.35),
-        inset 0 -5px 8px rgba(0,0,0,0.25),
-        0 8px 16px rgba(0,0,0,0.35);
-
-    transition:.2s;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
 }
 
-.btn-chat:hover{
-    transform:scale(1.05);
+/* ÍCONE DO CHAT - AZUL ESCURO PADRONIZADO */
+.btn-chat {
+    width: 46px;
+    height: 46px;
+    background: #05326b; /* Azul Escuro das outras telas */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-
-.chat-icon{
-    width: 28px;
-    height: 22px;
+.chat-icon {
+    width: 24px;
+    height: 18px;
     background: white;
-    border-radius: 6px;
+    border-radius: 4px;
     position: relative;
 }
 
-.chat-icon::after{
+.chat-icon::after {
     content: "";
     position: absolute;
-    bottom: -6px;
-    left: 6px;
+    bottom: -5px;
+    left: 5px;
     width: 0;
     height: 0;
-    border-top: 6px solid white;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+    border-top: 5px solid white;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
 }
 
 /* ================= CHAT ================= */
