@@ -1428,73 +1428,105 @@ function verificarLoginAutomatico(){
 
 let mensagensNaoLidas = 0;
 let chatAberto = false;
-
 const badgeChat = document.getElementById("badgeChat");
 
-// pega ultimo timestamp salvo
-let ultimoLido = localStorage.getItem("ultimoLido") || 0;
+// Função auxiliar para garantir que o timestamp seja sempre um número comparável
+function converterParaMs(timestamp) {
+    if (!timestamp) return 0;
+    // Se for o objeto Timestamp do Firebase
+    if (typeof timestamp.toMillis === 'function') return timestamp.toMillis();
+    // Se já for número
+    return Number(timestamp);
+}
 
+// 1. Carregar do LocalStorage garantindo que seja número
+let ultimoLido = Number(localStorage.getItem("ultimoLido")) || 0;
 
-// ESCUTAR CHAT
-db.collection("chat")
-.orderBy("timestamp")
-.onSnapshot(snapshot => {
+auth.onAuthStateChanged(user => {
+    if (user) {
+        const meuEmail = user.email;
 
-    mensagensNaoLidas = 0;
+        db.collection("chat")
+        .orderBy("timestamp", "asc")
+        .onSnapshot(snapshot => {
+            
+            if (chatAberto) {
+                mensagensNaoLidas = 0;
+                atualizarBadge();
+                
+                if (!snapshot.empty) {
+                    const ultimaMsg = snapshot.docs[snapshot.docs.length - 1].data();
+                    const ts = converterParaMs(ultimaMsg.timestamp);
+                    if (ts > 0) {
+                        ultimoLido = ts;
+                        localStorage.setItem("ultimoLido", ultimoLido);
+                    }
+                }
+                return;
+            }
 
-    snapshot.forEach(doc => {
+            let contador = 0;
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                const msgTS = converterParaMs(msg.timestamp);
+                
+                // Só conta se:
+                // 1. Tiver timestamp válido
+                // 2. For maior que o último lido (com margem de 100ms para evitar bugs de arredondamento)
+                // 3. Não for sua própria mensagem
+                if (msgTS && msgTS > (ultimoLido + 100) && msg.sender !== meuEmail) {
+                    contador++;
+                }
+            });
 
-        const msg = doc.data();
-
-        if(msg.timestamp > ultimoLido){
-            mensagensNaoLidas++;
-        }
-
-    });
-
-    atualizarBadge();
-
+            mensagensNaoLidas = contador;
+            atualizarBadge();
+        });
+    }
 });
-function atualizarBadge(){
 
-    if(mensagensNaoLidas > 0){
-
+function atualizarBadge() {
+    if (mensagensNaoLidas > 0) {
         badgeChat.style.display = "flex";
-        badgeChat.innerText = mensagensNaoLidas > 99 
-            ? "99+" 
-            : mensagensNaoLidas;
-
-    }else{
+        badgeChat.innerText = mensagensNaoLidas > 99 ? "99+" : mensagensNaoLidas;
+    } else {
         badgeChat.style.display = "none";
     }
-
 }
-function abrirChat(){
 
+function abrirChat() {
     chatAberto = true;
+    mensagensNaoLidas = 0;
+    atualizarBadge();
 
-    // pega o timestamp MAIS RECENTE
+    // Primeiro: Marca o AGORA como lido para limpar notificações instantaneamente
+    ultimoLido = Date.now();
+    localStorage.setItem("ultimoLido", ultimoLido);
+
+    // Segundo: Tenta pegar o timestamp real da última mensagem no banco para precisão
     db.collection("chat")
     .orderBy("timestamp", "desc")
     .limit(1)
     .get()
     .then(snapshot => {
-
-        if(!snapshot.empty){
-
-            ultimoLido = snapshot.docs[0].data().timestamp;
-
-            localStorage.setItem("ultimoLido", ultimoLido);
+        if (!snapshot.empty) {
+            const data = snapshot.docs[0].data();
+            const tsOficial = converterParaMs(data.timestamp);
+            if (tsOficial > 0) {
+                ultimoLido = tsOficial;
+                localStorage.setItem("ultimoLido", ultimoLido);
+            }
         }
-
-        mensagensNaoLidas = 0;
-        atualizarBadge();
-
+        
+        if (typeof irDeBaixo === 'function') irDeBaixo('telaChat');
     });
-
-    irDeBaixo('telaChat');
 }
 
+function fecharChat() {
+    chatAberto = false;
+    // Se tiver função para esconder a tela, chame aqui
+    if (typeof irParaHome === 'function') irParaHome();
+}
 async function verificarVersaoSite(){
 
   try{
