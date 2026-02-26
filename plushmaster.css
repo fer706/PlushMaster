@@ -1,3 +1,4 @@
+
 body{
   overflow-y: auto;   /* permite rolagem vertical */
   overflow-x: hidden; /* bloqueia rolagem lateral */
@@ -75,592 +76,545 @@ input{
 }
 footer{text-align:center;margin-top:15px}
 
-#telaHome {
-    background: #f8faff;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
+#telaHome{
+    background: linear-gradient(#4fc3ff,#dff5ff);
+    display:flex;
+    flex-direction:column;
+}
+.top-bar{
+    height:80px;              /* 🔥 mais fino */
+    background:#4fc3ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 12px;           /* menos espaço lateral */
+    color:#fff;
+
+    box-shadow:0 2px 6px rgba(0,0,0,0.15); /* opcional, mas fica lindo */
 }
 
 
-/* TOP BAR - SEM ARREDONDAMENTO */
-.top-bar {
-    height: 95px; 
-    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px 0 15px; 
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 158, 247, 0.2);
-    z-index: 10;
-    
-    /* Removido o arredondamento para ficar reto */
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
 
-/* CÂMERA (ESTILO ORIGINAL) */
 .camera-box {
     background: black;
-    margin: 0px auto; 
-    border-radius: 2px;
+    margin: 0px auto;       /* centraliza */
+    border-radius: 2px;      /* quase quadrado */
     width: 100%;
     max-width: 600px;
     aspect-ratio: 16/9;
     overflow: hidden;
 }
-
 .camera-box iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-/* ÁREA CENTRAL */
-.play-area {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.play-area{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.play-btn{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top, #7be5ff, #009dff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    font-weight:bold;
+    color:white;
+    text-decoration:none;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:0.2s;
+}
+.play-btn:active{
+    transform:scale(0.95);
+}
+.bottom-bar{
+    height:90px;
+    background:#4fc3ff;
+    border-top-left-radius:25px;
+    border-top-right-radius:25px;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+}
+.nav-item{
+    text-align:center;
+    font-size:12px;
+    color:#1a6fa3;
+}
+.nav-circle{
+    width:50px;
+    height:50px;
+    margin:0 auto 5px;
+    border-radius:50%;
+    background:linear-gradient(#aaf0ff,#4fc3ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    color:white;
+}
+.play-btn{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top, #7be5ff, #009dff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-family: 'Fredoka', sans-serif; /* 🔥 SÓ ISSO MUDOU */
+    font-size:30px;
+    font-weight:600;
+
+    color:white;
+    text-decoration:none;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    cursor:pointer;
+    transition:0.2s;
 }
 
-.play-btn {
-    width: 170px;
-    height: 170px;
-    border-radius: 50%;
-    background: radial-gradient(circle at top left, #4fc3ff, #009ef7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    font-weight: 800;
-    color: white;
-    text-decoration: none;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: 0.2s;
-    border: none;
-}
+.btn-chat{
+    position: relative;
 
-.play-btn:active {
-    transform: scale(0.95);
-}
+    width:45px;
+    height:45px;
 
-/* BARRA INFERIOR AZUL ESCURO */
-.bottom-bar {
-    height: 90px;
-    background: #05326b; 
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
-}
+    background: linear-gradient(
+        180deg,
+        #6fe9ff 0%,
+        #1bb6ff 55%,
+        #3f7bff 100%
+    );
 
-.nav-item {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.nav-circle {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 5px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+    flex-shrink:0;
+
+    box-shadow:
+        inset 0 5px 8px rgba(255,255,255,0.35),
+        inset 0 -5px 8px rgba(0,0,0,0.25),
+        0 8px 16px rgba(0,0,0,0.35);
+
+    transition:.2s;
 }
 
-/* BOTÃO PAI */
-.btn-chat {
-    position: relative;
-    width: 46px;
-    height: 46px;
-    background: #05326b;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    /* Removendo qualquer contorno ou sombra que possa parecer azul */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    outline: none;
-    -webkit-tap-highlight-color: transparent; 
-}
-
-/* BOLINHA SEM CONTORNO */
-.badge-chat {
-    position: absolute;
-    /* Ajuste de posição para fora do botão */
-    top: -5px;
-    right: -5px;
-    
-    background: #ff3b30 !important; /* Vermelho puro */
-    color: white !important;
-    
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    border-radius: 50%; /* Mantém redondo */
-    
-    /* REMOVENDO O ERRO DO CONTORNO */
-    border: none !important;        
-    outline: none !important;
-    box-shadow: none !important;
-    
-    /* Alinhamento do texto interno */
-    display: none; /* O JS muda para flex */
-    align-items: center;
-    justify-content: center;
-    
-    font-size: 11px;
-    font-weight: bold;
-    z-index: 99;
+.btn-chat:hover{
+    transform:scale(1.05);
 }
 
 
-.chat-icon {
-    width: 24px;
-    height: 18px;
+.chat-icon{
+    width: 28px;
+    height: 22px;
     background: white;
-    border-radius: 4px;
+    border-radius: 6px;
     position: relative;
 }
 
-.chat-icon::after {
+.chat-icon::after{
     content: "";
     position: absolute;
-    bottom: -5px;
-    left: 5px;
+    bottom: -6px;
+    left: 6px;
     width: 0;
     height: 0;
-    border-top: 5px solid white;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
+    border-top: 6px solid white;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
 }
 
 /* ================= CHAT ================= */
-#telaChat {
-  background: #f8faff; /* Fundo padrão unificado */
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  font-family: 'Inter', sans-serif;
+#telaChat{
+  background:#f3f3f3;
+  display:flex;
+  flex-direction:column;
 }
 
-/* TOPO PADRONIZADO */
-#telaChat .topo {
-  background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-  padding: 15px 20px 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  box-shadow: 0 8px 15px rgba(0, 158, 247, 0.1);
-  z-index: 10;
+#telaChat .topo{
+  background:#4fc3ff;
+  padding:5px 15px 25px 15px;
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
 }
 
-#telaChat .voltar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.2s;
+#telaChat .voltar{
+  font-size:22px;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-#telaChat .voltar:active { transform: scale(0.9); }
-
-#telaChat .logo {
-  font-weight: 700;
-  font-size: 18px;
-  color: white;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  letter-spacing: 0.5px;
+#telaChat .logo{
+  font-weight:bold;
+  font-size:20px;
+  color:white;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
 }
 
-#telaChat .perfil {
-  width: 42px;
-  height: 42px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  color: #fff;
+#telaChat .perfil{
+  width:42px;
+  height:42px;
+  background:white;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#4fc3ff;
+  font-size:20px;
 }
 
-/* ÁREA DE MENSAGENS */
-#chat-messages {
-  flex: 1;
-  padding: 20px 15px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* chat messages */
+#chat-messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
 }
 
-#chat-messages .message {
-  max-width: 75%;
-  padding: 12px 16px;
-  font-size: 15px;
-  line-height: 1.4;
-  position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+#chat-messages .message{
+  max-width:70%;
+  margin-bottom:10px;
+  padding:10px 15px;
+  border-radius:15px;
+  word-wrap:break-word;
 }
 
-/* Mensagem Enviada (Eu) */
-#chat-messages .sent {
-  background: #05326b; /* Azul escuro para destacar quem envia */
-  color: #fff;
-  align-self: flex-end;
-  border-radius: 18px 18px 2px 18px;
+#chat-messages .sent{
+  background:#24c6ff;
+  color:#fff;
+  margin-left:auto;
+  text-align:right;
 }
 
-/* Mensagem Recebida (Outro) */
-#chat-messages .received {
-  background: #fff;
-  color: #333;
-  align-self: flex-start;
-  border-radius: 18px 18px 18px 2px;
-  border: 1px solid #edf2f7;
+#chat-messages .received{
+  background:#fff;
+  color:#000;
+  margin-right:auto;
 }
 
-/* INPUT DE MENSAGEM */
-#telaChat .chat-input-container {
-  display: flex;
-  padding: 15px 20px 30px; /* Padding bottom maior para iPhones/Androids novos */
-  gap: 10px;
-  background: #fff;
-  border-top: 1px solid #edf2f7;
-  align-items: center;
+/* input */
+#telaChat .chat-input-container{
+  display:flex;
+  padding:10px 15px;
+  gap:10px;
+  background:#4fc3ff;
 }
 
-#chat-input {
-  flex: 1;
-  padding: 14px 20px;
-  border-radius: 25px;
-  border: 1px solid #eef2f6;
-  font-size: 15px;
-  background: #f8faff;
-  color: #05326b;
-  outline: none;
-  transition: border-color 0.3s;
+#chat-input{
+  flex:1;
+  padding:10px 15px;
+  border-radius:50px;
+  border:none;
+  font-size:16px;
+  background:#e0f7ff;
+  color:#000;
 }
 
-#chat-input:focus {
-  border-color: #4fc3ff;
+#send-btn{
+  padding:10px 20px;
+  border:none;
+  border-radius:50px;
+  background: linear-gradient(#24c6ff,#009ef7);
+  color:white;
+  cursor:pointer;
+  font-size:16px;
 }
 
-#send-btn {
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 5px 12px rgba(0, 158, 247, 0.3);
-  transition: all 0.2s;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
 }
 
-#send-btn:active {
-  transform: scale(0.9);
+
+
+body{
+  background: linear-gradient(#43c6ff, #e9f7ff);
+  min-height:100vh;
 }
 
-/* Reset básico para garantir que não quebre */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+/* TOPO */
+.topo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:15px;
 }
+
+.voltar{
+    width:35px;
+    height:35px;
+    background:#a7e7ff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.logo{
+    font-weight:bold;
+    color:#fff;
+    font-size:20px;
+}
+
 /* =========================
    TELA SELECIONAR (ISOLADO)
 ========================= */
 
-/* ============================================================
-   TELA SELECIONAR - VERSÃO FINAL PREMIUM
-   ============================================================ */
-
-#telaSelecionar {
-    background: #f8faff;
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
+#telaSelecionar{
+    background:#fff5eb;
 }
 
-/* TOPO COM GRADIENTE E CURVA */
-.sel-topo {
-    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    box-shadow: 0 8px 15px rgba(0, 158, 247, 0.12);
+/* TOPO */
+.sel-topo{
+    background:#4fc3ff;
+    height:80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
 }
 
-/* BOTÃO VOLTAR (GLASSMORPHISM) */
-.sel-voltar {
-    position: absolute;
-    left: 15px;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
+.sel-voltar{
+    position:absolute;
+    left:15px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.3);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    cursor:pointer;
 }
 
-.sel-voltar:active { transform: scale(0.9); }
-
-.sel-logo {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.5px;
+.sel-logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#fff;
 }
 
-/* SELETOR DE JOGADAS */
-.sel-jogadas {
-    margin: 20px;
-    background: #fff;
-    border-radius: 20px;
-    padding: 12px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+/* BLOCO */
+.sel-jogadas{
+  margin:15px 20px;
+  background:#fff;
+  border-radius:18px;
+  padding:10px 14px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.sel-jogadas-texto {
-    font-size: 15px;
-    font-weight: bold;
-    color: #05326b;
+/* TEXTO */
+.sel-jogadas-texto{
+  font-size:15px;
+  font-weight:bold;
+  color:#4fc3ff;
 }
 
-.sel-dropdown {
-    background: #f0faff;
-    padding: 8px 15px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    min-width: 80px;
-    justify-content: space-between;
-    color: #009ef7;
-    font-weight: bold;
-    border: 1px solid #e0f0ff;
+/* DROPDOWN FECHADO */
+.sel-dropdown{
+  background:#f3eadf;
+  padding:8px 12px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  min-width:70px;
+  justify-content:space-between;
 }
 
-/* LISTA DO DROPDOWN */
-.sel-lista {
-    position: absolute;
-    right: 20px;
-    margin-top: 5px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    max-height: 200px;
-    overflow-y: auto;
-    display: none;
-    z-index: 1000;
-    border: 1px solid #eee;
+/* LISTA */
+.sel-lista{
+  position:absolute;
+  right:35px;
+  margin-top:5px;
+
+  background:#fff;
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+
+  max-height:150px; /* mostra ~5 */
+  overflow-y:auto;
+
+  display:none;
+  z-index:1000;
 }
 
-.sel-lista div {
-    padding: 12px 20px;
-    font-weight: 600;
-    color: #05326b;
-    border-bottom: 1px solid #f8faff;
+/* ITEM */
+.sel-lista div{
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
 }
 
-.sel-lista div:hover {
-    background: #f0faff;
-    color: #009ef7;
+.sel-lista div:hover{
+  background:#4fc3ff;
+  color:#fff;
 }
 
-/* TÍTULOS */
-.sel-titulo {
-    padding: 10px 20px 0;
-    font-size: 20px;
-    font-weight: 800;
-    color: #05326b;
+
+
+/* TÍTULO */
+.sel-titulo{
+    padding:0 20px;
+    font-size:22px;
+    font-weight:bold;
+    color:#333;
 }
 
-/* CARDS DAS MÁQUINAS */
-.sel-maquinas {
-    display: flex;
-    gap: 15px;
-    padding: 20px;
+/* MÁQUINAS */
+.sel-maquinas{
+    display:flex;
+    gap:15px;
+    padding:20px;
 }
 
-.sel-card {
-    flex: 1;
-    background: #ffffff;
-    border-radius: 24px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0f3f7;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    transition: transform 0.2s;
+.sel-card{
+    flex:1;
+    background:#ffffff;
+    border-radius:20px;
+    padding:15px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.sel-card:active { transform: scale(0.97); }
-
-.sel-card img {
-    width: 100%;
-    height: 140px;
-    object-fit: contain;
-    border-radius: 15px;
-    margin-bottom: 10px;
+.sel-card img{
+    width:100%;
+    border-radius:15px;
 }
 
-.sel-preco {
-    font-size: 18px;
-    font-weight: 800;
-    color: #05326b;
-    margin-bottom: 12px;
+/* PREÇO */
+.sel-preco{
+    font-size:18px;
+    font-weight:bold;
+    margin:10px 0;
 }
 
-/* BOTÕES DE STATUS */
-.sel-btn-status {
-    width: 100%;
-    height: 38px;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 13px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* BOTÃO STATUS */
+.sel-btn-status{
+    width:100%;
+    height:36px;
+    border:none;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.sel-disponivel { background: #e6f9ff; color: #009ef7; }
-.sel-selecionada { background: #05326b; color: #fff; }
-.sel-indisponivel { background: #f1f1f1; color: #9e9e9e; cursor: not-allowed; }
+/* STATUS */
+.sel-disponivel{
+    background:#4fc3ff;
+    color:#fff;
+}
+
+.sel-selecionada{
+    background:#bdbdbd;
+    color:#fff;
+}
+
+.sel-indisponivel{
+    background:#9e9e9e;
+    color:#fff;
+    cursor:not-allowed;
+}
 
 /* SALDO */
-.sel-saldo {
-    background: #ffffff;
-    margin: 0 20px 10px;
-    padding: 18px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #05326b;
-    text-align: center;
-    border: 1px solid #eef2f6;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+.sel-saldo{
+    background:#ffffff;
+    margin:20px;
+    padding:15px;
+    border-radius:20px;
+    font-size:18px;
+    font-weight:bold;
 }
 
-/* ============================================================
-   BOTÃO INICIAR COM SISTEMA DE LOADER
-   ============================================================ */
+/* =============================
+   BOTÃO INICIAR COM LOADER
+============================= */
 .sel-btn-iniciar {
-    position: relative;
-    margin: 20px auto 40px;
-    width: 90%;
-    max-width: 400px;
-    background: #05326b;
+    position: relative;        /* necessário para o loader ficar dentro */
+    margin: 20px auto;
+    max-width: 400px;          /* evita estourar a tela */
+    width: 90%;                /* responsivo */
+    background: linear-gradient(#00c6ff,#0072ff);
     color: #fff;
-    padding: 20px;
-    border-radius: 20px;
-    font-size: 18px;
-    font-weight: 800;
-    border: none;
-    box-shadow: 0 10px 20px rgba(5, 50, 107, 0.2);
+    text-align: center;
+    padding: 18px;
+    border-radius: 18px;
+    font-size: 22px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    transition: all 0.3s;
+    overflow: hidden;          /* evita que loader "vaze" */
 }
 
-.sel-btn-iniciar:active { transform: scale(0.98); }
-
-/* Texto que some ao carregar */
+/* texto do botão */
 .sel-btn-iniciar .btn-text {
-    z-index: 2;
-    transition: opacity 0.2s;
+    z-index: 2;                /* garante que fique acima do loader */
 }
 
-.sel-btn-iniciar.loading .btn-text {
-    opacity: 0;
-}
-
-/* Container do Loader */
+/* loader */
 .sel-btn-iniciar .btn-loader {
     position: absolute;
     inset: 0;
     margin: auto;
     width: 32px;
     height: 32px;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1;
-    transition: opacity 0.2s;
+    opacity: 0;                /* inicia invisível */
+    pointer-events: none;      /* evita clique sobre o loader */
+    z-index: 1;                /* abaixo do texto */
 }
 
-.sel-btn-iniciar.loading .btn-loader {
-    opacity: 1;
-}
-
-/* Traços brancos do loader */
+/* traços do loader */
 .sel-btn-iniciar .btn-loader div {
     position: absolute;
-    width: 3px;
-    height: 10px;
-    background: #fff;
+    width: 4px;
+    height: 12px;
+    background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 16px;
-    animation: opacityTrail 0.8s linear infinite;
+    transform-origin: center 17px;
+    animation: opacityTrail .8s linear infinite;
 }
 
-/* Disposição circular dos traços */
+/* círculo com 8 traços */
 .sel-btn-iniciar .btn-loader div:nth-child(1){ transform: translate(-50%, -50%) rotate(0deg); animation-delay: -0.7s;}
 .sel-btn-iniciar .btn-loader div:nth-child(2){ transform: translate(-50%, -50%) rotate(45deg); animation-delay: -0.6s;}
 .sel-btn-iniciar .btn-loader div:nth-child(3){ transform: translate(-50%, -50%) rotate(90deg); animation-delay: -0.5s;}
@@ -670,9 +624,40 @@ footer{text-align:center;margin-top:15px}
 .sel-btn-iniciar .btn-loader div:nth-child(7){ transform: translate(-50%, -50%) rotate(270deg); animation-delay: -0.1s;}
 .sel-btn-iniciar .btn-loader div:nth-child(8){ transform: translate(-50%, -50%) rotate(315deg); animation-delay: 0s;}
 
+/* animação dos traços */
 @keyframes opacityTrail {
     0% { opacity: 1; }
-    100% { opacity: 0.1; }
+    100% { opacity: .15; }
+}
+
+/* quando estiver carregando */
+.sel-btn-iniciar.loading .btn-text {
+    opacity: 0;
+}
+
+.sel-btn-iniciar.loading .btn-loader {
+    opacity: 1;
+}
+
+
+
+/* CARD DA MÁQUINA */
+.sel-card{
+  background:#fff;
+  border-radius:20px;
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* CONTAINER DA IMAGEM */
+.sel-card img{
+  width:100%;
+  height:160px;          /* ALTURA PADRÃO PARA TODAS */
+  object-fit:contain;   /* NÃO DISTORCE */
+  display:block;
 }
 
 .notificacao.a{
@@ -822,266 +807,414 @@ footer{text-align:center;margin-top:15px}
 }
 /* ================= TELA CARTEIRA ================= */
 #telaCarteira {
-  background: #f8faff;
+  background: #f3f3f3;
   overflow-y: auto;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
 }
 
-/* TOPO */
+/* TOPO - Mais limpo e com profundidade */
 .carteira-topo {
-  background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-  padding: 25px 20px 30px; /* Reduzi o padding inferior pois não há mais sobreposição */
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  box-shadow: 0 8px 15px rgba(0, 158, 247, 0.1);
+  background: #4fc3ff;
+  padding: 20px 20px 30px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: 0 4px 15px rgba(79, 195, 255, 0.25);
 }
 
 .carteira-linha {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 15px;
 }
 
-.carteira-voltar { font-size: 24px; color: #fff; cursor: pointer; }
-.carteira-logo { font-size: 18px; font-weight: 700; color: #fff; }
+.carteira-voltar {
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.carteira-voltar:active {
+  opacity: 0.5;
+}
+
+.carteira-logo {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
 
 .carteira-perfil {
-  width: 42px; height: 42px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: bold; color: #fff;
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 14px; /* Quadrado arredondado moderno */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #4fc3ff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* TITULOS */
-.carteira-titulo { margin-top: 20px; font-size: 28px; font-weight: 800; color: #fff; }
-.carteira-sub { font-size: 15px; color: rgba(255, 255, 255, 0.8); }
+/* TITULOS - Hierarquia clara */
+.carteira-titulo {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #05326b;
+  letter-spacing: -0.5px;
+}
 
-/* CONTEÚDO - AJUSTADO PARA BAIXO */
+.carteira-sub {
+  font-size: 15px;
+  font-weight: 500;
+  color: #05326b;
+  opacity: 0.7;
+}
+
+/* CONTEÚDO */
 .carteira-sessao {
-  padding: 20px; /* Removida a margem negativa */
-  margin-top: 5px; /* Pequeno espaçamento após a curva azul */
+  padding: 25px 20px;
+}
+
+.saldo-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #05326b;
+  margin-bottom: 12px;
+  opacity: 0.6;
 }
 
 .saldo-box {
-  background: #ffffff;
+  background: #59cfff;
   border-radius: 24px;
-  padding: 30px 20px;
+  padding: 30px 15px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #edf2f7;
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(89, 207, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.saldo-titulo { font-size: 13px; text-transform: uppercase; color: #8e94a3; margin-bottom: 8px; font-weight: 600; }
-.saldo-valor { font-size: 40px; font-weight: 800; color: #05326b; }
+.saldo-valor {
+  font-size: 40px;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+}
 
 .pelucias {
-  margin-top: 12px; font-size: 14px; color: #009ef7; font-weight: 600;
-  background: #f0faff; display: inline-block; padding: 5px 15px; border-radius: 20px;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 6px 14px;
+  border-radius: 50px;
+  display: inline-block;
 }
 
-/* RECARGA E BOTÃO */
-.recarga { padding: 20px 25px 10px; }
-.recarga h3 { font-size: 18px; color: #05326b; margin-bottom: 15px; font-weight: 700; }
-.valor-box { background: #fff; padding: 22px; border-radius: 18px; border: 2px solid #eef2f6; text-align: center; font-size: 30px; font-weight: 800; color: #009ef7; }
-.cupom { margin-top: 12px; font-size: 13px; color: #8e94a3; text-align: center; display: block; }
+/* RECARGA */
+.recarga {
+  padding: 0 20px 10px;
+}
 
+.recarga h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #05326b;
+  opacity: 0.5;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.valor-box {
+  font-size: 32px;
+  font-weight: 800;
+  color: #05326b;
+}
+
+.cupom {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #009ef7;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.cupom:active {
+  transform: scale(0.95);
+}
+
+/* BOTÃO - Efeito de Elevação */
 .carteira-btn {
-  margin: 15px 20px 30px; width: calc(100% - 40px); padding: 20px; font-size: 16px; font-weight: 700;
-  border: none; border-radius: 18px; background: #05326b; color: #fff;
-  box-shadow: 0 10px 20px rgba(5, 50, 107, 0.15); cursor: pointer;
+  margin: 15px 20px 30px;
+  width: calc(100% - 40px);
+  padding: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #24c6ff, #009ef7);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 158, 247, 0.3);
+  transition: all 0.2s ease;
 }
 
+.carteira-btn:hover {
+  filter: brightness(1.05);
+}
+
+.carteira-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 10px rgba(0, 158, 247, 0.2);
+}
 
 /* ===== TELA CONTA ===== */
 #telaConta {
-    background: #f8faff;
+    background: #fff5eb;
     min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* TOPO */
+/* Reset para evitar espaços fantasmas */
+#telaConta * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* TOPO - Aumentei a altura para o logo (Minha Conta) descer */
 #telaConta .topo {
-    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-    height: 80px;
-    padding: 0 20px;
-    display: flex; align-items: center; position: relative;
+    background: #4fc3ff;
+    height: 100px; /* Aumentado de 80px para 100px */
+    width: 100%;
+    padding: 20px 20px 0; /* Mais espaço no topo */
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 #telaConta .botao-voltar {
-    width: 40px; height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    display: flex; justify-content: center; align-items: center; color: #fff;
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
 }
 
+/* LOGO (Texto 'Minha Conta') - Centralizado e mais baixo */
 #telaConta .logo {
-    position: absolute; left: 50%; transform: translateX(-50%);
-    color: white; font-size: 18px; font-weight: 700;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 35px; /* Define exatamente a distância do topo */
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
 }
 
-/* INFO AREA */
+/* INFO-AREA - Onde fica o Nick/Nome */
 #telaConta .info-area {
-    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-    padding: 10px 25px 30px; /* Reduzi o padding inferior */
-    border-bottom-left-radius: 35px;
-    border-bottom-right-radius: 35px;
-    display: flex; justify-content: space-between; align-items: center;
+    background: #4fc3ff;
+    width: 100%;
+    padding: 25px 25px 50px; /* Aumentei o padding superior para o Nick baixar */
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -1px;
 }
 
-#telaConta .titulo { font-size: 26px; font-weight: 800; color: #fff; }
-#telaConta .subtitulo { font-size: 15px; color: rgba(255, 255, 255, 0.85); }
+#telaConta .titulo {
+    font-size: 28px; /* Nick maior e mais visível */
+    font-weight: bold;
+    color: #003c7a;
+    margin-top: 10px; /* Empurra o nick para baixo */
+}
 
+#telaConta .subtitulo {
+    font-size: 17px;
+    color: #003c7a;
+    opacity: 0.9;
+}
+
+/* AVATAR */
 #telaConta .avatar {
-    width: 55px; height: 55px; background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px); border: 2px solid #fff; border-radius: 16px;
-    display: flex; justify-content: center; align-items: center; font-size: 22px; color: #fff;
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #003c7a;
+    margin-top: 10px; /* Alinha com o nick que desceu */
 }
 
-/* CARDS DE OPÇÕES - AJUSTADO PARA BAIXO */
+/* CARDS - Mantive os botões organizados abaixo */
 #telaConta .cards {
-    margin: 20px; /* Agora é uma margem positiva comum, os cards ficam totalmente abaixo */
+    margin: 20px auto;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 #telaConta .card {
     background: white;
     border-radius: 20px;
-    padding: 22px;
-    margin-bottom: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
-    border: 1px solid #edf2f7;
-    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 }
 
-#telaConta .card h3 { font-size: 17px; color: #05326b; font-weight: 700; margin: 0; }
-#telaConta .card::after { content: '→'; color: #4fc3ff; font-weight: bold; }
+#telaConta .card h3 {
+    font-size: 18px;
+    color: #35b6ff;
+    font-weight: bold;
+}
 
-/* BOTÃO SAIR */
+/* SAIR */
 #telaConta .sair {
-    margin: 30px 20px; padding: 18px; font-size: 16px; font-weight: 600;
-    color: #ff5e5e; display: flex; align-items: center; justify-content: center;
-    gap: 10px; background: #fff1f1; border-radius: 15px; cursor: pointer;
-}
-/* ===== TELA MINHAS INFORMAÇÕES ===== */
-#telaInformacoes {
-    background: #f8faff; /* Fundo padrão unificado */
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-/* TOPO PADRONIZADO */
-#telaInformacoes .topo {
-    background: linear-gradient(135deg, #4fc3ff 0%, #009ef7 100%);
-    padding: 15px 20px 30px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    box-shadow: 0 8px 15px rgba(0, 158, 247, 0.1);
-}
-
-#telaInformacoes .voltar {
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
+    margin: 30px auto;
+    font-size: 16px;
+    color: #888;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    color: #fff;
+    gap: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+}
+/* ===== TELA MINHAS INFORMAÇÕES ===== */
+#telaInformacoes {
+    background: #fdf1e3;
+    min-height: 100vh;
+    font-family: sans-serif;
 }
 
-#telaInformacoes .voltar:active { transform: scale(0.9); }
+/* TOPO - Ajustado para dar altura e baixar o logo */
+#telaInformacoes .topo {
+    background: #4fc3ff;
+    height: 90px; /* Altura definida para respiro */
+    padding: 20px 20px 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#telaInformacoes .voltar {
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10;
+}
 
 #telaInformacoes .logo {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    top: 32px; /* Baixei o texto 'Minha Conta/Informações' */
     color: white;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: bold;
 }
 
-/* TÍTULO DA SEÇÃO */
+/* TÍTULO - Centralizado e com respiro */
 #telaInformacoes .titulo {
     font-size: 22px;
     font-weight: 800;
-    color: #05326b;
-    margin: 25px 20px 15px;
+    color: #4fc3ff;
+    margin: 30px 20px 15px;
+    text-align: center;
 }
 
-/* CAIXA DE DADOS (CARD) */
+/* CAIXA DE DADOS - Estilo Card */
 #telaInformacoes .box {
-    background: #ffffff;
+    background: #fff; /* Branco puro para destacar do fundo creme */
     margin: 0 20px;
-    padding: 22px;
-    border-radius: 22px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0f3f7;
+    padding: 25px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 
 #telaInformacoes .box p {
     font-size: 16px;
-    margin-bottom: 15px;
-    color: #333;
+    margin-bottom: 18px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Label em cima, valor embaixo */
     gap: 4px;
 }
 
-#telaInformacoes .box p:last-child { margin-bottom: 0; }
+#telaInformacoes .box p:last-child {
+    margin-bottom: 0;
+}
 
 #telaInformacoes .label {
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #8e94a3;
-    font-weight: 700;
+    font-weight: bold;
+    color: #888;
 }
 
 #telaInformacoes .valor {
-    color: #05326b;
+    color: #003c7a;
+    font-size: 18px;
     font-weight: 600;
-    font-size: 17px;
 }
 
-/* LINKS DE AÇÃO */
+/* LINKS E EXCLUIR - Centralizados e elegantes */
 #telaInformacoes .link {
-    margin: 20px;
+    margin: 25px 20px;
     font-size: 16px;
-    font-weight: 700;
-    color: #009ef7;
+    color: #2e5bd3;
     cursor: pointer;
-    display: inline-block;
-}
-
-/* EXCLUIR CONTA */
-#telaInformacoes .excluir {
-    margin: 30px 20px;
-    padding: 18px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #ff5e5e;
-    background: #fff1f1;
-    border-radius: 15px;
     text-align: center;
-    cursor: pointer;
-    transition: background 0.2s;
+    font-weight: 600;
+    display: block;
 }
 
-/* ===== POPUPS (NOME E EXCLUIR) ===== */
+#telaInformacoes .excluir {
+    margin: 50px 20px 30px;
+    font-size: 16px;
+    color: #b30000;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+/* ===== POPUPS - Melhoria na UI (Corrigido para não abrir sozinho) ===== */
+
+/* Estilo para os fundos (BG) */
 #telaInformacoes .popup-bg, 
 #telaInformacoes .popup-fundo {
     position: fixed;
@@ -1089,75 +1222,112 @@ footer{text-align:center;margin-top:15px}
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(5, 50, 107, 0.4); /* Azul escuro translúcido */
-    backdrop-filter: blur(4px);
-    display: none;
+    background: rgba(0,0,0,0.6); /* Escurece o fundo */
+    backdrop-filter: blur(4px); /* Suaviza o fundo */
+    z-index: 1000;
+    
+    /* ESCONDER POR PADRÃO */
+    display: none; 
+    
+    /* CENTRALIZAR O CONTEÚDO QUANDO ESTIVER ATIVO */
     justify-content: center;
     align-items: center;
-    z-index: 1000;
 }
 
-/* Base da caixa do Popup */
+/* Estilo para as caixas brancas */
 #telaInformacoes .popup-box, 
 #telaInformacoes .popup-caixa {
-    background: #fff;
-    padding: 25px;
+    background: #ffffff;
+    padding: 30px 25px;
     width: 85%;
-    max-width: 340px;
-    border-radius: 24px;
+    max-width: 350px;
+    border-radius: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    animation: popupAparecer 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes popupAparecer {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
+/* Títulos dentro do popup */
+#telaInformacoes .popup-box h3,
 #telaInformacoes .popup-titulo {
-    font-size: 20px;
-    font-weight: 800;
-    color: #05326b;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+    font-size: 22px;
+    color: #003c7a;
+    font-weight: bold;
 }
 
+/* Inputs (Alterar Nome) */
 #telaInformacoes .popup-input {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     font-size: 16px;
     border-radius: 12px;
-    border: 2px solid #edf2f7;
-    margin-bottom: 15px;
+    border: 2px solid #f0f0f0;
+    background: #f9f9f9;
+    margin-bottom: 20px;
     outline: none;
-    background: #f8faff;
-    color: #05326b;
+    transition: border-color 0.2s;
 }
 
-#telaInformacoes .popup-btn, 
-#telaInformacoes .btn-confirmar {
+#telaInformacoes .popup-input:focus {
+    border-color: #4fc3ff;
+}
+
+/* Botões Gerais de Ação */
+#telaInformacoes .popup-btn,
+#telaInformacoes .btn-confirmar,
+#telaInformacoes .btn-cancelar {
     width: 100%;
-    background: #05326b;
-    color: white;
     border: none;
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 12px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: bold;
     cursor: pointer;
+    transition: transform 0.1s;
 }
 
-#telaInformacoes .btn-confirmar { background: #ff4d4d; }
+#telaInformacoes .popup-btn:active,
+#telaInformacoes .btn-confirmar:active,
+#telaInformacoes .btn-cancelar:active {
+    transform: scale(0.96);
+}
 
-#telaInformacoes .cancelar, 
+/* Cores específicas dos botões */
+#telaInformacoes .popup-btn {
+    background: #4fc3ff;
+    color: white;
+}
+
+#telaInformacoes .btn-confirmar {
+    background: #ff4d4d;
+    color: white;
+}
+
 #telaInformacoes .btn-cancelar {
+    background: #f0f0f0;
+    color: #666;
+    margin-top: 10px; /* Dá espaço se os botões estiverem empilhados */
+}
+
+/* Links de fechar/cancelar simples */
+#telaInformacoes .cancelar {
     margin-top: 15px;
+    display: inline-block;
+    color: #999;
     font-size: 14px;
-    font-weight: 600;
-    color: #8e94a3;
     cursor: pointer;
-    background: none;
-    border: none;
+    text-decoration: underline;
+}
+
+/* BOTÕES LADO A LADO (Caso você use a div popup-botoes no HTML) */
+#telaInformacoes .popup-botoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#telaInformacoes .popup-botoes button {
+    margin-top: 0; /* Remove a margem extra quando estão lado a lado */
 }
 .btn{
   position: relative;
@@ -1471,153 +1641,145 @@ footer{text-align:center;margin-top:15px}
 
 /* ===== TELA PAGAMENTO ESTILO APP ===== */
 
-#telaPagamento {
-    position: fixed;
-    inset: 0;
-    background: #f8faff; /* Fundo cinza azulado unificado */
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 30px 25px;
-    overflow-y: auto;
-    z-index: 9999;
+#telaPagamento{
+  position: fixed;
+  inset: 0;
+  background: #f4f6f8;
+  font-family: Arial, sans-serif;
+  padding: 25px;
+  overflow-y: auto;
+  z-index: 9999;
 }
 
-/* Título e Valor */
-#telaPagamento h2 {
-    text-align: left;
-    color: #05326b; /* Azul escuro para seriedade */
-    font-size: 28px;
-    margin-bottom: 8px;
-    font-weight: 800;
+/* Título */
+#telaPagamento h2{
+  text-align: left;
+  color: #57b6d9;
+  font-size: 32px;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
-#infoPagamento {
-    text-align: left;
-    color: #009ef7; /* Azul destaque */
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    background: #f0faff;
-    display: inline-block;
-    padding: 8px 15px;
-    border-radius: 12px;
+/* Infos */
+#infoPagamento{
+  text-align: left;
+  color: #57b6d9;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 25px;
 }
 
-#valorPagamento {
-    font-weight: 800;
+#valorPagamento{
+  font-weight: 800;
 }
 
-/* Texto de instrução */
-#telaPagamento p {
-    text-align: left;
-    color: #555;
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+/* Texto principal */
+#telaPagamento p{
+  text-align: left;
+  color: #444;
+  font-size: 17px;
+  line-height: 1.5;
 }
 
-/* PASSOS DO PIX */
-.passo {
-    display: flex;
-    align-items: flex-start; /* Alinha o número ao topo do texto caso quebre linha */
-    gap: 12px;
-    margin: 18px 0;
+/* PASSOS */
+.passo{
+  display:flex;
+  align-items:center; /* centraliza quando é 1 linha */
+  gap:10px;
+  margin:15px 0;
 }
 
-/* Quadrado do Número */
-.passo strong {
-    background: #4fc3ff;
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px; /* Estilo quadrado arredondado do app */
-    font-weight: 800;
-    flex: 0 0 36px;
-    box-shadow: 0 4px 10px rgba(79, 195, 255, 0.2);
+
+
+
+/* quadrado número */
+.passo strong{
+  background:#59b7d8;
+  color:#08313d;
+
+  width:40px;      /* tamanho FIXO */
+  height:40px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:6px;
+  font-weight:bold;
+
+  flex:0 0 40px;   /* 🔥 impede ocupar largura */
 }
 
-.passo span {
-    font-size: 15px;
-    color: #444;
-    font-weight: 500;
-    line-height: 1.3;
+
+/* campo PIX */
+#codigoPIX{
+  width: 100%;
+  height: 55px;
+  border-radius: 14px;
+  border: 2px solid #8ed0e6;
+  margin-top: 15px;
+  font-size: 16px;
+  padding: 10px;
+  background: #fff;
 }
 
-/* CAMPO DE CÓDIGO PIX */
-#codigoPIX {
-    width: 100%;
-    height: 58px;
-    border-radius: 16px;
-    border: 2px solid #eef2f6;
-    margin-top: 10px;
-    font-size: 14px; /* Fonte levemente menor para caber códigos grandes */
-    padding: 15px;
-    background: #fff;
-    color: #05326b;
-    font-weight: 600;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+/* BOTÃO COPIAR */
+#telaPagamento button{
+  width: 100%;
+  height: 55px;
+  border: none;
+  border-radius: 16px;
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-/* BOTÕES */
-#telaPagamento button {
-    cursor: pointer;
-    transition: all 0.2s;
+/* botão copiar */
+button[onclick="copiarCodigo()"]{
+  width: 100%;
+  height: 55px;
+  border: none;
+  border-radius: 14px;
+  margin-top: 12px;
+
+  background: #59b7d8;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-/* Botão Copiar (Destaque Principal) */
-button[onclick="copiarCodigo()"] {
-    width: 100%;
-    height: 55px;
-    border: none;
-    border-radius: 18px;
-    margin-top: 15px;
-    background: #009ef7;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    box-shadow: 0 8px 20px rgba(0, 158, 247, 0.2);
-}
 
-button[onclick="copiarCodigo()"]:active {
-    transform: scale(0.97);
-}
-
-/* Contador de Tempo */
+/* contador vermelho */
 #contador,
 #tempoFinal {
-    font-size: 20px;
-    font-weight: 800;
-    color: #ff5e5e; /* Vermelho suave padronizado */
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff0000;
 }
 
-/* BOTÃO VOLTAR (POSICIONADO NO RODAPÉ) */
-#voltarInicioBtn {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 50px);
-    max-width: 380px;
-    height: 60px;
-    border-radius: 20px;
-    border: none;
-    background: #05326b; /* Mantendo o azul escuro para botões de finalização */
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(5, 50, 107, 0.25);
+
+
+/* BOTÃO VOLTAR */
+#voltarInicioBtn{
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: calc(100% - 40px);
+  max-width: 380px; /* evita ficar gigante em PC */
+
+  height: 60px;
+  border-radius: 16px;
+  border: none;
+
+  background: linear-gradient(90deg,#19d3c5,#1e7cff);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-#voltarInicioBtn:active {
-    transform: translateX(-50%) scale(0.96);
-}
-
-/* Estilo para avisos secundários dentro do P */
-#telaPagamento small {
-    display: block;
-    margin-top: 10px;
-    color: #8e94a3;
-    font-size: 13px;
-}
+  
