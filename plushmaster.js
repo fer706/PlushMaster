@@ -620,7 +620,7 @@ irPara("telaHome");
       break;
 
     case "auth/user-disabled":
-      mensagem = "Sua conta foi bloqueada por descumprir regras. entre em contato com o suporte para mais informações.","a";
+      mensagem = "Sua conta foi bloqueada. entre em contato com o suporte para mais informações.";
       break;
 
   default:
