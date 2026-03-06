@@ -138,32 +138,51 @@ footer{text-align:center;margin-top:15px}
 .play-btn:active{
     transform:scale(0.95);
 }
-.bottom-bar{
-    height:90px;
-    background:#4fc3ff;
-    border-top-left-radius:25px;
-    border-top-right-radius:25px;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    box-shadow:0 -3px 10px rgba(0,0,0,0.2);
+.bottom-bar {
+    height: 90px;
+    background: #4fc3ff;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+    position: fixed; /* Garante que fique no rodapé */
+    bottom: 0;
+    width: 100%;
 }
-.nav-item{
-    text-align:center;
-    font-size:12px;
-    color:#1a6fa3;
+
+.nav-item {
+    text-align: center;
+    font-size: 12px;
+    color: #ffffff; /* Mudei para branco para destacar no azul */
+    font-weight: bold;
 }
-.nav-circle{
-    width:50px;
-    height:50px;
-    margin:0 auto 5px;
-    border-radius:50%;
-    background:linear-gradient(#aaf0ff,#4fc3ff);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    color:white;
+
+.nav-circle {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 5px;
+    border-radius: 50%;
+    background: linear-gradient(#aaf0ff, #4fc3ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Removi o font-size pois agora usamos imagens */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Estilo para a imagem dentro do círculo */
+.nav-icon {
+    width: 28px;  /* Tamanho ideal para o círculo de 50px */
+    height: 28px;
+    object-fit: contain; /* Não deixa a imagem esticar */
+}
+
+/* Feedback visual ao tocar */
+.nav-item:active {
+    transform: scale(0.9);
+    transition: 0.1s;
 }
 .play-btn{
     width:180px;
@@ -1781,5 +1800,110 @@ button[onclick="copiarCodigo()"]{
 
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
+.menu-hamburguer {
+    position: relative;
+    width: 45px;
+    height: 45px;
 
-  
+    /* Mesma cor do seu botão de chat */
+    background: linear-gradient(
+        180deg,
+        #6fe9ff 0%,
+        #1bb6ff 55%,
+        #3f7bff 100%
+    );
+
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px; /* Espaço entre os traços */
+
+    cursor: pointer;
+    flex-shrink: 0;
+
+    /* Mesmas sombras 3D do chat */
+    box-shadow:
+        inset 0 5px 8px rgba(255,255,255,0.35),
+        inset 0 -5px 8px rgba(0,0,0,0.25),
+        0 8px 16px rgba(0,0,0,0.35);
+
+    transition: .2s;
+}
+
+.menu-hamburguer:hover {
+    transform: scale(1.05);
+}
+
+/* Os 3 traços brancos */
+.menu-hamburguer span {
+    display: block;
+    width: 24px; /* Largura dos traços */
+    height: 3px;  /* Espessura dos traços */
+    background-color: white;
+    border-radius: 4px;
+}
+/* 1. O Fundo Escuro (Overlay) */
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none; 
+    transition: opacity 0.4s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 2. Menu Lateral (Sidebar) */
+.sidebar-bottom {
+    position: fixed;
+    bottom: -100%; /* Escondido */
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 80%;
+    background-color: #FDF9F3;
+    z-index: 9999;
+    transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px 20px 30px 20px;
+    border-radius: 30px 30px 0 0;
+    box-shadow: 0 -10px 25px rgba(0,0,0,0.1);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.sidebar-bottom.active {
+    bottom: 0;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* 3. Botão X e Títulos */
+.sidebar-header { position: relative; display: flex; justify-content: center; padding-top: 10px; }
+.handle { width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 10px auto 25px auto; }
+.btn-fechar-x { position: absolute; right: 15px; top: 5px; font-size: 32px; color: #1bb6ff; font-weight: bold; cursor: pointer; }
+
+/* 4. Cards */
+.menu-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+
+.menu-titulo { display: block; color: #1bb6ff; font-weight: 800; font-size: 1.1rem; }
+.menu-subtitulo { display: block; color: #8e8e8e; font-size: 0.85rem; }
+.menu-card:active { transform: scale(0.97); background: #f9f9f9; }

@@ -427,7 +427,13 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   
 <div class="top-bar">
 
-    <div style="width:36px;"></div> <!-- espaço fake só para equilibrar -->
+<div class="menu-hamburguer" onclick="abrirMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+    
 
     <img class="logo-topo" 
 src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
@@ -455,24 +461,34 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   
     <!-- MENU INFERIOR -->
     <div class="bottom-bar">
-        <div class="nav-item" onclick="irSemAnimacao('telaHome')">
-            <div class="nav-circle">🏠</div>
-            Home
+    <div class="nav-item" onclick="irSemAnimacao('telaHome')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/TYcsGrBz/428-4283255-house-outline-svg-png-icon-free-download-66240-logo-de-casa-png-removebg-preview.png" class="nav-icon">
         </div>
-        <div class="nav-item" onclick="abrirCarteira()">
-    <div class="nav-circle">💰</div>
-    Carteira
-</div>
-
-        <div class="nav-item" onclick="irSemAnimacao('telaConta')">
-            <div class="nav-circle">👤</div>
-            Conta
-        </div>
-        <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
-            <div class="nav-circle">🧸</div>
-            Pelúcias
-        </div>
+        Home
     </div>
+    
+    <div class="nav-item" onclick="abrirCarteira()">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/brtmKn1X/pngwing-com.png" class="nav-icon">
+        </div>
+        Carteira
+    </div>
+
+    <div class="nav-item" onclick="irSemAnimacao('telaConta')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/rsfp2dTM/png-clipart-computer-icons-user-google-account-symbol-symbol-miscellaneous-monochrome-thumbnail-remo.png" class="nav-icon">
+        </div>
+        Conta
+    </div>
+
+    <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/SKbk5L96/bear-cartoon-character-line-doodle-black-and-white-coloring-page-png-removebg-preview.png" class="nav-icon">
+        </div>
+        Pelúcias
+    </div>
+</div>
 </section>
 <section id="telaCarteira" class="tela">
 
@@ -660,8 +676,56 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   <button id="voltarInicioBtn" onclick="voltarInicio()">Voltar ao início</button>
 </section>
 
+<div id="overlay" class="overlay" onclick="abrirMenu()"></div>
 
+<div id="menuLateral" class="sidebar-bottom">
+    <div class="sidebar-header">
+        <div class="handle"></div> 
+        <div class="btn-fechar-x" onclick="abrirMenu()">&times;</div>
+    </div>
+    
+    <div class="menu-content">
+        <div class="menu-card" onclick="irPara('telaCarteira')">
+            <div class="menu-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/4341/4341764.png" width="30">
+            </div>
+            <div class="menu-text">
+                <span class="menu-titulo">Carteira</span>
+                <span class="menu-subtitulo">Adicione saldo para jogar</span>
+            </div>
+        </div>
 
+        <div class="menu-card" onclick="abrirTelaSelecionar()">
+            <div class="menu-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/808/808476.png" width="30">
+            </div>
+            <div class="menu-text">
+                <span class="menu-titulo">Jogar agora</span>
+                <span class="menu-subtitulo">Adicione jogadas e divirta-se</span>
+            </div>
+        </div>
+
+        <div class="menu-card" onclick="window.open('SEU_LINK_WHATSAPP', '_blank')">
+            <div class="menu-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968841.png" width="30">
+            </div>
+            <div class="menu-text">
+                <span class="menu-titulo">Grupo</span>
+                <span class="menu-subtitulo">Informações, promoções e suporte</span>
+            </div>
+        </div>
+
+        <div class="menu-card" onclick="irPara('telaSobre')">
+            <div class="menu-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/1046/1046713.png" width="30">
+            </div>
+            <div class="menu-text">
+                <span class="menu-titulo">Quem somos</span>
+                <span class="menu-subtitulo">Para saber mais sobre nós</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="plushmaster.js"></script>
 

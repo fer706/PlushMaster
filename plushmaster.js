@@ -1539,7 +1539,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.0.4"; // 🔥 sua versão do site
+    const versaoAtual = "1.0.5"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
@@ -1801,3 +1801,27 @@ function copiarCodigo(){
   });
 
 }
+function abrirMenu() {
+    const menu = document.getElementById('menuLateral');
+    const overlay = document.getElementById('overlay');
+    
+    // Toggle simples para abrir/fechar
+    menu.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+// VERIFICAÇÃO DE TELA BASE:
+// Se sair da Home, o menu perde a classe active na hora
+setInterval(() => {
+    const home = document.getElementById('telaHome');
+    const menu = document.getElementById('menuLateral');
+    const overlay = document.getElementById('overlay');
+
+    // Se a home não estiver ativa, removemos o active do menu
+    if (home && !home.classList.contains('active')) {
+        if (menu.classList.contains('active')) {
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    }
+}, 100);
