@@ -174,8 +174,8 @@ footer{text-align:center;margin-top:15px}
 
 /* Estilo para a imagem dentro do círculo */
 .nav-icon {
-    width: 28px;  /* Tamanho ideal para o círculo de 50px */
-    height: 28px;
+    width: 40px;  /* Tamanho ideal para o círculo de 50px */
+    height: 40px;
     object-fit: contain; /* Não deixa a imagem esticar */
 }
 
@@ -184,24 +184,36 @@ footer{text-align:center;margin-top:15px}
     transform: scale(0.9);
     transition: 0.1s;
 }
-.play-btn{
-    width:180px;
-    height:180px;
-    border-radius:50%;
+.play-btn {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
     background: radial-gradient(circle at top, #7be5ff, #009dff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    font-family: 'Fredoka', sans-serif; /* 🔥 SÓ ISSO MUDOU */
-    font-size:30px;
-    font-weight:600;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
 
-    color:white;
-    text-decoration:none;
-    box-shadow:0 10px 20px rgba(0,0,0,0.3);
-    cursor:pointer;
-    transition:0.2s;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+
+    /* Define a posição fixa */
+    transform: translateY(-50px); 
+    
+    /* Removemos a transição para evitar o efeito de "mola" ao clicar */
+    transition: none; 
+}
+
+/* Força o botão a ficar parado no clique */
+.play-btn:active, 
+.play-btn:focus {
+    transform: translateY(-50px) !important;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.3); /* Mantém a sombra igual */
 }
 
 .btn-chat{
@@ -1416,8 +1428,6 @@ body{
     opacity: .15;
   }
 }
-
-
 
 
 
