@@ -419,8 +419,9 @@ body{
    TELA SELECIONAR (ISOLADO)
 ========================= */
 
-#telaSelecionar{
-    background:#fff5eb;
+#telaSelecionar {
+    background: linear-gradient(to bottom, #4fc3ff 0%, #a5d8ff 35%, #e6f4ff 70%, #ffffff 100%);
+    min-height: 100vh;
 }
 
 /* TOPO */
@@ -754,21 +755,42 @@ body{
         from { opacity: 0; transform: translateX(20px); }
         to { opacity: 1; transform: translateX(0); }
     }
+/* Loader independente — no MESMO estilo do loader do botão */
 .loader {
-  border: 4px solid #f3f3f3;        /* cor de fundo da bolinha */
-  border-top: 4px solid #00d6ff;    /* cor do spinner */
-  border-radius: 50%;
-  width: 40px;
+  position: relative;
+  width: 40px;               /* tamanho equilibrado (igual ao do botão) */
   height: 40px;
-  animation: spin 1s linear infinite;
-
-  /* centraliza dentro do container */
-  margin: 40px auto; 
+  margin: 60px auto;         /* centraliza na página com bom espaçamento */
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Traços */
+.loader div {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.9);   /* mesma cor e opacidade do botão */
+  border-radius: 4px;
+  left: 50%;
+  bottom: 50%;               /* mesma posição base */
+  transform-origin: center 17px;          /* exatamente igual ao do botão */
+  opacity: 0;
+  animation: opacityTrail 0.8s linear infinite;
+}
+
+/* Posição e delay de cada um dos 8 traços — idêntico ao seu botão */
+.loader div:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg);   animation-delay: -0.7s; }
+.loader div:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg);  animation-delay: -0.6s; }
+.loader div:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg);  animation-delay: -0.5s; }
+.loader div:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg); animation-delay: -0.4s; }
+.loader div:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg); animation-delay: -0.3s; }
+.loader div:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg); animation-delay: -0.2s; }
+.loader div:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg); animation-delay: -0.1s; }
+.loader div:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg); animation-delay: 0s;   }
+
+/* Mesma animação de fade */
+@keyframes opacityTrail {
+  0%   { opacity: 1;    }
+  100% { opacity: 0.15; }
 }
 .maquinas .card {
     display: none;  /* esconde todos os cards até o Firebase carregar */
