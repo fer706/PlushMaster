@@ -1392,13 +1392,13 @@ function verificarLoginAutomatico(){
 
     // se saiu da conta → não loga
     if(usuarioSaiu === "true"){
-        voltarPara("tela1");
+        irSemAnimacao("tela1");
         return;
     }
 
     // se não tem usuário ou timestamp
     if(!usuario || !loginTimestamp){
-        voltarPara("tela1");
+        irSemAnimacao("tela1");
         return;
     }
 
@@ -1413,12 +1413,12 @@ function verificarLoginAutomatico(){
 
         notificar("Sua sessão expirou. Faça login novamente.");
 
-        voltarPara("tela1");
+        irSemAnimacao("tela1");
         return;
     }
 
     // login válido
-    voltarPara("telaHome");
+    irSemAnimacao("telaHome");
 }
 
 
