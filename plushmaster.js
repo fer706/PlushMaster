@@ -41,22 +41,18 @@ function clicarMaquina(id){
   btn.className = "sel-btn-status sel-indisponivel";
   return;
 }
-
-
-    // selecionada
+// selecionada
     if(maquinaSelecionada === m){
       btn.innerText = "Selecionada";
       btn.className = "sel-btn-status sel-selecionada";
     }
     else{
-      btn.innerText = "Selecionar";
+      btn.innerText = "disponivel";
       btn.className = "sel-btn-status sel-disponivel";
     }
 
   });
-
 }
-
   
 function iniciarJogo() {
 
@@ -307,22 +303,6 @@ if (novoEstado === "ocupada" && maquinaSelecionada === id) {
 
   // -------- UI ----------
 
-  // 🟢 MINHA máquina (parece disponível)
-if(novoEstado === "minha"){
-
-  card.style.pointerEvents = "auto";
-  card.style.opacity = "1";
-
-  const acao = card.querySelector(".sel-acao");
-  if(acao){
-    acao.innerHTML = `Iniciar agora<br>😀🥳`;
-  }
-
-  btn.innerText = "Disponível";
-  btn.className = "sel-btn-status sel-disponivel";
-
-  return;
-}
   if (novoEstado === "ocupada") {
   const tempoRestante = dados.fim - agora;
   
@@ -1581,7 +1561,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.2.0"; // 🔥 sua versão do site
+    const versaoAtual = "1.2.1"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
