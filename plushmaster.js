@@ -313,7 +313,7 @@ if (novoEstado === "ocupada" && maquinaSelecionada === id) {
   // Aplicando estilos em lote para melhor performance visual
   Object.assign(card.style, {
     pointerEvents: "none",
-    opacity: "0.6"
+    opacity: "1"
   });
 
   if (btn) {
@@ -341,7 +341,7 @@ if(novoEstado === "indisponivel"){
   btn.disabled = true;
 
   card.style.pointerEvents = "none";
-  card.style.opacity = "0.5";
+  card.style.opacity = "1";
 
   // 🔥 emoji só no card
   const acao = card.querySelector(".sel-acao");
@@ -1561,7 +1561,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.2.1"; // 🔥 sua versão do site
+    const versaoAtual = "1.2.2"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
