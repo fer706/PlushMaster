@@ -293,15 +293,17 @@ function atualizarStatusMaquina(doc){
     novoEstado = "indisponivel";
   }
 
-  // evita redesenho desnecessário
-  if(statusMaquinas[id] === novoEstado) return;
+  // Permite atualizar se o estado mudou OU se continua "ocupada" (para atualizar o tempo/jogadas)
+if (statusMaquinas[id] === novoEstado && novoEstado !== "ocupada") {
+    return;
+}
 
-  statusMaquinas[id] = novoEstado;
+statusMaquinas[id] = novoEstado;
 
-  // só limpa seleção se OUTRO travou
-  if(novoEstado === "ocupada" && maquinaSelecionada === id){
+// só limpa seleção se OUTRO travou
+if (novoEstado === "ocupada" && maquinaSelecionada === id) {
     maquinaSelecionada = null;
-  }
+}
 
   // -------- UI ----------
 
@@ -311,47 +313,87 @@ if(novoEstado === "minha"){
   card.style.pointerEvents = "auto";
   card.style.opacity = "1";
 
-  btn.innerText = "Selecionar"; // 🔥 parece livre
+  const acao = card.querySelector(".sel-acao");
+  if(acao){
+    acao.innerHTML = `Iniciar agora<br>😀🥳`;
+  }
+
+  btn.innerText = "Disponível";
   btn.className = "sel-btn-status sel-disponivel";
 
   return;
 }
+  if (novoEstado === "ocupada") {
+  const tempoRestante = dados.fim - agora;
+  
+  if (tempoRestante <= 0) return;
 
-  // 🔴 ocupada por outro
-  if(novoEstado === "ocupada"){
+  const jogadasRestantes = Math.ceil(tempoRestante / 60000);
 
+  // Aplicando estilos em lote para melhor performance visual
+  Object.assign(card.style, {
+    pointerEvents: "none",
+    opacity: "0.6"
+  });
+
+  if (btn) {
     btn.innerText = "Ocupada";
-    btn.className = "sel-btn-status sel-indisponivel";
-    card.style.pointerEvents = "none";
-    card.style.opacity = "0.6";
-
-    return;
+    btn.className = "sel-btn-status sel-ocupado";
+    btn.disabled = true;
   }
 
-  // ⚫ manutenção
-  if(novoEstado === "indisponivel"){
-
-    btn.innerText = "Indisponível";
-    btn.className = "sel-btn-status sel-indisponivel";
-    card.style.pointerEvents = "none";
-    card.style.opacity = "0.5";
-
-    return;
+  const acao = card.querySelector(".sel-acao");
+  if (acao) {
+    // Pluralização simples para deixar o texto polido
+    const sufixo = jogadasRestantes === 1 ? "jogada" : "jogadas";
+    acao.innerHTML = `<span>🕹️</span>Restam: ${jogadasRestantes} ${sufixo}`;
   }
 
-  // 🟡 disponível
-  card.style.pointerEvents = "auto";
-  card.style.opacity = "1";
-
-  if(maquinaSelecionada === id){
-    btn.innerText = "Selecionada";
-    btn.className = "sel-btn-status sel-selecionada";
-  }else{
-    btn.innerText = "Selecionar";
-    btn.className = "sel-btn-status sel-disponivel";
-  }
+  return;
 }
 
+
+  // ⚫ manutenção
+if(novoEstado === "indisponivel"){
+
+  btn.innerText = "Indisponível"; // ✔️ sem emoji no botão
+  btn.className = "sel-btn-status sel-indisponivel";
+  btn.disabled = true;
+
+  card.style.pointerEvents = "none";
+  card.style.opacity = "0.5";
+
+  // 🔥 emoji só no card
+  const acao = card.querySelector(".sel-acao");
+  if(acao){
+    acao.innerHTML = `Manutenção / Abastecimento<br>⚙️🧸`;
+  }
+
+  return;
+}
+
+// 🟢 disponível
+card.style.pointerEvents = "auto";
+card.style.opacity = "1";
+
+const acao = card.querySelector(".sel-acao");
+if (acao) {
+  // ESSA LINHA É A CHAVE: Ela apaga o "Restam X jogadas" 
+  // e coloca o texto de início padrão.
+  acao.innerHTML = `Iniciar agora<br>😀🥳`; 
+}
+
+// Reativa o botão (importante porque o estado 'ocupada' deu disabled nele)
+btn.disabled = false;
+
+if (maquinaSelecionada === id) {
+  btn.innerText = "Selecionada";
+  btn.className = "sel-btn-status sel-selecionada";
+} else {
+  btn.innerText = "Disponível";
+  btn.className = "sel-btn-status sel-disponivel";
+}
+}
 
 function toggleJogadas(){
   const lista = document.getElementById("listaJogadas");
@@ -1539,7 +1581,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.1.0"; // 🔥 sua versão do site
+    const versaoAtual = "1.2.0"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
