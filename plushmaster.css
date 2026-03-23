@@ -572,7 +572,7 @@ body{
     justify-content:center;
 
     gap:5px; /* 🔥 MAIS espaço entre texto e emoji */
-    line-height:1.3; /* 🔥 texto mais solto */
+    line-height:1.2; /* 🔥 texto mais solto */
     text-align:center;
 }
 /* BOTÃO */

@@ -326,9 +326,11 @@ if (novoEstado === "ocupada" && maquinaSelecionada === id) {
   if (acao) {
     // Pluralização simples para deixar o texto polido
     const sufixo = jogadasRestantes === 1 ? "jogada" : "jogadas";
-    acao.innerHTML = `<span>🕹️</span>Restam: ${jogadasRestantes} ${sufixo}`;
+    acao.innerHTML = `
+  <div>🕹️</div>
+  <div>Restam: ${jogadasRestantes} ${sufixo}</div>
+`;
   }
-
   return;
 }
 
@@ -346,7 +348,10 @@ if(novoEstado === "indisponivel"){
   // 🔥 emoji só no card
   const acao = card.querySelector(".sel-acao");
   if(acao){
-    acao.innerHTML = `Manutenção / Abastecimento<br>⚙️🧸`;
+   acao.innerHTML = `
+  <div>Manutenção / Abastecimento</div>
+  <div>⚙️🧸</div>
+`;
   }
 
   return;
@@ -360,7 +365,10 @@ const acao = card.querySelector(".sel-acao");
 if (acao) {
   // ESSA LINHA É A CHAVE: Ela apaga o "Restam X jogadas" 
   // e coloca o texto de início padrão.
-  acao.innerHTML = `Iniciar agora<br>😀🥳`; 
+  acao.innerHTML = `
+  <div>Iniciar agora</div>
+  <div>😀🥳</div>
+`;
 }
 
 // Reativa o botão (importante porque o estado 'ocupada' deu disabled nele)
