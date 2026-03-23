@@ -47,7 +47,7 @@ function clicarMaquina(id){
       btn.className = "sel-btn-status sel-selecionada";
     }
     else{
-      btn.innerText = "disponivel";
+      btn.innerText = "Disponivel";
       btn.className = "sel-btn-status sel-disponivel";
     }
 
