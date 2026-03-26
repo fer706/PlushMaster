@@ -4,26 +4,20 @@ body{
   overflow-x: hidden; /* bloqueia rolagem lateral */
 }
 
-
-.tela{
+.tela {
     position: fixed;
     inset: 0;
     background: #3dc8ff;
 
     transform: translateX(100%);
-    transition: none;
-
     pointer-events: none;
 }
 
-.tela.base{
+.tela.base {
     transform: translateX(0);
     pointer-events: auto;
     z-index: 2;
 }
-
-
-
 
 /* GERAL */
 .logo-login{
@@ -527,7 +521,7 @@ body{
 /* CARD */
 .sel-card {
     width: 180px;
-    height: 170px; /* altura fixa */
+    min-height: 170px; /* 🔥 cresce se precisar */
     background: #f4efe6;
     border-radius: 22px;
     padding: 14px;
@@ -537,6 +531,9 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    margin: 5px;
+    
 }
 /* TÍTULO */
 .sel-titulo{
@@ -736,18 +733,15 @@ body{
 
 }
 
-
-
-.notificacao{
+.notificacao {
 
   position: fixed;
   top: 20px;
   left: 50%;
 
-  transform: translate(-50%, -120%);
-  transition: transform .45s ease, opacity .45s ease;
-
+  transform: translate(-50%, 0); /* sem movimento */
   opacity: 0;
+
   z-index: 999999999;
 
   background: #000;
@@ -765,30 +759,36 @@ body{
   font-size: 14px;
   font-weight: 500;
 
-  /* 🔥 ISSO FAZ O TAMANHO INTELIGENTE */
-  width: max-content;     /* cresce para o lado */
-  max-width: 90vw;       /* nunca passa da tela */
+  width: max-content;
+  max-width: 90vw;
 
   text-align: center;
   line-height: 1.4;
   letter-spacing: .4px;
 
-  overflow-wrap: break-word; /* só quebra se PRECISAR */
+  overflow-wrap: break-word;
+
+  /* ✨ só fade rápido */
+  transition: opacity 0.2s ease;
 }
 
-
-.notificacao.ativa{
-  transform: translate(-50%, 0);
+.notificacao.ativa {
   opacity: 1;
 }
 
+.notificacao.a {
+
+  border: 2px solid #ffcc00;
+
+  box-shadow: 
+    0 0 8px #ffcc00,
+    0 0 20px rgba(255,204,0,0.5);
+
+}
+
+    
 
 
-
-    @keyframes aparecer {
-        from { opacity: 0; transform: translateX(20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
 /* Loader independente — no MESMO estilo do loader do botão */
 .loader {
   position: relative;

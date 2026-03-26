@@ -206,7 +206,7 @@ if (dados.jogando && dados.fim < agora) {
 
 
 
-let listenerMaquinas = null;
+let listenerMaquinas = false;
 
 async function abrirTelaSelecionar(){
 
@@ -214,7 +214,7 @@ async function abrirTelaSelecionar(){
 
   // 🔥 verifica internet imediatamente
   if(!navigator.onLine){
-    notificar("Você está desconectado. Feche e volte a abrir o site.","a");
+    notificar("sem conexão.","a");
   }
 window.addEventListener("offline", () => {
 
@@ -222,7 +222,7 @@ window.addEventListener("offline", () => {
 
   // verifica se a tela está visível
   if(telaSelecionar && telaSelecionar.classList.contains("base")){
-      notificar("Você está desconectado. Feche e volte a abrir o site.","a");
+      notificar("sua conexão caiu","a");
   }
 
 });
@@ -238,7 +238,7 @@ window.addEventListener("offline", () => {
   if (listenerMaquinas) listenerMaquinas();
 
   // 🔹 leitura inicial
-  const snapshotInicial = await db.collection("maquinas").get();
+  const snapshotInicial = await db.collection("maquinas").get({ source: "server" });
   snapshotInicial.forEach(doc => {
     atualizarStatusMaquina(doc);
   });
@@ -256,7 +256,6 @@ window.addEventListener("offline", () => {
     .forEach(c => c.style.display = "block");
 
 }
-
 function atualizarStatusMaquina(doc){
 
   const id = doc.id;
@@ -381,6 +380,14 @@ if (maquinaSelecionada === id) {
   btn.innerText = "Disponível";
   btn.className = "sel-btn-status sel-disponivel";
 }
+}
+
+function desativarTelas() {
+  document.querySelectorAll(".tela").forEach(t => {
+    t.classList.remove("base"); // remove tela ativa
+    t.style.pointerEvents = "none"; // bloqueia clique
+    t.style.opacity = "0.5"; // opcional (visual desativado)
+  });
 }
 
 function toggleJogadas(){
@@ -872,40 +879,44 @@ function pagar(){
 
 /* ================= ATUALIZAÇÃO EM TEMPO REAL ================= */
 let unsubscribeUser = null;
-let userData = null; // 🔥 guarda os dados em memória
+let userData = null; // guarda os dados em memória
 let conectadoAoServidor = false;
-
-
 
 firebase.auth().onAuthStateChanged((user) => {
 
-  // mata listener antigo
-  if(unsubscribeUser){
+  // 🔥 mata listener antigo
+  if (unsubscribeUser) {
     unsubscribeUser();
     unsubscribeUser = null;
   }
 
-  if(!user) return;
+  if (!user) return;
 
+  // 🔥 cria listener novo
   unsubscribeUser = db.collection("users")
-.doc(user.uid)
-.onSnapshot({
+    .doc(user.uid)
+    .onSnapshot({
+        includeMetadataChanges: true
+    }, (doc) => {
 
-    includeMetadataChanges: true
-
-}, (doc) => {
-
-    // 🔥 só aceita dado do servidor
-    if(doc.metadata.fromCache){
+      // 🔥 ignora totalmente cache
+      if (doc.metadata.fromCache) {
+        // bloqueia interface ou mostra aviso
         mostrarSemInternet();
         return;
-    }
+      }
 
-    userData = doc.data();
+      // 🔹 só chega aqui se for dado do servidor
+      conectadoAoServidor = true;
+      userData = doc.data();
 
-    atualizarInterface();
+      atualizarInterface();
 
-});
+  }, (erro) => {
+      console.error("Erro ao receber dados do usuário:", erro);
+      mostrarSemInternet();
+  });
+
 });
 function mostrarSemInternet(){
 
