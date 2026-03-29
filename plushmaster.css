@@ -657,8 +657,8 @@ body{
     position: absolute;
     inset: 0;
     margin: auto;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     opacity: 0;                /* inicia invisível */
     pointer-events: none;      /* evita clique sobre o loader */
     z-index: 1;                /* abaixo do texto */
@@ -667,13 +667,13 @@ body{
 /* traços do loader */
 .sel-btn-iniciar .btn-loader div {
     position: absolute;
-    width: 4px;
-    height: 12px;
+    width: 6px;
+    height: 16px;
     background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 17px;
+    transform-origin: center 23px;
     animation: opacityTrail .8s linear infinite;
 }
 
@@ -800,13 +800,13 @@ body{
 /* Traços */
 .loader div {
   position: absolute;
-  width: 4px;
-  height: 12px;
+  width: 6px;
+  height: 16px;
   background: rgba(255, 255, 255, 0.9);   /* mesma cor e opacidade do botão */
   border-radius: 4px;
   left: 50%;
   bottom: 50%;               /* mesma posição base */
-  transform-origin: center 17px;          /* exatamente igual ao do botão */
+  transform-origin: center 23px;          /* exatamente igual ao do botão */
   opacity: 0;
   animation: opacityTrail 0.8s linear infinite;
 }
@@ -1440,8 +1440,8 @@ body{
   inset: 0;
   margin: auto;
 
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36x;
 
   opacity: 0;              /* 🔥 FALTAVA ISSO */
   pointer-events: none;    /* evita clique no loader */
@@ -1456,8 +1456,8 @@ body{
 
   position: absolute;
 
-  width: 4px;
-  height: 12px;
+  width: 6px;
+  height: 16px;
 
   background: rgba(255,255,255,.9);
   border-radius: 4px;
@@ -1465,7 +1465,7 @@ body{
   left: 50%;
   bottom: 50%;
 
-  transform-origin: center 17px;
+  transform-origin: center 23px;
 
   animation: opacityTrail .8s linear infinite;
 }
@@ -1607,24 +1607,6 @@ body{
 
   pointer-events: none;   /* 🔥 ISSO BLOQUEIA O CLIQUE DE VERDADE */
   cursor: default;        /* remove a mãozinha */
-}
-#telaCarregando{
-    position: fixed;
-    inset: 0;
-    background: #3dc8ff; /* azul PlushMaster */
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9999;
-}
-
-.texto-carregando{
-    color: white;
-    font-size: 26px;
-    font-weight: bold;
-    letter-spacing: 1px;
 }
 
 
@@ -1981,3 +1963,51 @@ button[onclick="copiarCodigo()"]{
 .menu-titulo { display: block; color: #1bb6ff; font-weight: 800; font-size: 1.1rem; }
 .menu-subtitulo { display: block; color: #8e8e8e; font-size: 0.85rem; }
 .menu-card:active { transform: scale(0.97); background: #f9f9f9; }
+
+.loading-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.loading-img{
+    width: 500px;
+    max-width: 200%;
+}
+
+/* 🔥 loader maior */
+.btn-loader.big{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    opacity: 1;
+}
+
+.btn-loader.big div{
+    position: absolute;
+    width: 6px; /* 🔥 largura par */
+    height: 16px;
+    background: rgba(255,255,255,.9);
+    border-radius: 4px;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: center 23px;
+    animation: opacityTrail .8s linear infinite;
+    will-change: transform;
+}
+
+/* círculo */
+.btn-loader.big div:nth-child(1){ transform: translate(-50%, -50%) rotate(0deg); animation-delay: -0.7s;}
+.btn-loader.big div:nth-child(2){ transform: translate(-50%, -50%) rotate(45deg); animation-delay: -0.6s;}
+.btn-loader.big div:nth-child(3){ transform: translate(-50%, -50%) rotate(90deg); animation-delay: -0.5s;}
+.btn-loader.big div:nth-child(4){ transform: translate(-50%, -50%) rotate(135deg); animation-delay: -0.4s;}
+.btn-loader.big div:nth-child(5){ transform: translate(-50%, -50%) rotate(180deg); animation-delay: -0.3s;}
+.btn-loader.big div:nth-child(6){ transform: translate(-50%, -50%) rotate(225deg); animation-delay: -0.2s;}
+.btn-loader.big div:nth-child(7){ transform: translate(-50%, -50%) rotate(270deg); animation-delay: -0.1s;}
+.btn-loader.big div:nth-child(8){ transform: translate(-50%, -50%) rotate(315deg); animation-delay: 0s;}
