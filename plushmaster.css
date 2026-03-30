@@ -1991,13 +1991,13 @@ button[onclick="copiarCodigo()"]{
 
 .btn-loader.big div{
     position: absolute;
-    width: 6px; /* 🔥 largura par */
-    height: 15px;
+    width: 5px; /* 🔥 largura par */
+    height: 12px;
     background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 22px;
+    transform-origin: center 18px;
     animation: opacityTrail .8s linear infinite;
     will-change: transform;
 }
