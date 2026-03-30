@@ -383,13 +383,6 @@ if (maquinaSelecionada === id) {
 }
 }
 
-function desativarTelas() {
-  document.querySelectorAll(".tela").forEach(t => {
-    t.classList.remove("base"); // remove tela ativa
-    t.style.pointerEvents = "none"; // bloqueia clique
-    t.style.opacity = "0.5"; // opcional (visual desativado)
-  });
-}
 
 function toggleJogadas(){
   const lista = document.getElementById("listaJogadas");

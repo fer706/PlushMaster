@@ -1441,7 +1441,7 @@ body{
   margin: auto;
 
   width: 36px;
-  height: 36x;
+  height: 36px;
 
   opacity: 0;              /* 🔥 FALTAVA ISSO */
   pointer-events: none;    /* evita clique no loader */
