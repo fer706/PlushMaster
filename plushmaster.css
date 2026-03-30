@@ -667,13 +667,13 @@ body{
 /* traços do loader */
 .sel-btn-iniciar .btn-loader div {
     position: absolute;
-    width: 6px;
-    height: 15px;
+    width: 5px;
+    height: 12px;
     background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 22px;
+    transform-origin: center 18px;
     animation: opacityTrail .8s linear infinite;
 }
 
@@ -800,13 +800,13 @@ body{
 /* Traços */
 .loader div {
   position: absolute;
-  width: 6px;
-  height: 15px;
+  width: 5px;
+  height: 12px;
   background: rgba(255, 255, 255, 0.9);   /* mesma cor e opacidade do botão */
   border-radius: 4px;
   left: 50%;
   bottom: 50%;               /* mesma posição base */
-  transform-origin: center 22px;          /* exatamente igual ao do botão */
+  transform-origin: center 18px;          /* exatamente igual ao do botão */
   opacity: 0;
   animation: opacityTrail 0.8s linear infinite;
 }
@@ -1456,8 +1456,8 @@ body{
 
   position: absolute;
 
-  width: 6px;
-  height: 15px;
+  width: 5px;
+  height: 12px;
 
   background: rgba(255,255,255,.9);
   border-radius: 4px;
@@ -1465,7 +1465,7 @@ body{
   left: 50%;
   bottom: 50%;
 
-  transform-origin: center 22px;
+  transform-origin: center 18px;
 
   animation: opacityTrail .8s linear infinite;
 }
