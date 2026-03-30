@@ -105,7 +105,7 @@ if(dados.jogando && dados.uid === user.uid){
 
   saldo -= total;
 
-  const tempoExtra = jogadas * 60000;
+  const tempoExtra = jogadas * 20000;
 
   transaction.update(maquinaRef, {
     fim: dados.fim + tempoExtra
@@ -138,8 +138,8 @@ if(dados.jogando && dados.fim > agora){
 
       saldo -= total;
 
-      // ⏰ 1 minuto por jogada
-const tempoTotal = jogadas * 1 * 60 * 1000;
+      // ⏰ 20 segundos por jogada
+const tempoTotal = jogadas * 20 * 1000;
 
 
       
@@ -307,7 +307,8 @@ if (novoEstado === "ocupada" && maquinaSelecionada === id) {
   
   if (tempoRestante <= 0) return;
 
-  const jogadasRestantes = Math.ceil(tempoRestante / 60000);
+ // calcula jogadas restantes considerando 20 segundos por jogada
+const jogadasRestantes = Math.ceil(tempoRestante / 20000);
 
   // Aplicando estilos em lote para melhor performance visual
   Object.assign(card.style, {
@@ -1580,7 +1581,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.3.3"; // 🔥 sua versão do site
+    const versaoAtual = "1.4.3"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
