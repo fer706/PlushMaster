@@ -105,7 +105,7 @@ if(dados.jogando && dados.uid === user.uid){
 
   saldo -= total;
 
-  const tempoExtra = jogadas * 20000;
+  const tempoExtra = jogadas * 30000;
 
   transaction.update(maquinaRef, {
     fim: dados.fim + tempoExtra
@@ -138,8 +138,8 @@ if(dados.jogando && dados.fim > agora){
 
       saldo -= total;
 
-      // ⏰ 20 segundos por jogada
-const tempoTotal = jogadas * 20 * 1000;
+      // ⏰ 30 segundos por jogada
+const tempoTotal = jogadas * 30 * 1000;
 
 
       
@@ -307,8 +307,8 @@ if (novoEstado === "ocupada" && maquinaSelecionada === id) {
   
   if (tempoRestante <= 0) return;
 
- // calcula jogadas restantes considerando 20 segundos por jogada
-const jogadasRestantes = Math.ceil(tempoRestante / 20000);
+ // calcula jogadas restantes considerando 30 segundos por jogada
+const jogadasRestantes = Math.ceil(tempoRestante / 30000);
 
   // Aplicando estilos em lote para melhor performance visual
   Object.assign(card.style, {
