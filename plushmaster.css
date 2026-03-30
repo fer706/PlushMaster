@@ -668,12 +668,12 @@ body{
 .sel-btn-iniciar .btn-loader div {
     position: absolute;
     width: 6px;
-    height: 16px;
+    height: 15px;
     background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 23px;
+    transform-origin: center 22px;
     animation: opacityTrail .8s linear infinite;
 }
 
@@ -801,12 +801,12 @@ body{
 .loader div {
   position: absolute;
   width: 6px;
-  height: 16px;
+  height: 15px;
   background: rgba(255, 255, 255, 0.9);   /* mesma cor e opacidade do botão */
   border-radius: 4px;
   left: 50%;
   bottom: 50%;               /* mesma posição base */
-  transform-origin: center 23px;          /* exatamente igual ao do botão */
+  transform-origin: center 22px;          /* exatamente igual ao do botão */
   opacity: 0;
   animation: opacityTrail 0.8s linear infinite;
 }
@@ -1457,7 +1457,7 @@ body{
   position: absolute;
 
   width: 6px;
-  height: 16px;
+  height: 15px;
 
   background: rgba(255,255,255,.9);
   border-radius: 4px;
@@ -1465,7 +1465,7 @@ body{
   left: 50%;
   bottom: 50%;
 
-  transform-origin: center 23px;
+  transform-origin: center 22px;
 
   animation: opacityTrail .8s linear infinite;
 }
@@ -1992,12 +1992,12 @@ button[onclick="copiarCodigo()"]{
 .btn-loader.big div{
     position: absolute;
     width: 6px; /* 🔥 largura par */
-    height: 16px;
+    height: 15px;
     background: rgba(255,255,255,.9);
     border-radius: 4px;
     left: 50%;
     bottom: 50%;
-    transform-origin: center 23px;
+    transform-origin: center 22px;
     animation: opacityTrail .8s linear infinite;
     will-change: transform;
 }
