@@ -237,11 +237,26 @@ window.addEventListener("offline", () => {
   // mata listener antigo
   if (listenerMaquinas) listenerMaquinas();
 
-  // 🔹 leitura inicial
   const snapshotInicial = await db.collection("maquinas").get({ source: "server" });
-  snapshotInicial.forEach(doc => {
-    atualizarStatusMaquina(doc);
-  });
+
+const uid = auth.currentUser?.uid;
+let minhaMaquina = null;
+
+snapshotInicial.forEach(doc => {
+  const dados = doc.data();
+
+  // verifica se é o usuário jogando
+  if(dados.jogando && dados.uid === uid && dados.fim > Date.now()){
+    minhaMaquina = doc.id;
+  }
+
+  atualizarStatusMaquina(doc);
+});
+
+// 🔥 MOSTRA PRIORIDADE
+if(minhaMaquina){
+  notificar(`🎮 Você tem prioridade na máquina ${minhaMaquina.toUpperCase()}!`, "azul");
+}
 
   // 🔹 listener em tempo real
   listenerMaquinas = db.collection("maquinas")
@@ -824,9 +839,13 @@ function notificar(msg, tipo = "v") {
   const div = document.createElement("div");
 
   if(tipo === "a"){
-    div.className = "notificacao a"; // 👈 ESSA É A CHAVE
-  }else{
-    div.className = "notificacao";
+    div.className = "notificacao a"; // amarelo
+  }
+  else if(tipo === "azul"){
+    div.className = "notificacao azul"; // 🔵 azul
+  }
+  else{
+    div.className = "notificacao"; // vermelho padrão
   }
 
   div.innerText = msg;
@@ -842,8 +861,6 @@ function notificar(msg, tipo = "v") {
     setTimeout(() => div.remove(), 400);
   }, 3000);
 }
-
-
 
 
 
