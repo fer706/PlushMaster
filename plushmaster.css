@@ -92,20 +92,70 @@ footer{text-align:center;margin-top:15px}
 
 
 .camera-box {
-    background: black;
-    margin: 0px auto;       /* centraliza */
-    border-radius: 2px;      /* quase quadrado */
+    background: #5dd0fd;
+    margin: 0px auto;
+    border-radius: 2px;
     width: 100%;
     max-width: 600px;
     aspect-ratio: 16/9;
     overflow: hidden;
+    position: relative; /* 🔥 importante */
 }
+
+/* iframe */
 .camera-box iframe {
     width: 100%;
     height: 100%;
     border: none;
+    display: none; /* começa escondido */
 }
 
+/* 🔥 loader HOME */
+.load-home{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    opacity: 1;
+}
+
+.load-home div{
+    position: absolute;
+    width: 5px;
+    height: 12px;
+    background: #5e676893;
+    border-radius: 4px;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: center 18px;
+    animation: opacityTrail .8s linear infinite;
+}
+
+/* círculo */
+.load-home div:nth-child(1){ transform: translate(-50%, -50%) rotate(0deg); animation-delay: -0.7s;}
+.load-home div:nth-child(2){ transform: translate(-50%, -50%) rotate(45deg); animation-delay: -0.6s;}
+.load-home div:nth-child(3){ transform: translate(-50%, -50%) rotate(90deg); animation-delay: -0.5s;}
+.load-home div:nth-child(4){ transform: translate(-50%, -50%) rotate(135deg); animation-delay: -0.4s;}
+.load-home div:nth-child(5){ transform: translate(-50%, -50%) rotate(180deg); animation-delay: -0.3s;}
+.load-home div:nth-child(6){ transform: translate(-50%, -50%) rotate(225deg); animation-delay: -0.2s;}
+.load-home div:nth-child(7){ transform: translate(-50%, -50%) rotate(270deg); animation-delay: -0.1s;}
+.load-home div:nth-child(8){ transform: translate(-50%, -50%) rotate(315deg); animation-delay: 0s;}
+
+/* animação */
+@keyframes opacityTrail {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+.loading-screen{
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+}
 
 .play-area{
     flex:1;
@@ -802,7 +852,7 @@ body{
   position: absolute;
   width: 5px;
   height: 12px;
-  background: rgba(255, 255, 255, 0.9);   /* mesma cor e opacidade do botão */
+  background: #5e676893;   /* mesma cor e opacidade do botão */
   border-radius: 4px;
   left: 50%;
   bottom: 50%;               /* mesma posição base */
