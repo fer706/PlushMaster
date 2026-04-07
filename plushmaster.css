@@ -25,10 +25,19 @@ body{
     margin:25px auto;
     display:block;
 }
-.logo-topo{
-    width:140px;     /* tamanho ideal para topo */
-    height:auto;
-    display:block;
+.logo-topo {
+    width: 140px;     /* Tamanho ideal para topo */
+    height: auto;
+    display: block;
+
+    /* Centralização Absoluta */
+    position: absolute;
+    top: -3px;        /* Distância do topo */
+    left: 50%;        /* Joga o início da imagem para o meio da tela */
+    transform: translateX(-50%); /* Puxa metade da largura de volta para o centro perfeito */
+
+    /* Garante que a logo fique abaixo do botão voltar se eles se cruzarem */
+    z-index: 9998; 
 }
 
 
@@ -237,9 +246,9 @@ footer{text-align:center;margin-top:15px}
     justify-content: center;
     align-items: center;
 
-    font-family: 'Fredoka', sans-serif;
-    font-size: 30px;
-    font-weight: 600;
+    font-family: 'DynaPuff', system-ui, cursive;
+font-size: 30px;
+font-weight: 600;
 
     color: white;
     text-decoration: none;
@@ -324,7 +333,7 @@ footer{text-align:center;margin-top:15px}
 
 #telaChat .topo{
   background:#4fc3ff;
-  padding:5px 15px 25px 15px;
+  padding:60px 20px 25px 15px;
   border-bottom-left-radius:20px;
   border-bottom-right-radius:20px;
   display:flex;
@@ -349,17 +358,33 @@ footer{text-align:center;margin-top:15px}
   transform:translateX(-50%);
 }
 
-#telaChat .perfil{
-  width:42px;
-  height:42px;
-  background:white;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-  color:#4fc3ff;
-  font-size:20px;
+#telaChat .perfil {
+  /* Tamanho e Formato */
+  width: 50px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 50%;
+  
+  /* Centralização da Letra */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Tipografia */
+  color: #000000; 
+  font-family: 'DynaPuff', cursive;
+  font-weight: bold;
+  font-size: 20px;
+
+  /* FIXADO NO LADO DIREITO */
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 9999; /* Garante que fique acima das mensagens */
+
+  /* Estilo Flat */
+  border: none;
+  box-shadow: none;
 }
 
 /* chat messages */
@@ -512,10 +537,17 @@ body{
 }
 
 /* TEXTO */
-.sel-jogadas-texto{
-  font-size:15px;
-  font-weight:bold;
-  color:#4fc3ff;
+.sel-jogadas-texto {
+    /* Fonte temática do PlushMaster */
+    font-family: 'DynaPuff', system-ui, cursive;
+    
+    /* Mantendo suas configurações originais */
+    font-size: 15px;
+    font-weight: bold;
+    color: #4fc3ff; /* Azul claro original */
+    
+    /* Sem afastamento lateral */
+    margin-left: 0;
 }
 
 /* DROPDOWN FECHADO */
@@ -600,9 +632,19 @@ body{
     color:#1a1a1a;
     margin:5px 0;
 }
-.sel-texto1{
-  font-size:20px;
-    color:#fffdfd;
+.sel-texto1 {
+    /* Fonte temática do PlushMaster */
+    font-family: 'DynaPuff', system-ui, cursive;
+    
+    /* Tamanho e Cor */
+    font-size: 20px;
+    color: #ffffff;
+    
+    /* Afastamento da lateral esquerda */
+    margin-left: 15px;
+    
+    /* Peso da fonte para combinar com o estilo "cheinho" */
+    font-weight: 500;
 }
 
 
@@ -957,7 +999,7 @@ box-shadow:
 /* TOPO - Mais limpo e com profundidade */
 .carteira-topo {
   background: #4fc3ff;
-  padding: 20px 20px 30px;
+  padding: 60px 20px 30px;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   box-shadow: 0 4px 15px rgba(79, 195, 255, 0.25);
@@ -998,25 +1040,46 @@ box-shadow:
 }
 
 .carteira-perfil {
-  width: 42px;
-  height: 42px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 14px; /* Quadrado arredondado moderno */
+  /* Tamanho igual ao do chat */
+  width: 50px; 
+  height: 50px;
+  
+  /* Fundo branco e formato circular */
+  background: #ffffff;
+  border-radius: 50%;
+  
+  /* Centralização da letra */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  color: #4fc3ff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  
+  /* Letra Preta e Fonte do Projeto */
+  color: #000000;
+  font-family: 'DynaPuff', cursive;
+  font-weight: bold;
+  font-size: 20px;
+
+  /* Fixado no lado direito do topo */
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  
+  /* Sem contornos ou sombras como solicitado */
+  border: none;
+  box-shadow: none;
+  
+  /* Garante que fique por cima de outros elementos */
+  z-index: 9999;
 }
 
 /* TITULOS - Hierarquia clara */
 .carteira-titulo {
-  margin-top: 10px;
-  font-size: 28px;
-  font-weight: 800;
-  color: #05326b;
-  letter-spacing: -0.5px;
+    font-family: 'DynaPuff', system-ui, cursive;
+    margin-top: 10px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #05326b;
+    letter-spacing: normal;
 }
 
 .carteira-sub {
@@ -1032,13 +1095,15 @@ box-shadow:
 }
 
 .saldo-titulo {
+  font-family: 'DynaPuff', system-ui, cursive;
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: #05326b;
+  color: #000000;
   margin-bottom: 12px;
   opacity: 0.6;
+  /* Espaçamento normalizado */
+  letter-spacing: normal;
 }
 
 .saldo-box {
@@ -1074,12 +1139,15 @@ box-shadow:
 }
 
 .recarga h3 {
+  font-family: 'DynaPuff', system-ui, cursive;
   font-size: 15px;
   font-weight: 700;
-  color: #05326b;
+  color: #000000;
   opacity: 0.5;
   text-transform: uppercase;
   margin-bottom: 8px;
+  /* Espaçamento normalizado */
+  letter-spacing: normal;
 }
 
 .valor-box {
@@ -1127,7 +1195,6 @@ box-shadow:
   transform: translateY(2px);
   box-shadow: 0 3px 10px rgba(0, 158, 247, 0.2);
 }
-
 /* ===== TELA CONTA ===== */
 #telaConta {
     background: #fff5eb;
@@ -1193,10 +1260,13 @@ box-shadow:
 }
 
 #telaConta .titulo {
-    font-size: 28px; /* Nick maior e mais visível */
+    font-family: 'DynaPuff', system-ui, cursive;
+    font-size: 28px; 
     font-weight: bold;
     color: #003c7a;
-    margin-top: 10px; /* Empurra o nick para baixo */
+    margin-top: 10px;
+    /* Espaçamento normalizado */
+    letter-spacing: normal;
 }
 
 #telaConta .subtitulo {
@@ -1207,19 +1277,32 @@ box-shadow:
 
 /* AVATAR */
 #telaConta .avatar {
-    width: 60px;
-    height: 60px;
-    background: white;
+    /* Tamanho padronizado (50px como no chat/carteira) */
+    width: 50px;
+    height: 50px;
+    
+    /* Fundo branco e formato circular */
+    background: #ffffff;
     border-radius: 50%;
+    
+    /* Centralização perfeita da letra */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 22px;
+    
+    /* Tipografia: Letra preta e fonte do projeto */
+    font-family: 'DynaPuff', cursive;
+    font-size: 20px;
     font-weight: bold;
-    color: #003c7a;
-    margin-top: 10px; /* Alinha com o nick que desceu */
-}
+    color: #000000; /* Mudança para letra preta */
+    
+    /* Espaçamento */
+    margin-top: 10px;
 
+    /* Removendo qualquer contorno ou sombra */
+    border: none;
+    box-shadow: none;
+}
 /* CARDS - Mantive os botões organizados abaixo */
 #telaConta .cards {
     margin: 20px auto;
@@ -1242,9 +1325,12 @@ box-shadow:
 }
 
 #telaConta .card h3 {
+    font-family: 'DynaPuff', system-ui, cursive;
     font-size: 18px;
     color: #35b6ff;
     font-weight: bold;
+    /* Espaçamento normalizado */
+    letter-spacing: normal;
 }
 
 /* SAIR */
@@ -1298,13 +1384,15 @@ box-shadow:
 
 /* TÍTULO - Centralizado e com respiro */
 #telaInformacoes .titulo {
+    font-family: 'DynaPuff', system-ui, cursive;
     font-size: 22px;
     font-weight: 800;
     color: #4fc3ff;
     margin: 30px 20px 15px;
     text-align: center;
+    /* Espaçamento normalizado */
+    letter-spacing: normal;
 }
-
 /* CAIXA DE DADOS - Estilo Card */
 #telaInformacoes .box {
     background: #fff; /* Branco puro para destacar do fundo creme */
@@ -1569,15 +1657,26 @@ box-shadow:
 .esqueceu-senha:hover{
   text-decoration: underline;
 }
-.label-email{
-  font-size:16px;
-  color:#0066cc;   /* azul */
-  display:block;
-  margin-bottom:0px;
-  text-align:left;
+.label-email {
+  font-family: 'DynaPuff', cursive; /* Mantém o estilo fofinho */
+  font-size: 14px;
+  color: #061e63; /* Azul padrão para consistência */
+  font-weight: 500;
+  
+  display: block;
+  text-align: left;
+  margin-bottom: 6px; /* Um pequeno respiro antes do input */
+  margin-left: 4px;   /* Alinha melhor com a curvatura do input */
+  opacity: 0.9;
 }
-.card h2{
-  color:#061e63;   /* azul normal */
+.card h2 {
+  font-family: 'DynaPuff', cursive;
+  color: #061e63;
+  font-size: 23px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0px;
 }
 .subtitulo-email{
   font-size:13px;
@@ -1594,7 +1693,7 @@ box-shadow:
   margin-top:10px;     /* AFASTA do título */
   margin-bottom:14px; /* espaço antes da senha */
 }
-.btn-voltar{
+.btn-voltar {
   position: fixed;
   top: 12px;
   left: 12px;
@@ -1603,25 +1702,41 @@ box-shadow:
   height: 42px;
   border-radius: 50%;
 
-  background: rgba(255,255,255,0.35);
-  color: #fff;
+  /* --- EFEITO DE VIDRO --- */
+  background: rgba(255, 255, 255, 0.3); /* Base branca semi-transparente */
+  backdrop-filter: blur(8px);           /* O desfoque do vidro */
+  -webkit-backdrop-filter: blur(8px);    /* Essencial para Safari/iOS */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Bordinha de reflexo no vidro */
+  
+  /* --- COR DA SETA --- */
+  color: #ffffff; /* Define que o ícone interno será BRANCO */
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 22px;
   cursor: pointer;
   user-select: none;
-
-  backdrop-filter: blur(4px);
-  z-index: 9999; /* 🔥 ESSENCIAL */
+  z-index: 9999;
+  transition: all 0.2s ease;
 }
 
-.btn-voltar:hover{
-  background: rgba(255,255,255,0.45);
+.btn-voltar:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.08); /* Leve pulinho de interação */
 }
 
+/* Ajuste específico para a seta do Google */
+.btn-voltar svg {
+  width: 22px; 
+  height: 22px;
+  /* A seta do Google é "pesada" para a esquerda, 
+     esse ajuste de 1px deixa ela no centro visual perfeito */
+  margin-right: 1px; 
+  display: block;
+  /* Move a seta 3px para a direita dentro do círculo */
+  transform: translateX(4px);
+}
 
 
 /* bolinha */
