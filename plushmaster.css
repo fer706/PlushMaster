@@ -7,7 +7,7 @@ body{
 .tela {
     position: fixed;
     inset: 0;
-    background: #3dc8ff;
+    background: #02ccff;
 
     transform: translateX(100%);
     pointer-events: none;
@@ -942,7 +942,7 @@ box-shadow:
 .ball {
   width: 40px;
   height: 40px;
-  background: #00c3ff;
+  background: #02ccff;
   border-radius: 50%;
   animation: jumpGrow 1.6s ease-in-out forwards;
 }
@@ -990,7 +990,7 @@ box-shadow:
 }
 /* ================= TELA CARTEIRA ================= */
 #telaCarteira {
-  background: #f3f3f3;
+  background: #02ccff;
   overflow-y: auto;
   min-height: 100vh;
   font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
@@ -998,7 +998,7 @@ box-shadow:
 
 /* TOPO - Mais limpo e com profundidade */
 .carteira-topo {
-  background: #4fc3ff;
+  background: #02ccff;
   padding: 60px 20px 30px;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
@@ -1107,30 +1107,47 @@ box-shadow:
 }
 
 .saldo-box {
-  background: #59cfff;
-  border-radius: 24px;
-  padding: 30px 15px;
+  /* Gradiente do azul escuro para o claro conforme o print */
+  background: linear-gradient(135deg, #1a2adb, #00d2ff);
+  
+  /* Bordas bem arredondadas (pílula/ovalada) */
+  border-radius: 60px; 
+  
+  /* Mais espaçamento interno para o conteúdo respirar */
+  padding: 50px 20px;
+  
   text-align: center;
   color: #fff;
-  box-shadow: 0 8px 25px rgba(89, 207, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Sombra mais suave e espalhada */
+  box-shadow: 0 12px 30px rgba(26, 42, 219, 0.3);
+  
+  /* Borda interna bem fininha para dar o efeito de vidro/profundidade */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  
+  /* Margens para centralizar e separar dos outros elementos */
+  margin: 10px 0 30px;
+  position: relative;
+  overflow: hidden;
 }
 
 .saldo-valor {
-  font-size: 40px;
+  font-family: 'DynaPuff', cursive; /* Mantendo a fonte do seu projeto */
+  font-size: 48px; /* Valor bem grande e em destaque */
   font-weight: 800;
   display: block;
-  line-height: 1;
+  line-height: 1.1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .pelucias {
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.08);
-  padding: 6px 14px;
-  border-radius: 50px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.9;
   display: inline-block;
+  /* Removi o fundo escuro para ficar limpo como no print */
+  background: transparent; 
 }
 
 /* RECARGA */
@@ -1180,10 +1197,10 @@ box-shadow:
   font-weight: 700;
   border: none;
   border-radius: 18px;
-  background: linear-gradient(135deg, #24c6ff, #009ef7);
-  color: #fff;
+   background: linear-gradient(135deg, #1a2adb, #00d2ff);
+  color: #ffffff;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 158, 247, 0.3);
+  box-shadow: 0 6px 20px rgb(2, 101, 158);
   transition: all 0.2s ease;
 }
 
@@ -1197,7 +1214,7 @@ box-shadow:
 }
 /* ===== TELA CONTA ===== */
 #telaConta {
-    background: #fff5eb;
+    background: #02ccff;
     min-height: 100vh;
     font-family: sans-serif;
     margin: 0;
@@ -1213,7 +1230,7 @@ box-shadow:
 
 /* TOPO - Aumentei a altura para o logo (Minha Conta) descer */
 #telaConta .topo {
-    background: #4fc3ff;
+    background: #02ccff;
     height: 100px; /* Aumentado de 80px para 100px */
     width: 100%;
     padding: 20px 20px 0; /* Mais espaço no topo */
@@ -1248,7 +1265,7 @@ box-shadow:
 
 /* INFO-AREA - Onde fica o Nick/Nome */
 #telaConta .info-area {
-    background: #4fc3ff;
+    background: #02ccff;
     width: 100%;
     padding: 25px 25px 50px; /* Aumentei o padding superior para o Nick baixar */
     border-bottom-left-radius: 30px;
@@ -1318,9 +1335,17 @@ box-shadow:
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    
+    /* Centralização total do conteúdo */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centraliza na horizontal */
+    align-items: center;     /* Centraliza na vertical */
+    text-align: center;      /* Garante que o texto também alinhe ao centro */
+    flex-direction: column;  /* Alinha os itens em coluna (um embaixo do outro) */
+    
+    /* Centralização do card na tela (caso ele tenha largura fixa) */
+    margin: 10px auto; 
+    
     cursor: pointer;
 }
 
@@ -1347,14 +1372,14 @@ box-shadow:
 }
 /* ===== TELA MINHAS INFORMAÇÕES ===== */
 #telaInformacoes {
-    background: #fdf1e3;
+    background: #02ccff;
     min-height: 100vh;
     font-family: sans-serif;
 }
 
 /* TOPO - Ajustado para dar altura e baixar o logo */
 #telaInformacoes .topo {
-    background: #4fc3ff;
+    background: #02ccff;
     height: 90px; /* Altura definida para respiro */
     padding: 20px 20px 0;
     display: flex;
@@ -1387,7 +1412,7 @@ box-shadow:
     font-family: 'DynaPuff', system-ui, cursive;
     font-size: 22px;
     font-weight: 800;
-    color: #4fc3ff;
+    color: #ffffff;
     margin: 30px 20px 15px;
     text-align: center;
     /* Espaçamento normalizado */
@@ -1395,7 +1420,7 @@ box-shadow:
 }
 /* CAIXA DE DADOS - Estilo Card */
 #telaInformacoes .box {
-    background: #fff; /* Branco puro para destacar do fundo creme */
+    background: #ffffff; /* Branco puro para destacar do fundo creme */
     margin: 0 20px;
     padding: 25px 20px;
     border-radius: 20px;
