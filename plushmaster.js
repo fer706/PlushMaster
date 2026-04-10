@@ -1,3 +1,49 @@
+
+
+// --- 1. REFERÊNCIAS E VARIÁVEIS ---
+const player = document.getElementById("playerPlushmaster");
+const audioDocRef = db.collection("config").doc("audio");
+let dadosServidor = null;
+
+// --- 2. ESCUTA O FIREBASE (MONITORAMENTO) ---
+audioDocRef.onSnapshot((docSnap) => {
+    if (docSnap.exists) {
+        dadosServidor = docSnap.data();
+
+        if (dadosServidor.urlMusica && player.src !== dadosServidor.urlMusica) {
+            player.src = dadosServidor.urlMusica;
+            player.load(); 
+        }
+
+        if (dadosServidor.tocando === false) {
+            player.pause();
+        } 
+        else if (dadosServidor.tocando === true) {
+            player.play().catch(() => {});
+        }
+    }
+});
+
+// --- 3. FUNÇÃO PARA O SEU VERIFICARLOGIN ---
+function activarMusicaServidor() {
+    if (dadosServidor && dadosServidor.tocando === true) {
+        player.play().catch(() => {});
+    }
+}
+
+// --- 4. O GATILHO QUE NÃO FALHA (MOUSEDOWN) ---
+window.addEventListener('mousedown', () => {
+    if (dadosServidor && dadosServidor.tocando === true) {
+        if (!player.src || player.src === "") {
+            player.src = dadosServidor.urlMusica;
+        }
+
+        player.play().catch(() => {
+            player.load();
+            player.play().catch(() => {});
+        });
+    }
+}, { once: true });
 let jogadas = 0;
 let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
@@ -740,7 +786,6 @@ async function irParaUsuario(btn){
 }
 
 
-
 async function irParaSenha(btn){
   const username = document.getElementById('usernameCadastro').value.trim();
   if(!username){
@@ -1002,6 +1047,47 @@ function atualizarInterface(){
   }
 
 }
+
+function verificarLoginAutomatico(){
+
+    const usuario = localStorage.getItem("usuarioLogado");
+    const usuarioSaiu = localStorage.getItem("usuarioSaiu");
+    const loginTimestamp = localStorage.getItem("loginTimestamp");
+
+    // 12 horas em ms
+   const LIMITE_LOGIN = 12 * 60 * 60 * 1000; // 12 horas
+
+    // se saiu da conta → não loga
+    if(usuarioSaiu === "true"){
+        irPara("tela1");
+        return;
+    }
+
+    // se não tem usuário ou timestamp
+    if(!usuario || !loginTimestamp){
+        irPara("tela1");
+        return;
+    }
+
+    const agora = Date.now();
+    const tempoLogin = agora - Number(loginTimestamp);
+
+    // 🔥 sessão expirada
+    if(tempoLogin > LIMITE_LOGIN){
+
+        localStorage.removeItem("usuarioLogado");
+        localStorage.removeItem("loginTimestamp");
+
+        notificar("Sua sessão expirou. Faça login novamente.");
+        irPara("tela1");
+        return;
+    }
+
+    
+    // login válido
+    irPara("telaHome");
+}
+
 
 
 function abrirCarteira(){
@@ -1433,49 +1519,6 @@ function validarCPF(cpf) {
 
 return true;
 }
-function verificarLoginAutomatico(){
-
-    const usuario = localStorage.getItem("usuarioLogado");
-    const usuarioSaiu = localStorage.getItem("usuarioSaiu");
-    const loginTimestamp = localStorage.getItem("loginTimestamp");
-
-    // 12 horas em ms
-   const LIMITE_LOGIN = 12 * 60 * 60 * 1000; // 12 horas
-
-    // se saiu da conta → não loga
-    if(usuarioSaiu === "true"){
-        irPara("tela1");
-        return;
-    }
-
-    // se não tem usuário ou timestamp
-    if(!usuario || !loginTimestamp){
-        irPara("tela1");
-        return;
-    }
-
-    const agora = Date.now();
-    const tempoLogin = agora - Number(loginTimestamp);
-
-    // 🔥 sessão expirada
-    if(tempoLogin > LIMITE_LOGIN){
-
-        localStorage.removeItem("usuarioLogado");
-        localStorage.removeItem("loginTimestamp");
-
-        notificar("Sua sessão expirou. Faça login novamente.");
-
-        irPara("tela1");
-        return;
-    }
-
-    // login válido
-    irPara("telaHome");
-}
-
-
-
-
 
 
 let mensagensNaoLidas = 0;
@@ -1591,7 +1634,7 @@ async function verificarVersaoSite(){
     if(!doc.exists) return;
 
     const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.4.4"; // 🔥 sua versão do site
+    const versaoAtual = "1.4.5"; // 🔥 sua versão do site
 
     if(versaoBanco !== versaoAtual){
 
