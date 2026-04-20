@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -6,6 +6,7 @@
   name="viewport" 
   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PlushMaster</title>
+<meta name="theme-color" content="#03bdf5">
 <link rel="icon" type="image/png" href="https://i.postimg.cc/pXQ9MCLx/plush-master-logo-removebg-preview.png">
 <link rel="stylesheet" href="plushmaster.css">
 <!-- FONTE -->
@@ -51,15 +52,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         intro.remove();
 
-        // 🔥 abre carregando SEM animação
+        // abre carregando SEM animação
         irSemAnimacao("telaCarregando");
 
-        // 👉 espera 2 segundos
+        // espera 2 segundos
         setTimeout(() => {
 
             verificarLoginAutomatico();
 
-            // 🔥 espera MAIS 1 segundo e verifica a versão
+            // espera MAIS 1 segundo e verifica a versão
             setTimeout(() => {
 
                 verificarVersaoSite();
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <img src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png" class="loading-img">
 
-        <!-- 🔥 MESMO LOADER -->
+        <!-- MESMO LOADER -->
         <div class="btn-loader big">
             <div></div><div></div><div></div><div></div>
             <div></div><div></div><div></div><div></div>
@@ -90,13 +91,24 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
 
 <section id="tela1" class="tela">
+    <div class="hero-home">
+      <div class="hero-badge">Diversão ao vivo</div>
     <img class="logo-login" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
+    <h1 class="hero-title">Pegue suas Pelúcias com um visual mais premium</h1>
+    <p class="hero-subtitle">Entre, escolha a máquina, acompanhe tudo em tempo real e jogue com uma experiência mais bonita e clara.</p>
+
+    <div class="hero-highlights">
+      <span>Fila ao vivo</span>
+      <span>Carteira rápida</span>
+      <span>Suporte no chat</span>
+    </div>
 
     <button class="btn btn-comecar"
         onclick="irPara('telacadastroLogin')">
         Vamos começar
     </button>
 
+    </div>
 <footer class="footer-plush">
     © 2026 PlushMaster
 </footer>
@@ -129,10 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
     © 2026 PlushMaster
 </footer>
   </div>
-</section>
-
-        
-    </div>
 </section>
 
 <!-- SENHA -->
@@ -337,9 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </section>
 
-        
-    </div>
-</section>
 <section id="telaConta" class="tela">
 
   <div class="topo">
@@ -372,8 +377,38 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <div class="sair" onclick="sairConta()">
-        <span>↺</span> Sair da conta
+        <span>→</span> Sair da conta
     </div>
+
+    <div class="bottom-bar">
+    <div class="nav-item" onclick="irSemAnimacao('telaHome')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/Vk97JtTR/cd06113e-6c89-416b-a7b0-ef84f17bc432-removebg-preview.png" class="nav-icon">
+        </div>
+        Home
+    </div>
+    
+    <div class="nav-item" onclick="abrirCarteira()">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
+        </div>
+        Carteira
+    </div>
+
+    <div class="nav-item" onclick="irSemAnimacao('telaConta')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/3NRMB1MD/0789a33d-c3f4-4949-b667-d29a3d473560-removebg-preview.png" class="nav-icon">
+        </div>
+        Conta
+    </div>
+
+    <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
+        </div>
+        Pelúcias
+    </div>
+</div>
 
 </section>
 <section id="telaInformacoes" class="tela">
@@ -466,6 +501,12 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
 </div>
 
+    <div class="home-hero-panel">
+        <p class="home-kicker">Painel principal</p>
+        <h2>Pronto para buscar a próxima pelúcia?</h2>
+        <p>Veja a transmissão, entre na fila e gerencie seu saldo sem perder tempo.</p>
+    </div>
+
     
     <div class="camera-box">
 
@@ -496,7 +537,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
         Home
     </div>
     
-    <div class="nav-item" onclick="irSemAnimacao('telaCarteira')">
+    <div class="nav-item" onclick="abrirCarteira()">
         <div class="nav-circle">
             <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
         </div>
@@ -512,7 +553,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
     <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
         <div class="nav-circle">
-            <img src=https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png"" class="nav-icon">
+            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
         </div>
         Pelúcias
     </div>
@@ -557,9 +598,35 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 <button class="carteira-btn" onclick="abrirTelaPagamento()">Prosseguir para o pagamento</button>
 
 
-</section>
+    <div class="bottom-bar">
+    <div class="nav-item" onclick="irSemAnimacao('telaHome')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/Vk97JtTR/cd06113e-6c89-416b-a7b0-ef84f17bc432-removebg-preview.png" class="nav-icon">
+        </div>
+        Home
+    </div>
+    
+    <div class="nav-item" onclick="abrirCarteira()">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
+        </div>
+        Carteira
+    </div>
 
+    <div class="nav-item" onclick="irSemAnimacao('telaConta')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/3NRMB1MD/0789a33d-c3f4-4949-b667-d29a3d473560-removebg-preview.png" class="nav-icon">
+        </div>
+        Conta
+    </div>
 
+    <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
+        <div class="nav-circle">
+            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
+        </div>
+        Pelúcias
+    </div>
+</div>
 </section>
 
 
@@ -690,7 +757,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 <div id="popupUpdate" class="popup-update">
   
   <div class="popup-box">
-      <h2>Nova versão disponível 🚀</h2>
+      <h2>Nova versão disponível</h2>
 
       <p>
         Seu PlushMaster está desatualizado.<br>
@@ -733,16 +800,17 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   <button id="voltarInicioBtn" onclick="voltarInicio()">Voltar ao início</button>
 </section>
 
-<div id="overlay" class="overlay" onclick="abrirMenu()"></div>
-
-<div id="menuLateral" class="sidebar-bottom">
+<section id="menuLateral" class="tela menu-screen">
     <div class="sidebar-header">
-        <div class="handle"></div> 
-        <div class="btn-fechar-x" onclick="abrirMenu()">&times;</div>
+        <div>
+            <div class="menu-screen-kicker">Menu</div>
+            <div class="menu-screen-title">PlushMaster</div>
+        </div>
+        <div class="btn-fechar-x" onclick="fecharMenu()">&times;</div>
     </div>
     
     <div class="menu-content">
-        <div class="menu-card" onclick="irPara('telaCarteira')">
+        <div class="menu-card" onclick="abrirDestinoDoMenu('telaCarteira')">
             <div class="menu-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/4341/4341764.png" width="30">
             </div>
@@ -752,7 +820,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
             </div>
         </div>
 
-        <div class="menu-card" onclick="abrirTelaSelecionar()">
+        <div class="menu-card" onclick="abrirDestinoDoMenu('telaSelecionar')">
             <div class="menu-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/808/808476.png" width="30">
             </div>
@@ -772,7 +840,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
             </div>
         </div>
 
-        <div class="menu-card" onclick="irPara('telaSobre')">
+        <div class="menu-card" onclick="abrirDestinoDoMenu('telaSobre')">
             <div class="menu-icon">
                 <img src="https://cdn-icons-png.flaticon.com/512/1046/1046713.png" width="30">
             </div>
@@ -782,7 +850,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <script src="plushmaster.js"></script>
 
@@ -792,3 +860,5 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
 
   
+
+

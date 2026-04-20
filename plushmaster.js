@@ -4,6 +4,7 @@
 const player = document.getElementById("playerPlushmaster");
 const audioDocRef = db.collection("config").doc("audio");
 let dadosServidor = null;
+let listenerOfflineRegistrado = false;
 
 // --- 2. ESCUTA O FIREBASE (MONITORAMENTO) ---
 audioDocRef.onSnapshot((docSnap) => {
@@ -262,6 +263,7 @@ async function abrirTelaSelecionar(){
   if(!navigator.onLine){
     notificar("sem conexão.","a");
   }
+  if(!listenerOfflineRegistrado){
 window.addEventListener("offline", () => {
 
   const telaSelecionar = document.getElementById("telaSelecionar");
@@ -272,6 +274,8 @@ window.addEventListener("offline", () => {
   }
 
 });
+    listenerOfflineRegistrado = true;
+  }
 
   
 
@@ -473,9 +477,10 @@ const sendBtn = document.getElementById('send-btn');
 
 
 auth.onAuthStateChanged(async (user) => {
+  if (verificandoEmail) return;
+
   if (!user) {
     // Se não estiver logado, volta para a tela de login
-    irPara('telacadastro/Login');
     return;
   }
 
@@ -534,6 +539,30 @@ db.collection('chat').orderBy('timestamp')
 
 let telaAtual = document.querySelector(".tela.base");
 let historicoTelas = [];
+
+function telaVisivel(id){
+    const tela = document.getElementById(id);
+    return Boolean(tela && tela.classList.contains("base"));
+}
+
+function resetarParaTela(id){
+    const destino = document.getElementById(id);
+    if(!destino) return;
+
+    document.querySelectorAll(".tela").forEach(tela => {
+        tela.classList.remove("base");
+        tela.style.transition = "";
+        tela.style.transform = "";
+    });
+
+    destino.classList.add("base");
+    telaAtual = destino;
+    historicoTelas = [];
+
+    if (typeof fecharMenu === "function") {
+        fecharMenu();
+    }
+}
 
 function irPara(id){
     const nova = document.getElementById(id);
@@ -1088,36 +1117,51 @@ function verificarLoginAutomatico(){
     irPara("telaHome");
 }
 
-
-
-function abrirCarteira(){
-
-  // 1️⃣ abre a tela (sua animação)
-  irSemAnimacao("telaCarteira");
-
-  // 2️⃣ força zero imediatamente
-  const saldoCart = document.getElementById("saldoCarteira");
-  const pelCart   = document.getElementById("peluciasCarteira");
-
-  if(saldoCart){
-    saldoCart.textContent = "R$ 0,00";
+function iniciarOuvinteCarteira() {
+  // 1. Verifica se o usuário está logado
+  const user = firebase.auth().currentUser;
+  
+  if (!user) {
+    console.error("Usuário não autenticado!");
+    return;
   }
 
-  if(pelCart){
-    pelCart.textContent = "0 pelúcias acumuladas";
-  }
+  // 2. Acessa o documento usando a sintaxe de "ponto" (v8)
+  const userRef = firebase.firestore().collection("usuarios").doc(user.uid);
 
-  // 3️⃣ após a animação / pequeno delay, mostra saldo real
-  setTimeout(() => {
+  // 3. Ouve as mudanças em tempo real com onSnapshot
+  userRef.onSnapshot((docSnap) => {
+    if (docSnap.exists) {
+      const dados = docSnap.data();
+      console.log("Dados recebidos (v8):", dados);
 
-    if(typeof atualizarInterface === "function"){
-      atualizarInterface();
+      const saldoElemento = document.getElementById("saldoCarteira");
+      const peluciaElemento = document.getElementById("peluciasCarteira");
+
+      if (saldoElemento) {
+        const valorSaldo = Number(dados.saldo) || 0;
+        saldoElemento.textContent = `R$ ${valorSaldo.toFixed(2).replace('.', ',')}`;
+      }
+
+      if (peluciaElemento) {
+        peluciaElemento.textContent = `${dados.pelucias || 0} pelúcias acumuladas`;
+      }
+    } else {
+      console.warn("Documento não encontrado para o UID:", user.uid);
     }
-
-  }, 250); // ajuste se sua animação for mais longa
-
+  }, (error) => {
+    console.error("Erro no Firebase:", error);
+  });
 }
-
+// Sua função de abrir a tela agora fica assim:
+function abrirCarteira() {
+  irSemAnimacao("telaCarteira");
+  
+  // Aguarda um microssegundo para garantir que o DOM renderizou
+  setTimeout(() => {
+    iniciarOuvinteCarteira();
+  }, 50);
+}
 
 
 auth.onAuthStateChanged(async (user) => {
@@ -1161,6 +1205,7 @@ function sairConta() {
     localStorage.removeItem("usuarioLogado");
     localStorage.removeItem("loginEmail");
     localStorage.removeItem("loginSenha");
+    localStorage.removeItem("loginTimestamp");
 
     voltarPara("tela1");
   });
@@ -1663,12 +1708,6 @@ function atualizarSite(){
 
 function mostrarPopupAtualizacao(){
 
-   document.getElementById("popupAtualizacao")
-           .style.display = "flex";
-
-}
-function mostrarPopupAtualizacao(){
-
   const popup = document.getElementById("popupUpdate");
 
   // 🔥 proteção anti-erro
@@ -1896,27 +1935,66 @@ function copiarCodigo(){
   });
 
 }
+function fecharMenu() {
+    if (!telaVisivel('menuLateral')) return;
+    fecharParaBaixo('telaHome');
+}
+
+function abrirDestinoDoMenu(id) {
+    if (!telaVisivel('menuLateral')) {
+        if (id === 'telaCarteira') {
+            abrirCarteira();
+            return;
+        }
+
+        if (id === 'telaSelecionar') {
+            abrirTelaSelecionar();
+            return;
+        }
+
+        irPara(id);
+        return;
+    }
+
+    fecharMenu();
+
+    setTimeout(() => {
+        if (id === 'telaCarteira') {
+            abrirCarteira();
+            return;
+        }
+
+        if (id === 'telaSelecionar') {
+            abrirTelaSelecionar();
+            return;
+        }
+
+        irPara(id);
+    }, 380);
+}
+
 function abrirMenu() {
     const menu = document.getElementById('menuLateral');
-    const overlay = document.getElementById('overlay');
-    
-    // Toggle simples para abrir/fechar
-    menu.classList.toggle('active');
-    overlay.classList.toggle('active');
+    if (!menu) return;
+
+    if (!telaVisivel('telaHome')) {
+        fecharMenu();
+        return;
+    }
+
+    irDeBaixo('menuLateral');
 }
 
 // VERIFICAÇÃO DE TELA BASE:
-// Se sair da Home, o menu perde a classe active na hora
+// Se sair da Home, o menu fecha junto
 setInterval(() => {
     const home = document.getElementById('telaHome');
     const menu = document.getElementById('menuLateral');
-    const overlay = document.getElementById('overlay');
 
     // Se a home não estiver ativa, removemos o active do menu
-    if (home && !home.classList.contains('active')) {
-        if (menu.classList.contains('active')) {
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
+    if (home && menu && !home.classList.contains('base')) {
+        if (menu.classList.contains('base')) {
+            fecharMenu();
         }
     }
 }, 100);

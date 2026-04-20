@@ -237,6 +237,16 @@ footer{text-align:center;margin-top:15px}
     transform: scale(0.9);
     transition: 0.1s;
 }
+
+/* Bottom-bar ativo: Carteira */
+#telaCarteira.base .bottom-bar .nav-item:nth-child(2) .nav-circle{
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+}
+
+#telaCarteira.base .bottom-bar .nav-item:nth-child(2){
+  color: #ffffff;
+}
 .play-btn {
     width: 160px;
     height: 160px;
@@ -1224,8 +1234,6 @@ box-shadow:
 /* Reset para evitar espaços fantasmas */
 #telaConta * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 /* TOPO - Aumentei a altura para o logo (Minha Conta) descer */
@@ -2205,3 +2213,393 @@ button[onclick="copiarCodigo()"]{
 .btn-loader.big div:nth-child(6){ transform: translate(-50%, -50%) rotate(225deg); animation-delay: -0.2s;}
 .btn-loader.big div:nth-child(7){ transform: translate(-50%, -50%) rotate(270deg); animation-delay: -0.1s;}
 .btn-loader.big div:nth-child(8){ transform: translate(-50%, -50%) rotate(315deg); animation-delay: 0s;}
+
+/* ===== MENU (Tela) ===== */
+#menuLateral{
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.92), rgba(255,255,255,0) 34%),
+    linear-gradient(180deg, #e6fbff 0%, #9ae7ff 38%, #ecfbff 100%);
+  overflow-y: auto;
+  padding: 22px 18px 34px;
+}
+
+#menuLateral .sidebar-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+  padding: 10px 6px 18px;
+}
+
+#menuLateral .menu-screen-kicker{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #1498c8;
+  margin-bottom: 6px;
+}
+
+#menuLateral .menu-screen-title{
+  font-family: 'DynaPuff', system-ui, cursive;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  line-height: 1;
+  color: #0c2e64;
+}
+
+#menuLateral .btn-fechar-x{
+  position: relative;
+  top: auto;
+  right: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.82);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  color: #1bb6ff;
+  font-size: 32px;
+  font-weight: 900;
+  user-select:none;
+}
+
+#menuLateral .menu-content{
+  display: grid;
+  gap: 14px;
+  padding: 6px 6px 0;
+}
+
+#menuLateral .menu-card{
+  margin-bottom: 0;
+  border-radius: 26px;
+  padding: 18px 16px;
+  box-shadow: 0 14px 30px rgba(12, 103, 150, 0.10);
+}
+
+#menuLateral .menu-icon{
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #dbf9ff 0%, #95e5ff 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+#menuLateral .menu-icon img{
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+#menuLateral .menu-titulo{
+  display:block;
+  color:#1bb6ff;
+  font-weight: 900;
+  font-size: 1.12rem;
+}
+
+#menuLateral .menu-subtitulo{
+  display:block;
+  color:#6d7d88;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 768px){
+  #menuLateral{ padding: 18px 14px 28px; }
+  #menuLateral .menu-card{ border-radius: 22px; }
+  #menuLateral .menu-icon{ width: 56px; height: 56px; border-radius: 16px; }
+}
+
+/* ===== Melhorias visuais 2026 ===== */
+#tela1{
+    background:
+      radial-gradient(circle at top, rgba(255,255,255,0.85), rgba(255,255,255,0) 32%),
+      linear-gradient(180deg, #ddfbff 0%, #8de6ff 42%, #13bef1 100%);
+}
+
+.hero-home{
+    min-height: 100vh;
+    padding: 34px 24px 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.hero-badge{
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(6,30,99,0.08);
+    color: #0a4a82;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero-home .logo-login{
+    width: min(420px, 90vw);
+    margin: 0;
+    filter: drop-shadow(0 18px 35px rgba(8, 71, 114, 0.16));
+}
+
+.hero-title{
+    max-width: 720px;
+    font-family: 'DynaPuff', system-ui, cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.08;
+    color: #0a245f;
+}
+
+.hero-subtitle{
+    max-width: 640px;
+    font-size: clamp(1rem, 2.4vw, 1.12rem);
+    line-height: 1.65;
+    color: rgba(7, 34, 74, 0.78);
+}
+
+.hero-highlights{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hero-highlights span{
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.85);
+    color: #0b4173;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(12, 88, 142, 0.1);
+}
+
+.btn-comecar{
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: min(100%, 340px);
+    margin-top: 10px;
+    border-radius: 16px;
+    box-shadow: 0 16px 30px rgba(0, 96, 170, 0.24);
+}
+
+.footer-plush{
+    width: max-content;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.58);
+    color: #0d3966;
+    font-weight: 700;
+}
+
+#telaHome{
+    background:
+      radial-gradient(circle at top, rgba(255,255,255,0.85), rgba(255,255,255,0) 30%),
+      linear-gradient(180deg, #86e5ff 0%, #42cfff 40%, #e5fbff 100%);
+}
+
+.top-bar{
+    background: transparent;
+    box-shadow: none;
+    padding: 14px 16px 6px;
+}
+
+.home-hero-panel{
+    margin: 4px 16px 14px;
+    padding: 18px 18px 20px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(235,248,255,0.84));
+    box-shadow: 0 18px 40px rgba(7, 79, 128, 0.14);
+    color: #0d3360;
+}
+
+.home-kicker{
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1695c6;
+}
+
+.home-hero-panel h2{
+    font-family: 'DynaPuff', system-ui, cursive;
+    font-size: clamp(1.35rem, 4vw, 2rem);
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+.home-hero-panel p{
+    color: rgba(13, 51, 96, 0.78);
+    line-height: 1.55;
+}
+
+.camera-box{
+    width: calc(100% - 32px);
+    border-radius: 28px;
+    box-shadow: 0 20px 44px rgba(5, 74, 115, 0.18);
+}
+
+.loading-screen p{
+    font-weight: 700;
+    color: #0d4f7d;
+}
+
+.play-area{
+    padding: 18px 20px 150px;
+    align-items: flex-start;
+}
+
+.play-btn{
+    width: min(220px, 62vw);
+    height: min(220px, 62vw);
+    background:
+      radial-gradient(circle at 30% 20%, #ffffff 0%, #9befff 20%, #1ebeff 56%, #007eea 100%);
+    box-shadow:
+      inset 0 8px 14px rgba(255,255,255,0.48),
+      0 22px 38px rgba(0, 98, 171, 0.28);
+    letter-spacing: 0.04em;
+}
+
+.bottom-bar{
+    left: 0;
+    right: 0;
+    width: calc(100% - 18px);
+    margin: 0 auto 10px;
+    border-radius: 28px;
+    background: rgba(10, 145, 212, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.nav-item{
+    min-width: 64px;
+}
+
+.nav-circle{
+    box-shadow: inset 0 6px 10px rgba(255,255,255,0.38), 0 8px 18px rgba(0,0,0,0.14);
+}
+
+.sidebar-bottom{
+    background: linear-gradient(180deg, #fffdf9 0%, #edfaff 100%);
+}
+
+.menu-card{
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.menu-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.08);
+}
+
+.loading-box{
+    width: min(100%, 440px);
+}
+
+.loading-img{
+    width: min(430px, 88vw);
+}
+
+@media (max-width: 768px){
+    .hero-home{
+        padding-top: 26px;
+    }
+
+    .home-hero-panel{
+        margin-top: 0;
+    }
+
+    .camera-box{
+        aspect-ratio: 16 / 10;
+    }
+
+    .bottom-bar{
+        width: calc(100% - 12px);
+        height: 84px;
+        margin-bottom: 6px;
+    }
+
+    .nav-item{
+        font-size: 11px;
+    }
+}
+
+/* Ajustes finos pedidos */
+.btn-voltar{
+    top: 18px;
+    left: 18px;
+}
+
+#telaHome{
+    display: flex;
+    flex-direction: column;
+}
+
+#telaHome .top-bar{
+    order: 1;
+}
+
+#telaHome .camera-box{
+    order: 2;
+    margin-top: 8px;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 0;
+}
+
+#telaHome .home-hero-panel{
+    order: 3;
+    margin-top: 14px;
+    margin-bottom: 10px;
+}
+
+#telaHome .play-area{
+    order: 4;
+    padding: 10px 20px 150px;
+    align-items: center;
+}
+
+#telaHome .play-btn{
+    width: min(150px, 42vw);
+    height: min(150px, 42vw);
+    font-size: clamp(1.2rem, 4.2vw, 1.6rem);
+    transform: none;
+}
+
+#telaHome .play-btn:active,
+#telaHome .play-btn:focus{
+    transform: none !important;
+}
+
+@media (max-width: 768px){
+    .btn-voltar{
+        top: 14px;
+        left: 14px;
+    }
+
+    #telaHome .camera-box{
+        margin-top: 6px;
+    }
+
+    #telaHome .home-hero-panel{
+        margin-top: 12px;
+    }
+
+    #telaHome .play-area{
+        padding: 4px 16px 138px;
+    }
+}
