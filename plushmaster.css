@@ -1,4 +1,3 @@
-
 body{
   overflow-y: auto;   /* permite rolagem vertical */
   overflow-x: hidden; /* bloqueia rolagem lateral */
@@ -191,52 +190,6 @@ footer{text-align:center;margin-top:15px}
 .play-btn:active{
     transform:scale(0.95);
 }
-.bottom-bar {
-    height: 90px;
-    background: #4fc3ff;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
-    position: fixed; /* Garante que fique no rodapé */
-    bottom: 0;
-    width: 100%;
-}
-
-.nav-item {
-    text-align: center;
-    font-size: 12px;
-    color: #ffffff; /* Mudei para branco para destacar no azul */
-    font-weight: bold;
-}
-
-.nav-circle {
-    width: 50px;
-    height: 50px;
-    margin: 0 auto 5px;
-    border-radius: 50%;
-    background: linear-gradient(#aaf0ff, #4fc3ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Removi o font-size pois agora usamos imagens */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Estilo para a imagem dentro do círculo */
-.nav-icon {
-    width: 40px;  /* Tamanho ideal para o círculo de 50px */
-    height: 40px;
-    object-fit: contain; /* Não deixa a imagem esticar */
-}
-
-/* Feedback visual ao tocar */
-.nav-item:active {
-    transform: scale(0.9);
-    transition: 0.1s;
-}
 
 /* Bottom-bar ativo: Carteira */
 #telaCarteira.base .bottom-bar .nav-item:nth-child(2) .nav-circle{
@@ -246,6 +199,13 @@ footer{text-align:center;margin-top:15px}
 
 #telaCarteira.base .bottom-bar .nav-item:nth-child(2){
   color: #ffffff;
+}
+
+/* Bottom-bar ativo: Home e Conta (para ficar igual em todas as telas com bottom bar) */
+#telaHome.base .bottom-bar .nav-item:nth-child(1) .nav-circle,
+#telaConta.base .bottom-bar .nav-item:nth-child(3) .nav-circle{
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.14);
 }
 .play-btn {
     width: 160px;
@@ -2473,22 +2433,57 @@ button[onclick="copiarCodigo()"]{
 }
 
 .bottom-bar{
+    position: fixed;
+    bottom: 0;
     left: 0;
     right: 0;
+    z-index: 50;
+
+    height: 90px;
     width: calc(100% - 18px);
     margin: 0 auto 10px;
     border-radius: 28px;
     background: rgba(10, 145, 212, 0.88);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .nav-item{
     min-width: 64px;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 700;
+    transition: transform 0.12s ease;
 }
 
 .nav-circle{
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 5px;
+    border-radius: 50%;
+    background: linear-gradient(#aaf0ff, #4fc3ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: inset 0 6px 10px rgba(255,255,255,0.38), 0 8px 18px rgba(0,0,0,0.14);
+}
+
+.nav-icon{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-item:active{
+    transform: scale(0.92);
 }
 
 .sidebar-bottom{
