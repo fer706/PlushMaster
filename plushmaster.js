@@ -48,6 +48,291 @@ let maquinaSelecionada = null;
 let statusMaquinas = { plush: "disponivel", toy: "disponivel" };
 let iniciandoJogo = false;
 
+// ======= HISTÓRICO (Firestore: users/{uid}/historico) =======
+let unsubscribeHistorico = null;
+let historicoCache = [];
+let historicoFiltro = "all";
+let historicoErro = null;
+let avisouHistoricoPermissao = false;
+
+async function refreshUserServer(){
+  const user = firebase.auth().currentUser;
+  if(!user) return;
+  try{
+    const doc = await db.collection("users").doc(user.uid).get({ source: "server" });
+    if(doc.exists){
+      userData = doc.data();
+      atualizarInterface();
+    }
+  }catch(e){
+    // se estiver sem internet, não quebra a tela
+    console.error("Erro ao atualizar usuário (server):", e);
+  }
+}
+
+// ======= MINHAS INFORMAÇÕES (reload ao abrir) =======
+let infoLoadToken = 0;
+
+function abrirInformacoes(){
+  const telaInfo = document.getElementById("telaInformacoes");
+  const boxEl   = document.getElementById("infoBox");
+  const erroEl  = document.getElementById("infoErro");
+  const loadEl  = document.getElementById("infoLoading");
+  const conteudoEl = document.getElementById("infoConteudo");
+
+  // evita mostrar dados antigos por 1 frame
+  if(erroEl) erroEl.style.display = "none";
+  if(boxEl) boxEl.style.display = "block";
+  if(loadEl) loadEl.style.display = "block";
+  if(conteudoEl) conteudoEl.style.display = "none";
+
+  // Se já estiver aberta, só recarrega (sem depender da navegação)
+  if(telaInfo && telaInfo.classList.contains("base")){
+    carregarInformacoes();
+    return;
+  }
+
+  irPara("telaInformacoes");
+
+  // Recarrega logo ao abrir (sempre do servidor)
+  setTimeout(carregarInformacoes, 10);
+}
+
+async function carregarInformacoes(){
+  const token = ++infoLoadToken;
+  const startedAt = Date.now();
+  const minMs = 350; // garante que o loader apareça
+
+  const user = firebase.auth().currentUser;
+
+  const emailEl = document.getElementById("campoEmail");
+  const nomeEl  = document.getElementById("campoNome");
+  const boxEl   = document.getElementById("infoBox");
+  const erroEl  = document.getElementById("infoErro");
+  const loadEl  = document.getElementById("infoLoading");
+  const conteudoEl = document.getElementById("infoConteudo");
+
+  if(!emailEl || !nomeEl) return;
+
+  if(erroEl) erroEl.style.display = "none";
+  if(boxEl) boxEl.style.display = "block";
+  if(loadEl) loadEl.style.display = "block";
+  if(conteudoEl) conteudoEl.style.display = "none";
+
+  nomeEl.innerText = "Carregando...";
+  emailEl.innerText = "Carregando...";
+
+  const finish = (mode) => {
+    const elapsed = Date.now() - startedAt;
+    const wait = Math.max(0, minMs - elapsed);
+    setTimeout(() => {
+      if(token !== infoLoadToken) return; // existe uma requisição mais nova
+
+      if(loadEl) loadEl.style.display = "none";
+      if(mode === "ok"){
+        if(erroEl) erroEl.style.display = "none";
+        if(boxEl) boxEl.style.display = "block";
+        if(conteudoEl) conteudoEl.style.display = "block";
+      }else{
+        if(boxEl) boxEl.style.display = "none";
+        if(conteudoEl) conteudoEl.style.display = "none";
+        if(erroEl) erroEl.style.display = "block";
+      }
+    }, wait);
+  };
+
+  if(!user){
+    finish("err");
+    return;
+  }
+
+  try{
+    const ref = db.collection("users").doc(user.uid);
+    const snap = await ref.get({ source: "server" }); // igual no Histórico: sem cache
+
+    let username = "-";
+    if(snap.exists){
+      const dados = snap.data();
+      if(dados && dados.username) username = dados.username;
+    }
+
+    nomeEl.innerText = username;
+    emailEl.innerText = user.email || "";
+    finish("ok");
+  }catch(e){
+    console.error("Erro ao carregar informações:", e);
+    finish("err");
+  }
+}
+
+function onTelaAberta(id){
+  // Mantém este gancho para futuras telas, mas sem recarregar aqui
+  // (evita duplo carregamento/loader aparecendo depois do conteúdo).
+}
+
+function formatarDataHistorico(ts){
+  try{
+    if(!ts) return "";
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString("pt-BR", { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit" });
+  }catch{
+    return "";
+  }
+}
+
+async function adicionarHistorico({ tipo, titulo, valor = 0, detalhes = {} }){
+  const user = firebase.auth().currentUser;
+  if(!user) return;
+
+  try{
+    await db
+      .collection("users")
+      .doc(user.uid)
+      .collection("historico")
+      .add({
+        tipo: String(tipo || "outro"),
+        titulo: String(titulo || "Atividade"),
+        valor: Number(valor) || 0,
+        detalhes: detalhes || {},
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      });
+  }catch(e){
+    if (e && (e.code === "permission-denied" || String(e.message || "").includes("Missing or insufficient permissions"))) {
+      if (!avisouHistoricoPermissao) {
+        avisouHistoricoPermissao = true;
+        notificar("Histórico bloqueado pelas regras do Firestore. Precisa liberar permissão.", "a");
+      }
+    }
+    console.error("Erro ao salvar histórico:", e);
+  }
+}
+
+function renderHistorico(){
+  const listEl = document.getElementById("histList");
+  const emptyEl = document.getElementById("histEmpty");
+  if(!listEl) return;
+
+  if(historicoErro){
+    Array.from(listEl.querySelectorAll(".hist-item")).forEach(n => n.remove());
+    if(emptyEl){
+      emptyEl.style.display = "block";
+      const t = emptyEl.querySelector(".hist-empty-title");
+      const s = emptyEl.querySelector(".hist-empty-sub");
+      if(t) t.textContent = "Erro ao carregar atividades";
+      if(s) s.textContent = "";
+    }
+    return;
+  }
+
+  const itens = historicoFiltro === "all"
+    ? historicoCache
+    : historicoCache.filter(i => i.tipo === historicoFiltro);
+
+  // limpa itens renderizados, mas mantém o empty (se existir)
+  Array.from(listEl.querySelectorAll(".hist-item")).forEach(n => n.remove());
+
+  if(!itens.length){
+    if(emptyEl) emptyEl.style.display = "block";
+    return;
+  }
+
+  if(emptyEl) emptyEl.style.display = "none";
+
+  for(const it of itens){
+    const wrap = document.createElement("div");
+    wrap.className = "hist-item";
+
+    const valorFmt = (it.valor || 0).toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    const valorClass = it.valor < 0 ? "neg" : (it.valor > 0 ? "pos" : "");
+
+    let icon = "material-symbols:info";
+    if(it.tipo === "jogo") icon = "material-symbols:stadia-controller";
+    if(it.tipo === "recarga") icon = "material-symbols:add-circle";
+    if(it.tipo === "pix_gerado") icon = "material-symbols:qr-code";
+    if(it.tipo === "pix_copiado") icon = "material-symbols:content-copy";
+
+    wrap.innerHTML = `
+      <div class="hist-left">
+        <div class="hist-ico">
+          <iconify-icon icon="${icon}" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="hist-main">
+          <div class="hist-row">
+            <div class="hist-titulo">${it.titulo || "Atividade"}</div>
+            <div class="hist-valor ${valorClass}">${valorFmt}</div>
+          </div>
+          <div class="hist-meta">${formatarDataHistorico(it.criadoEm)}${it.tipo ? " • " + it.tipo : ""}</div>
+        </div>
+      </div>
+    `;
+
+    listEl.appendChild(wrap);
+  }
+}
+
+function setFiltroHistorico(tipo, btn){
+  historicoFiltro = tipo || "all";
+
+  // atualiza UI dos chips
+  document.querySelectorAll("#telaHistorico .hist-chip").forEach(b => b.classList.remove("ativo"));
+  if(btn && btn.classList) btn.classList.add("ativo");
+
+  renderHistorico();
+}
+
+function abrirHistorico(){
+  irPara("telaHistorico");
+  // toda vez que abrir: recarrega do servidor e mostra loading
+  setTimeout(() => {
+    refreshUserServer();
+    carregarHistorico();
+  }, 50);
+}
+
+async function carregarHistorico(){
+  const user = firebase.auth().currentUser;
+  const listEl = document.getElementById("histList");
+  const emptyEl = document.getElementById("histEmpty");
+  const loadingEl = document.getElementById("histLoading");
+
+  if(!user){
+    historicoErro = null;
+    historicoCache = [];
+    renderHistorico();
+    return;
+  }
+
+  // reseta estado e mostra loader
+  historicoErro = null;
+  avisouHistoricoPermissao = false;
+  if(loadingEl) loadingEl.style.display = "block";
+  if(emptyEl) emptyEl.style.display = "none";
+  if(listEl) Array.from(listEl.querySelectorAll(".hist-item")).forEach(n => n.remove());
+
+  if(unsubscribeHistorico){
+    unsubscribeHistorico();
+    unsubscribeHistorico = null;
+  }
+
+  try{
+    const snap = await db
+      .collection("users")
+      .doc(user.uid)
+      .collection("historico")
+      .orderBy("criadoEm", "desc")
+      .limit(50)
+      .get({ source: "server" });
+
+    historicoCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }catch(err){
+    console.error("Erro ao carregar histórico:", err);
+    historicoErro = err || { code: "unknown" };
+  }finally{
+    if(loadingEl) loadingEl.style.display = "none";
+    renderHistorico();
+  }
+}
+
 function clicarMaquina(id){
 
   if(
@@ -117,6 +402,11 @@ function iniciarJogo() {
 
     const maquinaRef = db.collection("maquinas").doc(maquinaSelecionada);
     const userRef = db.collection("users").doc(user.uid);
+
+    const maquinaLog = maquinaSelecionada;
+    const jogadasLog = jogadas;
+    const valorJogadaLog = maquinaSelecionada === "toy" ? 5 : 2;
+    const totalLog = jogadasLog * valorJogadaLog;
 
     db.runTransaction(async (transaction) => {
 
@@ -210,6 +500,14 @@ transaction.update(maquinaRef, {
       notificar(`🎮 Máquina ${maquinaSelecionada.toUpperCase()} iniciada!`); 
        iniciandoJogo = false;
   setBtnLoading("btnIniciar", false);
+
+      // registra no histórico (gasto de jogadas)
+      adicionarHistorico({
+        tipo: "jogo",
+        titulo: `Jogo: ${String(maquinaLog || "").toUpperCase()} (${jogadasLog} jogadas)`,
+        valor: -Number(totalLog || 0),
+        detalhes: { maquina: maquinaLog, jogadas: jogadasLog, valorJogada: valorJogadaLog }
+      });
     })
     .catch(err => {
       notificar(err.message);
@@ -589,6 +887,7 @@ function irPara(id){
         telaAtual.classList.remove("base");
 
         telaAtual = nova;
+        onTelaAberta(telaAtual.id);
     }, 350);
 }
 
@@ -621,6 +920,7 @@ function voltarPara(idTela) {
 
         // atualiza referência
         telaAtual = telaDestino;
+        onTelaAberta(telaAtual.id);
     }, 350);
 }
 
@@ -642,6 +942,7 @@ function irSemAnimacao(id){
     nova.classList.add("base");
 
     telaAtual = nova;
+    onTelaAberta(telaAtual.id);
 }
 function irDeBaixo(id){
     const nova = document.getElementById(id);
@@ -1214,28 +1515,8 @@ function sairConta() {
 
 
 auth.onAuthStateChanged(async user => {
-    if (!user) return;
-
-    const emailEl = document.getElementById("campoEmail");
-    const nomeEl  = document.getElementById("campoNome");
-
-    if (!emailEl || !nomeEl) return;
-
-    emailEl.innerText = user.email;
-
-    const ref = db.collection("users").doc(user.uid);
-    const snap = await ref.get();
-
-    let username = "—";
-
-    if (snap.exists) {
-        const dados = snap.data();
-        if (dados.username) {
-            username = dados.username;
-        }
-    }
-
-    nomeEl.innerText = username;
+    // A tela "Minhas informações" agora faz reload quando abre (abrirInformacoes()).
+    // Mantemos este listener vazio para não sobrescrever o loader/erro.
 });
 
 
@@ -1311,23 +1592,23 @@ let podeAlterarUsername = false;
 
 auth.onAuthStateChanged(async user => {
     if (!user) return;
+    try{
+      const ref = db.collection("users").doc(user.uid);
+      const snap = await ref.get({ source: "server" });
 
-    const ref = db.collection("users").doc(user.uid);
-    const snap = await ref.get();
+      if (!snap.exists) return;
 
-    if (!snap.exists) return;
+      const dados = snap.data();
 
-    const dados = snap.data();
-
-    // Mostra username
-    document.getElementById("campoNome").innerText =
-        dados.username || "—";
-
-    // controla se pode alterar
-    if (dados.usernameAlterado === true) {
-        podeAlterarUsername = false;
-    } else {
-        podeAlterarUsername = true;
+      // controla se pode alterar
+      if (dados.usernameAlterado === true) {
+          podeAlterarUsername = false;
+      } else {
+          podeAlterarUsername = true;
+      }
+    }catch(e){
+      // offline/permission: evita quebrar a página
+      podeAlterarUsername = false;
     }
 });
 
@@ -1670,7 +1951,7 @@ async function verificarVersaoSite() {
     const doc = await db.collection("config").doc("app").get();
     if (!doc.exists) return;
 
-    const versaoAtual = "1.5.5";
+    const versaoAtual = "1.6.5";
     const versaoBanco = String(doc.data()?.versao ?? "").trim();
 
     // se no banco estiver vazio/sem campo, não força popup
@@ -1835,6 +2116,7 @@ function voltarInicio(){
 async function pagarStripe(){
 
   const numero = parseInt(valorNumeros || "0");
+  const valorReais = Number(numero || 0) / 100;
 
   if(numero < 500){
     notificar("Valor mínimo R$5");
@@ -1881,6 +2163,13 @@ async function pagarStripe(){
 
     notificar("✅ PIX gerado! Copie o código.");
 
+    adicionarHistorico({
+      tipo: "pix_gerado",
+      titulo: "PIX gerado (recarga)",
+      valor: Number(valorReais || 0),
+      detalhes: { numero, metodo: "pix" }
+    });
+
   }catch(err){
 
     console.log(err);
@@ -1915,6 +2204,15 @@ function copiarCodigo(){
   .then(()=>{
 
     notificar("✅ Código PIX copiado!");
+
+    const numero = parseInt(valorNumeros || "0");
+    const valorReais = Number(numero || 0) / 100;
+    adicionarHistorico({
+      tipo: "pix_copiado",
+      titulo: "Código PIX copiado",
+      valor: Number(valorReais || 0),
+      detalhes: { metodo: "pix" }
+    });
 
   })
   .catch(()=>{
