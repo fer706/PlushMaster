@@ -1,5 +1,3 @@
-
-
 // --- 1. REFERÊNCIAS E VARIÁVEIS ---
 const player = document.getElementById("playerPlushmaster");
 const audioDocRef = db.collection("config").doc("audio");
@@ -1667,31 +1665,25 @@ function fecharChat() {
     // Se tiver função para esconder a tela, chame aqui
     if (typeof irParaHome === 'function') irParaHome();
 }
-async function verificarVersaoSite(){
+async function verificarVersaoSite() {
+  try {
+    const doc = await db.collection("config").doc("app").get();
+    if (!doc.exists) return;
 
-  try{
+    const versaoAtual = "1.5.5";
+    const versaoBanco = String(doc.data()?.versao ?? "").trim();
 
-    const doc = await db
-      .collection("config")
-      .doc("app")
-      .get();
+    // se no banco estiver vazio/sem campo, não força popup
+    if (!versaoBanco) return;
 
-    if(!doc.exists) return;
-
-    const versaoBanco = doc.data().versao;
-    const versaoAtual = "1.4.5"; // 🔥 sua versão do site
-
-    if(versaoBanco !== versaoAtual){
-
+    if (versaoBanco !== versaoAtual) {
       mostrarPopupAtualizacao();
-
     }
-
-  }catch(e){
+  } catch (e) {
     console.error("Erro ao verificar versão:", e);
   }
-
 }
+
 
 function atualizarSite(){
 
