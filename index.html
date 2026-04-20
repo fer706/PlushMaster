@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
 </head>
 <body>
 
@@ -366,45 +367,48 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <div class="cards">
-        <div class="card" onclick="irPara('telaHistorico')">
-            <h3>📊 Histórico de atividades</h3>
+        <div class="card" onclick="abrirHistorico()">
+            <h3><iconify-icon class="inline-icon" icon="material-symbols:history"></iconify-icon> Histórico de atividades</h3>
         </div>
 
-        <div class="card" onclick="irPara('telaInformacoes')">
-    <h3>📘 Minhas informações</h3>
+        <div class="card" onclick="abrirInformacoes()">
+    <h3><iconify-icon class="inline-icon" icon="material-symbols:android-contacts"></iconify-icon> Minhas informações</h3>
 </div>
 
     </div>
 
     <div class="sair" onclick="sairConta()">
-        <span>→</span> Sair da conta
+        <iconify-icon class="logout-icon" icon="material-symbols:logout" aria-hidden="true"></iconify-icon>
+        Sair da conta
     </div>
 
     <div class="bottom-bar">
     <div class="nav-item" onclick="irSemAnimacao('telaHome')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/Vk97JtTR/cd06113e-6c89-416b-a7b0-ef84f17bc432-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:home-outline-rounded"></iconify-icon>
         </div>
         Home
     </div>
     
     <div class="nav-item" onclick="abrirCarteira()">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:account-balance-wallet-outline"></iconify-icon>
         </div>
         Carteira
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaConta')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/3NRMB1MD/0789a33d-c3f4-4949-b667-d29a3d473560-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:person"></iconify-icon>
         </div>
         Conta
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M380-80q-75 0-127.5-52.5T200-260q0-35 17-64.5t63-75.5q6-6 11.5-12.5T306-430q-51-78-78.5-163.5T200-760q0-58 21-89t59-31q57 0 102 55t68 101q9 20 16.5 40.5T480-641q6-22 13.5-42.5T511-724q22-46 67-101t102-55q38 0 59 31t21 89q0 81-27.5 166.5T654-430q9 11 14.5 17.5T680-400q46 46 63 75.5t17 64.5q0 75-52.5 127.5T580-80q-45 0-72.5-10L480-100l-27.5 10Q425-80 380-80Zm0-80q23 0 46-5.5t43-16.5q-11-5-20-17t-9-21q0-8 11.5-14t28.5-6q17 0 28.5 6t11.5 14q0 9-9 21t-20 17q20 11 43 16.5t46 5.5q42 0 71-29t29-71q0-18-10-35t-30-34q-14-12-23-21t-29-34q-29-35-48-45.5T480-440q-41 0-60.5 10.5T372-384q-20 25-29 34t-23 21q-20 17-30 34t-10 35q0 42 29 71t71 29Zm40-130q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9Zm120 0q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9ZM363-489q11-8 25-14t31-11q-2-48-14.5-95.5T373-696q-19-40-42-67.5T285-799q-2 6-3.5 15.5T280-760q0 68 21.5 138T363-489Zm234 0q40-63 61.5-133T680-760q0-14-1.5-23.5T675-799q-23 8-46 35.5T587-696q-18 39-30.5 86.5T541-514q15 4 29 10.5t27 14.5Z"/>
+            </svg>
         </div>
         Pelúcias
     </div>
@@ -429,16 +433,25 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
 <div class="titulo">Minhas informações</div>
 
-    <div class="box">
-        <p><span class="label">Apelido:</span>
-            <span class="valor" id="campoNome">Carregando...</span>
-        </p>
+    <div class="info-erro" id="infoErro" style="display:none;">Erro ao carregar informações</div>
 
-        <p><span class="label">E-mail:</span>
-            <span class="valor" id="campoEmail">Carregando...</span>
-        </p>
+    <div class="box" id="infoBox">
+        <div class="loader" id="infoLoading" style="display:none;" aria-label="Carregando informações">
+          <div></div><div></div><div></div><div></div>
+          <div></div><div></div><div></div><div></div>
+        </div>
 
-        <p><span class="label">Senha:</span> ***************</p>
+        <div id="infoConteudo" style="display:none;">
+          <p><span class="label">Apelido:</span>
+              <span class="valor" id="campoNome">Carregando...</span>
+          </p>
+
+          <p><span class="label">E-mail:</span>
+              <span class="valor" id="campoEmail">Carregando...</span>
+          </p>
+
+          <p><span class="label">Senha:</span> ***************</p>
+        </div>
     </div>
 
     <div class="link" onclick="alterarNome()">Alterar apelido</div>
@@ -475,6 +488,46 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
 
 
+
+<!-- TELA HISTÓRICO -->
+<section id="telaHistorico" class="tela">
+  <div class="topo">
+    <div class="btn-voltar" onclick="voltarPara('telaConta')">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+        <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+      </svg>
+    </div>
+
+    <img class="logo-topo" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
+  </div>
+
+  <div class="hist-wrap">
+    <div class="hist-title">
+      <iconify-icon class="inline-icon" icon="material-symbols:history"></iconify-icon>
+      Histórico de atividades
+    </div>
+
+    <div class="hist-sub">Aqui aparecem suas recargas e ações mais recentes.</div>
+
+    <div class="hist-filtros">
+      <button class="hist-chip ativo" type="button" onclick="setFiltroHistorico('all', this)">Tudo</button>
+      <button class="hist-chip" type="button" onclick="setFiltroHistorico('recarga', this)">Recargas</button>
+      <button class="hist-chip" type="button" onclick="setFiltroHistorico('jogo', this)">Jogos</button>
+    </div>
+
+    <div class="hist-list" id="histList">
+      <div class="loader" id="histLoading" style="display:none;" aria-label="Carregando histórico">
+        <div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <div class="hist-empty" id="histEmpty">
+        <div class="hist-empty-title">Sem atividades por enquanto</div>
+        <div class="hist-empty-sub">Quando você fizer uma recarga ou jogar, vai aparecer aqui.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
 
 <!-- ================= HOME ================= -->
 
@@ -532,28 +585,30 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
     <div class="bottom-bar">
     <div class="nav-item" onclick="irSemAnimacao('telaHome')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/Vk97JtTR/cd06113e-6c89-416b-a7b0-ef84f17bc432-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:home-outline-rounded"></iconify-icon>
         </div>
         Home
     </div>
     
     <div class="nav-item" onclick="abrirCarteira()">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:account-balance-wallet-outline"></iconify-icon>
         </div>
         Carteira
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaConta')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/3NRMB1MD/0789a33d-c3f4-4949-b667-d29a3d473560-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:person"></iconify-icon>
         </div>
         Conta
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M380-80q-75 0-127.5-52.5T200-260q0-35 17-64.5t63-75.5q6-6 11.5-12.5T306-430q-51-78-78.5-163.5T200-760q0-58 21-89t59-31q57 0 102 55t68 101q9 20 16.5 40.5T480-641q6-22 13.5-42.5T511-724q22-46 67-101t102-55q38 0 59 31t21 89q0 81-27.5 166.5T654-430q9 11 14.5 17.5T680-400q46 46 63 75.5t17 64.5q0 75-52.5 127.5T580-80q-45 0-72.5-10L480-100l-27.5 10Q425-80 380-80Zm0-80q23 0 46-5.5t43-16.5q-11-5-20-17t-9-21q0-8 11.5-14t28.5-6q17 0 28.5 6t11.5 14q0 9-9 21t-20 17q20 11 43 16.5t46 5.5q42 0 71-29t29-71q0-18-10-35t-30-34q-14-12-23-21t-29-34q-29-35-48-45.5T480-440q-41 0-60.5 10.5T372-384q-20 25-29 34t-23 21q-20 17-30 34t-10 35q0 42 29 71t71 29Zm40-130q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9Zm120 0q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9ZM363-489q11-8 25-14t31-11q-2-48-14.5-95.5T373-696q-19-40-42-67.5T285-799q-2 6-3.5 15.5T280-760q0 68 21.5 138T363-489Zm234 0q40-63 61.5-133T680-760q0-14-1.5-23.5T675-799q-23 8-46 35.5T587-696q-18 39-30.5 86.5T541-514q15 4 29 10.5t27 14.5Z"/>
+            </svg>
         </div>
         Pelúcias
     </div>
@@ -577,7 +632,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   </div>
 
   <div class="carteira-sessao">
-    <div class="saldo-titulo">💲 Saldo na carteira</div>
+    <div class="saldo-titulo"><iconify-icon class="inline-icon" icon="material-symbols:attach-money"></iconify-icon> Saldo na carteira</div>
     <div class="saldo-box">
       <div class="saldo-valor" id="saldoCarteira">R$ 0,00</div>
       <div class="pelucias" id="peluciasCarteira">0 pelúcias acumuladas</div>
@@ -585,7 +640,7 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   </div>
 
   <div class="recarga">
-  <h3>💳 Qual valor você quer adicionar?</h3>
+  <h3><iconify-icon class="inline-icon" icon="material-symbols:credit-card"></iconify-icon> Qual valor você quer adicionar?</h3>
 
   <div class="valor-box" id="valorSelecionado" contenteditable="true">
   R$ 0,00
@@ -601,28 +656,30 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
     <div class="bottom-bar">
     <div class="nav-item" onclick="irSemAnimacao('telaHome')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/Vk97JtTR/cd06113e-6c89-416b-a7b0-ef84f17bc432-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:home-outline-rounded"></iconify-icon>
         </div>
         Home
     </div>
     
     <div class="nav-item" onclick="abrirCarteira()">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/FsMqdNKb/67fb676e-2778-415e-abf1-908490217e96-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:account-balance-wallet-outline"></iconify-icon>
         </div>
         Carteira
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaConta')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/3NRMB1MD/0789a33d-c3f4-4949-b667-d29a3d473560-removebg-preview.png" class="nav-icon">
+            <iconify-icon class="nav-icon" icon="material-symbols:person"></iconify-icon>
         </div>
         Conta
     </div>
 
     <div class="nav-item" onclick="irSemAnimacao('telaPelucias')">
         <div class="nav-circle">
-            <img src="https://i.postimg.cc/jdx6M1kv/unnamed-removebg-preview.png" class="nav-icon">
+            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M380-80q-75 0-127.5-52.5T200-260q0-35 17-64.5t63-75.5q6-6 11.5-12.5T306-430q-51-78-78.5-163.5T200-760q0-58 21-89t59-31q57 0 102 55t68 101q9 20 16.5 40.5T480-641q6-22 13.5-42.5T511-724q22-46 67-101t102-55q38 0 59 31t21 89q0 81-27.5 166.5T654-430q9 11 14.5 17.5T680-400q46 46 63 75.5t17 64.5q0 75-52.5 127.5T580-80q-45 0-72.5-10L480-100l-27.5 10Q425-80 380-80Zm0-80q23 0 46-5.5t43-16.5q-11-5-20-17t-9-21q0-8 11.5-14t28.5-6q17 0 28.5 6t11.5 14q0 9-9 21t-20 17q20 11 43 16.5t46 5.5q42 0 71-29t29-71q0-18-10-35t-30-34q-14-12-23-21t-29-34q-29-35-48-45.5T480-440q-41 0-60.5 10.5T372-384q-20 25-29 34t-23 21q-20 17-30 34t-10 35q0 42 29 71t71 29Zm40-130q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9Zm120 0q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9ZM363-489q11-8 25-14t31-11q-2-48-14.5-95.5T373-696q-19-40-42-67.5T285-799q-2 6-3.5 15.5T280-760q0 68 21.5 138T363-489Zm234 0q40-63 61.5-133T680-760q0-14-1.5-23.5T675-799q-23 8-46 35.5T587-696q-18 39-30.5 86.5T541-514q15 4 29 10.5t27 14.5Z"/>
+            </svg>
         </div>
         Pelúcias
     </div>
@@ -645,7 +702,12 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   </div>
 
 <div class="sel-jogadas">
-  <div class="sel-jogadas-texto">😊 Selecionar jogadas</div>
+  <div class="sel-jogadas-texto">
+    <svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M480-480Zm0 400q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q43 0 83 8.5t77 24.5v90q-35-20-75.5-31.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-32-6.5-62T776-600h86q9 29 13.5 58.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm320-600v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM620-520q25 0 42.5-17.5T680-580q0-25-17.5-42.5T620-640q-25 0-42.5 17.5T560-580q0 25 17.5 42.5T620-520Zm-280 0q25 0 42.5-17.5T400-580q0-25-17.5-42.5T340-640q-25 0-42.5 17.5T280-580q0 25 17.5 42.5T340-520Zm263.5 221.5Q659-337 684-400H276q25 63 80.5 101.5T480-260q68 0 123.5-38.5Z"/>
+    </svg>
+    Selecionar jogadas
+  </div>
 
   <div class="sel-dropdown" onclick="toggleJogadas()">
     <span id="valorJogadas">00</span>
@@ -669,7 +731,12 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 </div>
 
 
-  <div class="sel-texto1">🧸 Selecionar máquina</div>
+  <div class="sel-texto1">
+    <svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M440-120v-400h400v80H576l264 264-56 56-264-264v264h-80Zm-160 0v-80h80v80h-80Zm-80-640h-80q0-33 23.5-56.5T200-840v80Zm80 0v-80h80v80h-80Zm160 0v-80h80v80h-80Zm160 0v-80h80v80h-80Zm160 0v-80q33 0 56.5 23.5T840-760h-80ZM200-200v80q-33 0-56.5-23.5T120-200h80Zm-80-80v-80h80v80h-80Zm0-160v-80h80v80h-80Zm0-160v-80h80v80h-80Zm640 0v-80h80v80h-80Z"/>
+    </svg>
+    Selecionar máquina
+  </div>
 
   <div id="loader" class="loader">
   <div></div><div></div><div></div><div></div>
@@ -800,6 +867,102 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
   <button id="voltarInicioBtn" onclick="voltarInicio()">Voltar ao início</button>
 </section>
 
+<!-- TELA QUEM SOMOS -->
+<section id="telaSobre" class="tela">
+  <div class="topo topo-sobre">
+    <div class="btn-voltar" onclick="voltarPara('telaHome')">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+        <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+      </svg>
+    </div>
+
+    <img class="logo-topo" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
+  </div>
+
+  <div class="sobre-wrap">
+    <p class="sobre-kicker">Quem somos</p>
+    <h2 class="sobre-title">PlushMaster</h2>
+    <p class="sobre-text">
+      Somos uma plataforma de pelúcias ao vivo: você escolhe a máquina, entra na fila e joga acompanhando a câmera.
+      Nosso foco é deixar tudo simples, rápido e seguro, com recarga fácil na carteira e histórico de atividades.
+    </p>
+
+    <div class="sobre-grid">
+      <div class="sobre-card">
+        <div class="sobre-icone">
+          <iconify-icon icon="material-symbols:verified-user" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="sobre-card-title">Segurança</div>
+        <div class="sobre-card-sub">Conta, recargas e sessões protegidas.</div>
+      </div>
+
+      <div class="sobre-card">
+        <div class="sobre-icone">
+          <iconify-icon icon="material-symbols:bolt" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="sobre-card-title">Rapidez</div>
+        <div class="sobre-card-sub">Entre na fila e jogue sem enrolação.</div>
+      </div>
+
+      <div class="sobre-card">
+        <div class="sobre-icone">
+          <iconify-icon icon="material-symbols:headset-mic" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="sobre-card-title">Suporte</div>
+        <div class="sobre-card-sub">A gente te ajuda quando precisar.</div>
+      </div>
+    </div>
+
+    <div class="sobre-cta">
+      <button class="sobre-btn" onclick="irPara('telaSuporte')">Falar com o suporte</button>
+    </div>
+  </div>
+</section>
+
+<!-- TELA SUPORTE -->
+<section id="telaSuporte" class="tela">
+  <div class="topo topo-sobre">
+    <div class="btn-voltar" onclick="voltarPara('telaHome')">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+        <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+      </svg>
+    </div>
+    <img class="logo-topo" src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-removebg-preview.png">
+  </div>
+
+  <div class="suporte-wrap">
+    <p class="sobre-kicker">Suporte</p>
+    <h2 class="sobre-title">Falar com o suporte</h2>
+    <p class="sobre-text">
+      Escolha como você prefere falar com a gente. Normalmente respondemos o mais rápido possível.
+    </p>
+
+    <div class="suporte-grid">
+      <button class="suporte-card" onclick="window.open('SEU_LINK_WHATSAPP', '_blank')">
+        <div class="suporte-icone">
+          <iconify-icon icon="material-symbols:chat" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="suporte-info">
+          <div class="suporte-title">WhatsApp</div>
+          <div class="suporte-sub">Clique para abrir a conversa</div>
+        </div>
+        <div class="suporte-seta" aria-hidden="true">›</div>
+      </button>
+
+      <button class="suporte-card" onclick="window.location.href='mailto:contatoplushmaster@gmail.com?subject=Suporte%20PlushMaster&body=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%3A%20'">
+        <div class="suporte-icone">
+          <iconify-icon icon="material-symbols:mail" aria-hidden="true"></iconify-icon>
+        </div>
+        <div class="suporte-info">
+          <div class="suporte-title">Email</div>
+          <div class="suporte-sub">Envie uma mensagem para o suporte</div>
+        </div>
+        <div class="suporte-seta" aria-hidden="true">›</div>
+      </button>
+    </div>
+  </div>
+</section>
+
 <section id="menuLateral" class="tela menu-screen">
     <div class="sidebar-header">
         <div>
@@ -827,6 +990,16 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
             <div class="menu-text">
                 <span class="menu-titulo">Jogar agora</span>
                 <span class="menu-subtitulo">Adicione jogadas e divirta-se</span>
+            </div>
+        </div>
+
+        <div class="menu-card" onclick="abrirDestinoDoMenu('telaSuporte')">
+            <div class="menu-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/10419/10419450.png" width="30">
+            </div>
+            <div class="menu-text">
+                <span class="menu-titulo">Suporte</span>
+                <span class="menu-subtitulo">Email e WhatsApp</span>
             </div>
         </div>
 
@@ -860,6 +1033,3 @@ src="https://i.postimg.cc/rF2M2jyV/Logo-digital-da-Plush-Master-com-ursinho-1-re
 
 
   
-
-
-
