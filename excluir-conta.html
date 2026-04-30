@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Excluir Conta | PlushMaster</title>
+    <style>
+      :root{
+        --bg1:#4fc3ff;
+        --bg2:#dff5ff;
+        --ink:#0d3360;
+        --muted:rgba(13,51,96,.75);
+        --card:rgba(255,255,255,.92);
+        --shadow:0 18px 50px rgba(0,0,0,.12);
+        --radius:18px;
+        --btn1:#24c6ff;
+        --btn2:#009ef7;
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        color:var(--ink);
+        background: linear-gradient(180deg,var(--bg1),var(--bg2));
+        min-height:100vh;
+      }
+      header{padding:28px 18px 10px;text-align:center}
+      header h1{margin:0;font-size:28px;letter-spacing:.2px}
+      header p{margin:10px 0 0;color:var(--muted);font-weight:600}
+      main{padding:14px 18px 40px}
+      .wrap{max-width:920px;margin:0 auto}
+      .card{
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:var(--shadow);
+        padding:18px 18px 14px;
+        line-height:1.5;
+      }
+      h2{margin:18px 0 8px;font-size:18px}
+      ul{margin:8px 0 0 18px}
+      li{margin:6px 0}
+      .cta{
+        margin-top:14px;
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+      }
+      .btn{
+        display:inline-block;
+        padding:12px 14px;
+        border-radius:14px;
+        text-decoration:none;
+        font-weight:800;
+        color:#fff;
+        background: linear-gradient(90deg,var(--btn1),var(--btn2));
+      }
+      .btn.secondary{
+        background: rgba(255,255,255,.65);
+        color: var(--ink);
+        border: 1px solid rgba(13,51,96,.18);
+      }
+      a{color:#0a67a8}
+      footer{
+        text-align:center;
+        padding:18px;
+        color:rgba(13,51,96,.7);
+        font-size:13px;
+      }
+      .note{margin-top:12px;color:var(--muted);font-size:14px}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Excluir Conta – PlushMaster</h1>
+      <p>Instruções para solicitar exclusão de conta e dados</p>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <div class="card">
+          <p>
+            Para solicitar a exclusão da sua conta PlushMaster e dos dados associados, siga os passos abaixo.
+          </p>
+
+          <h2>1. Envie o pedido</h2>
+          <p>
+            Envie um e-mail para <a href="mailto:contatoplushmaster@gmail.com">contatoplushmaster@gmail.com</a> com o assunto:
+            <strong>“Exclusão de conta – PlushMaster”</strong>.
+          </p>
+          <p>Inclua no e-mail:</p>
+          <ul>
+            <li>E-mail da conta</li>
+            <li>Nome de usuário</li>
+            <li>CPF (para confirmar a identidade, se necessário)</li>
+          </ul>
+
+          <h2>2. Prazo</h2>
+          <p>
+            Após recebermos o pedido, iremos analisar e processar a solicitação em até <strong>30 dias</strong>.
+          </p>
+
+          <h2>3. O que será excluído</h2>
+          <ul>
+            <li>Dados do perfil (ex.: nome de usuário, data de nascimento, CPF associado à conta)</li>
+            <li>Dados de uso vinculados à conta (históricos e registros vinculados ao usuário)</li>
+          </ul>
+
+          <h2>4. O que pode ser mantido</h2>
+          <p>
+            Alguns dados podem ser mantidos por prazo adicional quando necessário para cumprir obrigações legais,
+            auditoria, segurança e prevenção a fraudes (por exemplo, registros essenciais de transações).
+          </p>
+
+          <div class="cta">
+            <a class="btn" href="mailto:contatoplushmaster@gmail.com?subject=Exclus%C3%A3o%20de%20conta%20%E2%80%93%20PlushMaster&body=Ol%C3%A1!%0A%0AQuero%20solicitar%20a%20exclus%C3%A3o%20da%20minha%20conta%20PlushMaster.%0A%0AE-mail%3A%20%0AUsu%C3%A1rio%3A%20%0ACPF%20(opcional)%3A%20%0A%0AObrigado!">
+              Solicitar por e-mail
+            </a>
+            <a class="btn secondary" href="./index.html">Voltar para a Política</a>
+          </div>
+
+          <p class="note">
+            Observação: para sua segurança, podemos solicitar informações adicionais para confirmar que o pedido é do titular da conta.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      PlushMaster • Exclusão de conta
+    </footer>
+  </body>
+</html>
+
